@@ -1,0 +1,12 @@
+{
+  "entrypoint": "index.html",
+  "shell": "src/md-app.html",
+  "fragments": [
+    "src/md-main.html",
+    "src/md-events.html",
+    "src/md-gallery.html",
+    "src/md-menu.html"
+    "src/md-reservation.html"
+    "src/md-about.html"
+  ]
+}

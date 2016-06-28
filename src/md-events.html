@@ -1,0 +1,217 @@
+<!--
+@license
+Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
+
+<dom-module id="md-events">
+
+  <template>
+
+    <style>
+      :host {
+        display: block;
+        padding: 10px;
+      }
+      .card {
+        box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
+        padding: 16px;
+        margin: 24px;
+        border-radius: 5px;
+        background-color: #424242;
+        color: #fff;
+        overflow: auto;
+      }
+
+      .circle {
+        display: inline-block;
+        height: 64px;
+        width: 64px;
+        border-radius: 50%;
+        background: #F44336;
+        line-height: 64px;
+        font-size: 30px;
+        color: #fff;
+        text-align: center;
+      }
+      .card-right {
+        margin-left: auto;
+      }
+      .card-left {
+        float: left;
+        margin-right: 15px;
+        margin-bottom: 15px;
+      }
+      .card-left img {
+        display: block;
+        max-width: 300px;
+      }
+
+      time.icone
+      {
+        float: right;
+        font-size: 0.8em; /* change icon size */
+        display: block;
+        position: relative;
+        width: 7em;
+        height: 7em;
+        background-color: #fff;
+        border-radius: 0.6em;
+        box-shadow: 0 1px 0 #bdbdbd, 0 2px 0 #fff, 0 3px 0 #bdbdbd, 0 4px 0 #fff, 0 5px 0 #bdbdbd, 0 0 0 1px #bdbdbd;
+        overflow: hidden;
+      }
+
+      time.icone * {
+        display: block;
+        width: 100%;
+        font-size: 1em;
+        font-weight: bold;
+        font-style: normal;
+        text-align: center;
+      }
+
+      time.icone strong
+      {
+        position: absolute;
+        #font-size: 1.1em;
+        top: 0;
+        padding: 0.4em 0;
+        color: #fff;
+        background-color: #F44336;
+        border-bottom: 1px dashed #F44336;
+        box-shadow: 0 2px 0 #F44336;
+      }
+      time.icone em
+      {
+        position: absolute;
+        bottom: 0.3em;
+        color: #F44336;
+      }
+
+      time.icone span
+      {
+        font-size: 2.8em;
+        letter-spacing: -0.05em;
+        padding-top: 0.8em;
+        color: #2f2f2f;
+      }
+      .artists {
+        margin-top: 16px;
+        margin-bottom: 16px;
+      }
+
+      h3 {
+        font-size: 22px;
+        margin: 0 0 16px 0;
+        color: #F44336;
+      }
+    </style>
+
+    <iron-ajax auto
+               url="http://localhost:80/api/v1/events/"
+               handle-as="json"
+               last-response="{{response}}"></iron-ajax>
+
+    <template is="dom-repeat" items="{{_formatResponse(response)}}">
+
+      <div class="card">
+        <h3>{{item.name}}</h3>
+        <div class="card-left">
+          <img src="{{item.poster.thumbnail}}">
+        </div>
+        <div class="card-right">
+          <time class="icone">
+            <em>
+              {{item.date.weekday}}
+            </em>
+            <strong>
+              {{item.date.month}}
+            </strong>
+            <span>
+              {{item.date.day}}
+            </span>
+          </time>
+
+          <p>Выступают:
+            <template is="dom-repeat" items="{{item.artists}}" as="artist">
+                <span>{{artist.name}}&nbsp</span>
+            </template>
+          </p>
+          <p>Стиль:
+            <template is="dom-repeat" items="{{item.artists}}" as="artist">
+                <span>{{artist.style}}&nbsp</span>
+            </template>
+          </p>
+          <p>Вход: {{item.price}}</p>
+          <p>Начало: {{item.start}}</p>
+          <p>{{item.info}}</p>
+        </div>
+
+
+      </div>
+
+    </template>
+
+  </template>
+
+  <script>
+
+    Polymer({
+
+      is: 'md-events',
+      ready: function() {
+
+      },
+      properties: {
+        day: {
+          type: String,
+          computed: 'computeDate(item.date)',
+        }
+      },
+
+      _formatResponse: function(response) {
+        var index, len, date;
+        var options = {
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric',
+          weekday: 'long',
+        };
+        for (index = 0, len = response.length; index < len; ++index) {
+          response[index].start = response[index].start.slice(0, -3);
+          if(response[index].price == 0) {
+            response[index].price = 'Свободный';
+          } else {
+            response[index].price += ' р.'
+          }
+          date = new Date(response[index].date);
+          date = date.toLocaleString("ru", options).split(' ');
+          response[index].date = {
+            'weekday': date[0].slice(0, -1),
+            'day': date[1],
+            'month': date[2],
+            'year': date[3],
+            'original': response[index].date,
+          };
+
+        };
+
+        return response;
+      },
+
+      computeDate: function(date) {
+        return date.split('-')[0];
+      }
+
+    });
+
+  </script>
+
+</dom-module>
