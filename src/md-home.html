@@ -10,60 +10,251 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 <link rel="import" href="../bower_components/polymer/polymer.html">
 <link rel="import" href="../bower_components/iron-image/iron-image.html">
-<link rel="import" href="../bower_components/paper-card/paper-card.html">
+<link rel="import" href="../bower_components/app-layout/app-header-layout/app-header-layout.html">
+<link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="../bower_components/iron-media-query/iron-media-query.html">
+<link rel="import" href="../bower_components/paper-styles/typography.html">
+
+
+
+<link rel="import" href="../bower_components/neon-animation/neon-shared-element-animatable-behavior.html">
+<link rel="import" href="../bower_components/neon-animation/animations/hero-animation.html">
+<link rel="import" href="../bower_components/neon-animation/animations/ripple-animation.html">
+<link rel="import" href="../bower_components/neon-animation/animations/fade-out-animation.html">
+<link rel="import" href="../bower_components/neon-animation/animations/fade-in-animation.html">
+<link rel="import" href="../bower_components/neon-animation/animations/cascaded-animation.html">
+
 <dom-module id="md-home">
 
   <template>
 
     <style>
-      :host {
-        display: block;
-        padding: 10px;
-      }
-      .card {
-        box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
-        max-width: 100%;
-        height: auto;
-      }
+    :host {
+    }
 
-      .circle {
-        display: inline-block;
-        height: 64px;
-        width: 64px;
-        border-radius: 50%;
-        background: #ddd;
-        line-height: 64px;
-        font-size: 30px;
-        color: #555;
-        text-align: center;
-      }
-      paper-card {
-        max-width: 550px;
-        text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
-        --paper-card-background-color: #303030;
-        --paper-card-header-color: #F44336;
-      }
-      h1 {
-        font-size: 22px;
-        margin: 16px 0;
-        color: #212121;
-      }
+    .container {
+      @apply(--layout-fullbleed);
+      width: 100%;
+    }
+
+    .menu {
+      -webkit-transition: all .5s ease;
+      position: relative;
+      display: inline-block;
+      float: left;
+      vertical-align: top;
+      width: calc(100% / 3);
+      height: 100%;
+      @apply(--paper-font-title);
+      @apply(--layout-vertical);
+      @apply(--layout-center-center);
+    }
+
+    .events {
+      position: relative;
+      display: inline-block;
+      float: left;
+      vertical-align: top;
+      width: calc(100% / 3 * 2);
+      height: calc(100% / 3);
+      @apply(--paper-font-title);
+      @apply(--layout-vertical);
+      @apply(--layout-center-center);
+    }
+
+    .image {
+      -webkit-transition: all 0.2s linear;
+      -webkit-transform: scale3d(1, 1, 1);
+      transform: scale3d(1, 1, 1);
+      filter: url("data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\'><filter id=\'grayscale\'><feColorMatrix type=\'saturate\' values=\'1\'/></filter></svg>#grayscale"); /* Firefox 10+ */
+      filter: gray alpha(opacity=100); /* IE6-9 */
+      -webkit-filter: grayscale(100%); /* Chrome 19+ & Safari 6+ */
+      -webkit-backface-visibility: hidden; /* Fix for transition flickering */
+    }
+
+    .menu:hover .image{
+      -webkit-transform: scale3d(1.1, 1.1, 1);
+      transform: scale3d(1.1, 1.1, 1);
+      filter: none;
+      -webkit-filter: grayscale(0%);
+    }
+
+    .events:hover .image{
+      -webkit-transform: scale3d(1.1, 1.1, 1);
+      transform: scale3d(1.1, 1.1, 1);
+      filter: none;
+      -webkit-filter: grayscale(0%);
+    }
+
+    .reserve:hover .image{
+      -webkit-transform: scale3d(1.1, 1.1, 1);
+      transform: scale3d(1.1, 1.1, 1);
+      filter: none;
+      -webkit-filter: grayscale(0%);
+    }
+
+    .about:hover .image{
+      -webkit-transform: scale3d(1.1, 1.1, 1);
+      transform: scale3d(1.1, 1.1, 1);
+      filter: none;
+      -webkit-filter: grayscale(0%);
+    }
+
+    .gallery:hover .image{
+      -webkit-transform: scale3d(1.1, 1.1, 1);
+      transform: scale3d(1.1, 1.1, 1);
+      filter: none;
+      -webkit-filter: grayscale(0%);
+    }
+
+    .menu:hover .item-title{
+      color: white;
+    }
+
+    .events:hover .item-title{
+      color: white;
+    }
+
+    .reserve:hover .item-title{
+      color: white;
+    }
+
+    .about:hover .item-title{
+      color: white;
+    }
+
+    .gallery:hover .item-title{
+      color: white;
+    }
+
+    .reserve {
+      position: relative;
+      display: inline-block;
+      float: left;
+      vertical-align: top;
+      width: calc(100% / 3);
+      height: calc(100% / 3);
+      @apply(--paper-font-title);
+      @apply(--layout-vertical);
+      @apply(--layout-center-center);
+    }
+
+    .about {
+      position: relative;
+      display: inline-block;
+      float: left;
+      vertical-align: top;
+      width: calc(100% / 3);
+      height: calc(100% / 3);
+      @apply(--paper-font-title);
+      @apply(--layout-vertical);
+      @apply(--layout-center-center);
+    }
+
+    .gallery {
+      position: relative;
+      display: inline-block;
+      float: left;
+      vertical-align: top;
+      width: calc(100% / 3 * 2);
+      height: calc(100% / 3);
+      @apply(--paper-font-title);
+      @apply(--layout-vertical);
+      @apply(--layout-center-center);
+    }
+
+    .item-title {
+      font-family: 'Iron Russian Edition' !important;
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: linear-gradient(to bottom, rgba(0,0,0,0) 0%, rgba(0,0,0,0.8) 100%);
+      color: var(--app-primary-color);
+      padding: 20px;
+      @apply(--paper-font-display3);
+      transition: opacity 0.1s;
+      transition: color 0.5s;
+      z-index: 1;
+    }
+
+    iron-image {
+      height: 100%;
+      width: 100%;
+    }
+
+    app-header {
+      background-color: var(--app-primary-color);
+      color: #FFFFFF;
+    }
+
     </style>
-    <a href="#/home">
-      <paper-card heading="Меню" image="http://localhost/img/static/homepage/меню.jpg" preload-image fade-image></paper-card>
-    </a>
-    <a href="#/menu">
-      <paper-card heading="Мероприятия" image="http://localhost/img/static/homepage/мероприятия3.jpg" preload-image fade-image></paper-card>
-    </a>
 
-    <paper-card heading="Бронирование" image="http://localhost/img/static/homepage/заказан.jpg" preload-image fade-image></paper-card>
-    <paper-card heading="О Нас" image="http://localhost/img/static/homepage/онас.jpg" preload-image fade-image></paper-card>
+    <iron-media-query query="max-width: 750px" query-matches="{{smallScreen}}"></iron-media-query>
 
+    <app-header-layout>
+      <template is="dom-if" if="{{smallScreen}}">
+        <app-header id="header" effects="waterfall fade-background" reveals>
+          <app-toolbar>
+            <content select="[drawer-toggle]"></content>
+            <div main-title>Mad Dog Club</div>
+          </app-toolbar>
+        </app-header>
+      </template>
 
+      <div class="container">
+        <a href="#/menu">
+          <div class="menu item" id="menu">
+            <iron-image class="image" sizing="cover" preload fade src="http://localhost/img/static/homepage/menu.jpg"></iron-image>
+            <div class="item-title">
+              Меню
+            </div>
+            <div class="item-cover"></div>
+          </div>
+        </a>
 
+        <a href="#/events">
+          <div class="events item" id="events">
+            <iron-image class="image" sizing="cover" preload fade src="http://localhost/img/static/homepage/мероприятия3.jpg"></iron-image>
+            <div class="item-title">
+              События
+            </div>
+            <div class="item-cover"></div>
+          </div>
+        </a>
 
+        <a href="#/reservation">
+          <div class="reserve item" id="reservation">
+            <iron-image class="image" sizing="cover" preload fade src="http://localhost/img/static/homepage/reserved.jpg"></iron-image>
+            <div class="item-title">
+              Бронирование
+            </div>
+            <div class="item-cover"></div>
+          </div>
+        </a>
 
+        <a href="#/about">
+          <div class="about item" id="about">
+            <iron-image class="image" sizing="cover" preload fade src="http://localhost/img/static/homepage/онас.jpg"></iron-image>
+            <div class="item-title">
+              О нас
+            </div>
+            <div class="item-cover"></div>
+          </div>
+        </a>
 
+        <a href="#/gallery">
+          <div class="gallery item" id="gallery">
+            <iron-image class="image" sizing="cover" preload fade src="http://localhost/img/static/homepage/gallery.jpg"></iron-image>
+            <div class="item-title">
+              Галерея
+            </div>
+            <div class="item-cover"></div>
+          </div>
+        </a>
+
+      </div>
+    </app-header-layout>
 
 
   </template>
@@ -72,8 +263,94 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     Polymer({
 
-      is: 'md-home'
+      is: 'md-home',
 
+      behaviors: [
+        Polymer.NeonSharedElementAnimatableBehavior,
+        Polymer.IronResizableBehavior],
+
+      properties: {
+        animationConfig: {
+          value: function() {
+            var items = Polymer.dom(this.root).querySelectorAll('.item');
+            var itemsArray = Array.prototype.slice.call(items);
+            return {
+              'entry': [
+                {
+                  name: 'fade-in-animation',
+                  node: this,
+                }, {
+                  name: 'cascaded-animation',
+                  animation: 'slide-from-bottom-animation',
+                  nodes: itemsArray,
+                  timing: {delay: 50}
+                }],
+              'exit': [
+                {
+                  name: 'hero-animation',
+                  id: 'events-hero',
+                  fromPage: this,
+                }, {
+                  name: 'hero-animation',
+                  id: 'menu-hero',
+                  fromPage: this,
+                }, {
+                  name: 'hero-animation',
+                  id: 'reservation-hero',
+                  fromPage: this,
+                }, {
+                  name: 'hero-animation',
+                  id: 'gallery-hero',
+                  fromPage: this,
+                },{
+                  name: 'hero-animation',
+                  id: 'about-hero',
+                  fromPage: this,
+                },{
+                  name: 'ripple-animation',
+                  id: 'events-ripple',
+                  fromPage: this,
+                },{
+                  name: 'ripple-animation',
+                  id: 'menu-ripple',
+                  fromPage: this,
+                },{
+                  name: 'ripple-animation',
+                  id: 'reservation-ripple',
+                  fromPage: this,
+                },{
+                  name: 'ripple-animation',
+                  id: 'gallery-ripple',
+                  fromPage: this,
+                },{
+                  name: 'ripple-animation',
+                  id: 'about-ripple',
+                  fromPage: this,
+                },{
+                  name: 'fade-out-animation',
+                  node: this,
+              }]
+            }
+          }
+        },
+
+        sharedElements: {
+          value: function() {
+            return {
+              'reservation-hero': this.$.reservation,
+              'reservation-ripple': this.$.reservation,
+              'menu-hero': this.$.menu,
+              'menu-ripple': this.$.menu,
+              'events-hero': this.$.events,
+              'events-ripple': this.$.events,
+              'gallery-hero': this.$.gallery,
+              'gallery-ripple': this.$.gallery,
+              'about-hero': this.$.about,
+              'about-ripple': this.$.about,
+            }
+          }
+        }
+      },
     });
 
   </script>

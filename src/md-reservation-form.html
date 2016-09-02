@@ -1,0 +1,323 @@
+<!--
+@license
+Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../bower_components/paper-input/paper-textarea.html">
+<link rel="import" href="../bower_components/paper-input/paper-input-container.html">
+<link rel="import" href="../bower_components/paper-input/paper-input-error.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../bower_components/gold-phone-input/gold-phone-input.html">
+<link rel="import" href="../bower_components/paper-checkbox/paper-checkbox.html">
+<link rel="import" href="../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
+<link rel="import" href="../bower_components/paper-styles/typography.html">
+<link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout.html">
+
+<link rel="import" href="md-timepicker.html">
+
+<link rel="import" href="../bower_components/iron-icons/maps-icons.html">
+
+<dom-module id="md-reservation-form">
+
+  <template>
+
+    <style>
+      :host {
+        display: block;
+        --iron-icon-fill-color: #FFFFFF;
+        --paper-input-container-color: #fff;
+        --paper-input-container-focus-color: var(--app-primary-color);
+        --paper-input-container-input-color: #fff;
+        --paper-checkbox-label-color: #fff;
+        --paper-checkbox-unchecked-color: #fff;
+        --paper-checkbox-unchecked-ink-color: #fff;
+        --paper-checkbox-checked-color: var(--app-primary-color);
+        --paper-checkbox-checked-ink-color: var(--app-primary-color);
+        --gold-phone-input-country-code: {
+          color: #FFFFFF;
+        }
+      }
+
+      .reservation-icons iron-icon {
+        --iron-icon-height: 21px;
+        --iron-icon-width: 21px;
+        --iron-icon-fill-color: #FFFFFF;
+      }
+
+    paper-button {
+      margin-top: 16px;
+      background: var(--app-primary-color);
+      color: #fff;
+    }
+
+    .form-container {
+      width: 80%;
+
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .form-title {
+      @apply(--paper-font-title);
+      color: var(--app-primary-color);
+      margin-top: 16px;
+    }
+
+    .form-item {
+      margin-top: 16px;
+      margin-right: 24px;
+      min-width: 120px;
+
+    }
+
+    .form-row {
+      @apply(--layout-horizontal);
+    }
+
+    .form-block {
+      margin-bottom: 24px;
+    }
+
+    </style>
+
+    <iron-ajax id="ajax"
+               url="http://localhost/api/v1/reservation/"
+               method="POST"
+               handle-as="json"
+               on-response="handleResponse"></iron-ajax>
+
+    <div class="form-container">
+      <div class="form-block">
+        <div class="form-title">
+          Контактные данные
+        </div>
+        <div class="form-item">
+          <paper-input auto-validate
+                       maxlength="20"
+                       char-counter
+                       error-message="Это обязательное поле!"
+                       value="{{form.name}}"
+                       label="Имя*"
+                       required></paper-input>
+        </div>
+        <div class="form-item">
+          <gold-phone-input required
+                            auto-validate
+                            country-code="7"
+                            maxlength="12"
+                            always-float-label
+                            error-message="Это обязательное поле!"
+                            label="Номер телефона*"
+                            value="{{form.phone}}"></gold-phone-input>
+        </div>
+      </div>
+
+      <div class="form-block">
+        <div class="form-title">
+          Дата посещения
+        </div>
+        <div class="form-row">
+          <div class="form-item">
+            <vaadin-date-picker required
+                                auto-validate
+                                label="Дата*"
+                                value="{{form.date}}"
+                                i18n="[[i18n]]"></vaadin-date-picker>
+          </div>
+          <div class="form-item">
+            <paper-input-container  attr-for-value="value" id="time">
+              <label>Время*</label>
+              <md-timepicker class="paper-input-input" value="{{form.time}}"></md-timepicker>
+              <paper-input-error>Это обязательное поле!</paper-input-error>
+            </paper-input-container>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-block">
+        <div class="form-title">
+          Дополнительно
+        </div>
+        <div class="form-row">
+          <div class="form-item">
+            <paper-dropdown-menu label="Количество человек*" value="{{form.count_people}}">
+              <paper-listbox class="dropdown-content">
+                <paper-item>&nbsp&nbsp&nbsp&nbsp&nbsp 1 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                <paper-item>&nbsp&nbsp&nbsp&nbsp&nbsp 2 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                <paper-item>&nbsp&nbsp&nbsp&nbsp&nbsp 3 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                <paper-item>&nbsp&nbsp&nbsp&nbsp&nbsp 4 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                <paper-item>&nbsp&nbsp&nbsp&nbsp&nbsp 5 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                <paper-item>&nbsp&nbsp&nbsp&nbsp&nbsp 6 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                <paper-item>&nbsp&nbsp&nbsp&nbsp&nbsp 7 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                <paper-item>&nbsp&nbsp&nbsp&nbsp&nbsp 8 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+              </paper-listbox>
+            </paper-dropdown-menu>
+          </div>
+          <div class="form-item">
+            <paper-checkbox on-change="_handleCheckbox">Вип столик</paper-checkbox>
+          </div>
+        </div>
+
+        <div class="form-item">
+          <paper-textarea label="Комментарий" value="{{form.comment}}" maxlength="100"
+          char-counter></paper-textarea>
+        </div>
+      </div>
+
+    <paper-button raised on-tap="submitForm" disabled$="[[!validators.summary]]">
+      <iron-icon class="reservation-icons" icon="maps:near-me"></iron-icon>
+      Отправить
+    </paper-button>
+
+  </div>
+  </template>
+
+  <script>
+
+    Polymer({
+      is: 'md-reservation-form',
+
+      properties: {
+        form: {
+          type: Object,
+          value: function() {
+            return {
+                name: '',
+                phone: '',
+                date: '',
+                time: new Date().getHours() + ':' + new Date().getMinutes() + ':00',
+                is_vip: false,
+            }
+          },
+        },
+
+        validators: {
+          type: Object,
+          value: function() {
+            return {
+              name: false,
+              phone: false,
+            }
+          }
+        },
+
+        errors: {
+          type: Object,
+        },
+
+        i18n: {
+          type: Object,
+          readonly: true,
+          value: function() {
+            return {
+              monthNames: [
+                'Январь', 'Февраль', 'Март', 'Апрель', 'Май',
+                'Июнь', 'Июль', 'Август', 'Сентябрь',
+                'Октябрь', 'Ноябрь', 'Декабрь'
+              ],
+              weekdaysShort: [
+                'Вс', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб'
+              ],
+              firstDayOfWeek: 1,
+              today: 'Сегодня',
+              cancel: 'Отмена',
+              formatDate: function(d) {
+                var date = d.getDate();
+                var month = d.getMonth() + 1;
+                if(date < 10) {
+                  date = '0' + date;
+                }
+                if(month < 10) {
+                  month = '0' + month;
+                }
+                return [date, month, d.getFullYear()].join('.');
+              },
+              formatTitle: function(monthName, fullYear) {
+                return monthName + ' ' + fullYear;
+              },
+            }
+          },
+        },
+      },
+
+      observers: [
+        '_formNameChanged(form.name)',
+        '_formPhoneChanged(form.phone)',
+        '_formDateChanged(form.date)',
+        '_formPeopleChanged(form.count_people)',
+        '_formValid(validators.name, validators.phone, validators.count_peeople)',
+      ],
+
+      _formTimeInitial: function(newValue, oldValue) {
+        this.set('form.time', newValue);
+      },
+
+      _formNameChanged: function(newValue, oldValue) {
+        this.set('validators.name', newValue.length !== 0);
+      },
+
+      _formPhoneChanged: function(newValue, oldValue) {
+        this.set('validators.phone', (newValue.length !== 0 && newValue.length === 12));
+      },
+
+      _formDateChanged: function(newValue, oldValue) {
+        if(newValue.length === 0) {
+          this.set('form.date', this._initialDate());
+        }
+      },
+
+      _formPeopleChanged: function(newValue, oldValue) {
+        this.set('validators.count_peeople', newValue !== 0);
+      },
+
+      _formValid: function(name, phone) {
+        this.set('validators.summary', (name && phone));
+      },
+
+      _initialDate: function() {
+        var d = new Date();
+        var date = d.getDate();
+        var month = d.getMonth() + 1;
+        if(date < 10) {
+          date = '0' + date;
+        }
+        if(month < 10) {
+          month = '0' + month;
+        }
+        return [d.getFullYear(),  month, date].join('-');
+      },
+
+      ready: function() {
+        this.importHref(
+          this.resolveUrl('../bower_components/vaadin-date-picker/vaadin-date-picker.html'), null, null, true);
+          this.importHref(
+            this.resolveUrl('../bower_components/paper-dropdown-menu/paper-dropdown-menu.html'), null, null, true);
+      },
+
+      submitForm: function() {
+        this.form.phone = '+7' + this.form.phone.replace(/-/g, '');
+        this.$.ajax.body = this.form;
+        this.$.ajax.generateRequest();
+      },
+
+      handleResponse: function(request) {
+        console.log(request.detail.responce);
+      },
+
+      _handleCheckbox: function() {
+        this.set('form.is_vip', !this.form.is_vip);
+      },
+
+    });
+  </script>
+
+</dom-module>

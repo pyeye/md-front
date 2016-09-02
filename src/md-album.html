@@ -1,0 +1,345 @@
+<!--
+@license
+Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../bower_components/app-layout/app-grid/app-grid-style.html">
+
+<link rel="import" href="../bower_components/neon-animation/neon-shared-element-animatable-behavior.html">
+<link rel="import" href="../bower_components/neon-animation/animations/hero-animation.html">
+<link rel="import" href="../bower_components/neon-animation/animations/ripple-animation.html">
+<link rel="import" href="../bower_components/neon-animation/animations/fade-out-animation.html">
+<link rel="import" href="../bower_components/neon-animation/animations/fade-in-animation.html">
+
+
+<dom-module id="md-album">
+
+  <template>
+
+  <style is="custom-style" include="app-grid-style">
+
+  :host {
+    display: block;
+    --app-header-image: url(http://localhost/img/static/homepage/мероприятия3.jpg);
+    --app-grid-columns: 4;
+    --app-grid-gutter: 5px;
+    --app-grid-item-height: 20vw;
+  }
+
+  app-header {
+    background-color: var(--app-primary-color);
+    color: #fff;
+    font-family: 'Iron Russian Edition' !important;
+    --app-header-background-front-layer: {
+      background-image: var(--app-header-image);
+      background-position: center center;
+    };
+  }
+
+  app-toolbar.tall {
+    height: 176px;
+  }
+  sample-content {
+    padding-top: 212px;
+  }
+  [main-title] {
+    font-weight: normal;
+    margin-left: 50px;
+    font-size: 60px;
+
+  }
+  [condensed-title] {
+    font-size: 40px;
+    font-weight: normal;
+    margin-left: 5px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  [condensed-title] i {
+    font-weight: 100;
+    font-style: normal;
+  }
+  @media (max-width: 639px) {
+    [main-title] {
+      margin-left: 50px;
+      font-size: 30px;
+    }
+    [condensed-title] {
+      font-size: 24px;
+    }
+  }
+
+  app-toolbar {
+    color: white;
+
+  }
+  .card {
+    position: relative;
+    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
+    padding: 16px;
+    margin: 16px;
+    border-radius: 5px;
+    background-color: #424242;
+    color: #fff;
+    overflow: auto;
+  }
+  .card-container {
+    transform: translate3d(0px, 0px, 0px);
+    transition-duration: 0ms;
+    object-fit: cover;
+    display: inline-block;
+    width: 24%;
+    height: 250px;
+    color: black;
+    text-decoration: none;
+    margin-right: 10px;
+  }
+
+  ul {
+    padding: 0;
+    list-style: none;
+  }
+
+  .item {
+    min-height: 200px;
+    list-style: none;
+    background-color: white;
+    position: relative;
+    background-color: white;
+    background-size: cover;
+    background-position: center center;
+  }
+
+  @media (max-width: 999px) {
+    .card-container {
+
+      width: 32%;
+      height: 250px;
+
+    }
+  }
+
+  @media (max-width: 799px) {
+    .card-container {
+
+      width: 47%;
+      height: 200px;
+
+    }
+  }
+
+  @media (max-width: 599px) {
+    .card-container {
+
+      width: 90%;
+      height: 150px;
+
+    }
+  }
+
+  p {
+    color: var(--app-primary-color);
+  }
+
+  paper-icon-button {
+    color: white;
+    --paper-icon-button-ink-color: white;
+  }
+
+  .content {
+    display: block;
+    position: relative;
+    max-width: 1000px;
+    margin: 16px auto;
+  }
+
+  #ripple {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 100vw;
+    background-color: #191919;
+    z-index: -5;
+  }
+
+
+  </style>
+
+  <app-route route="[[route]]"
+             pattern="/:album"
+             data="{{albumData}}"></app-route>
+
+  <iron-ajax id="ajax"
+             handle-as="json"
+             on-response="handleResponse"></iron-ajax>
+
+
+  <app-header id="header" condenses reveals effects="waterfall resize-title blend-background parallax-background">
+    <app-toolbar>
+      <a href="#/gallery" tabindex="-1">
+        <paper-icon-button icon="arrow-back"></paper-icon-button>
+      </a>
+      <h3 condensed-title>{{headerTitle}}</h3>
+    </app-toolbar>
+    <app-toolbar class="tall">
+      <h1 main-title>{{headerTitle}}</h1>
+    </app-toolbar>
+  </app-header>
+
+  <div id="ripple"></div>
+  <div id="lightgallery" class="content"></div>
+
+
+  <!--
+
+  <ul class="app-grid">
+    <template items="[[album.images]]" is="dom-repeat">
+      <li class="item" style="background-image: url([[item.image.thumbnail]]);">
+      </li>
+    </template>
+  </ul>
+-->
+</template>
+
+<script>
+Polymer({
+
+  is: 'md-album',
+
+  properties: {
+    active: {
+      type: Boolean,
+      value: false,
+      reflectToAttribute: true
+    },
+
+    headerTitle: {
+      type: String,
+    },
+
+    album: {
+      type: Object,
+      notify: true,
+      observer: '_albumChanged'
+    },
+
+    animationConfig: {
+      value: function() {
+        return {
+          'entry': [{
+            name: 'hero-animation',
+            id: 'album-hero',
+            toPage: this,
+          }, {
+            name: 'ripple-animation',
+            id: 'album-ripple',
+            toPage: this,
+            timing: {
+              duration: 800
+            }
+          }, {
+            name: 'fade-in-animation',
+            node: this.$.lightgallery,
+            timing: {
+              delay: 300
+            }
+          }],
+          'exit': {
+            name: 'fade-out-animation',
+            node: this,
+          },
+        }
+      }
+    },
+
+    sharedElements: {
+      value: function() {
+        return {
+          'album-hero': this.$.header,
+          'album-ripple': this.$.ripple,
+        }
+      }
+    },
+  },
+
+  listeners: {
+    'md-render-neon-page': '_renderNeonPage',
+  },
+
+  observers: [
+    '_albumPageChanged(albumData.album)'
+  ],
+
+  behaviors: [Polymer.NeonSharedElementAnimatableBehavior,
+    Polymer.IronResizableBehavior],
+
+  _renderNeonPage: function(e) {
+    layout = document.createElement('app-header-layout');
+    layout.id = "layout";
+    childNodes = Polymer.dom(this.root).childNodes;
+
+    for (var i = 0; i < childNodes.length; i++) {
+      Polymer.dom(layout).appendChild(childNodes[i]);
+    }
+    Polymer.dom(this.root).appendChild(layout);
+    this.unlisten(this, 'md-render-neon-page', '_renderNeonPage');
+  },
+
+  _albumPageChanged: function(album) {
+    if(album !== undefined && this.route.prefix === '/album') {
+      this.$.ajax.url = ['http://localhost:80/api/v1/albums', album].join('/') + '/';
+      this.$.ajax.generateRequest();
+    }
+  },
+
+  _albumChanged: function(album) {
+    this.headerTitle = album.event.name;
+    this.customStyle['--app-header-image'] = 'url(' + album.main_image.original +')';
+    this.updateStyles();
+    lightGallery(this.$.lightgallery, {
+      'thumbnail': true,
+    });
+
+  },
+
+  handleResponse: function(request) {
+    while (Polymer.dom(this.$.lightgallery).firstChild) {
+      Polymer.dom(this.$.lightgallery).removeChild(Polymer.dom(this.$.lightgallery).firstChild);
+    }
+    var img = [];
+    for (var i = 0; i < request.detail.response.images.length; i++) {
+      img[i] = document.createElement('a');
+      img[i]['href'] = request.detail.response.images[i]['image']['original'];
+      img[i]['innerHTML'] = '<img class="card-container" src=' + request.detail.response.images[i]['image']['thumbnail'] + ' />';
+      Polymer.dom(this.$.lightgallery).appendChild(img[i]);
+    }
+
+    this.album = request.detail.response;
+    scroll(0,0)
+
+  },
+
+  attached: function() {
+    this._updateGridStyles = this._updateGridStyles || function() {
+      this.updateStyles();
+    }.bind(this);
+    window.addEventListener('resize', this._updateGridStyles);
+  },
+
+  detached: function() {
+    window.removeEventListener('resize', this._updateGridStyles);
+  },
+
+  });
+
+  </script>
+</dom-module>

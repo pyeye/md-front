@@ -9,56 +9,300 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 -->
 
 <link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../bower_components/app-layout/app-grid/app-grid-style.html">
+<link rel="import" href="../bower_components/paper-styles/typography.html">
+<link rel="import" href="../bower_components/paper-ripple/paper-ripple.html">
+
+
+<link rel="import" href="../bower_components/app-layout/app-drawer/app-drawer.html">
+<link rel="import" href="../bower_components/app-layout/app-header/app-header.html">
+<link rel="import" href="../bower_components/app-layout/app-toolbar/app-toolbar.html">
+<link rel="import" href="../bower_components/app-layout/app-header-layout/app-header-layout.html">
+
+<link rel="import" href="../bower_components/neon-animation/neon-shared-element-animatable-behavior.html">
+<link rel="import" href="../bower_components/neon-animation/animations/hero-animation.html">
+<link rel="import" href="../bower_components/neon-animation/animations/ripple-animation.html">
+<link rel="import" href="../bower_components/neon-animation/animations/fade-out-animation.html">
+<link rel="import" href="../bower_components/neon-animation/animations/fade-in-animation.html">
+<link rel="import" href="../bower_components/neon-animation/animations/slide-from-bottom-animation.html">
+<link rel="import" href="../bower_components/neon-animation/animations/cascaded-animation.html">
+
+<link rel="import" href="md-icons.html">
 
 <dom-module id="md-gallery">
 
   <template>
 
-    <style>
-      :host {
-        display: block;
-        padding: 10px;
-      }
-      .card {
-        box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
-        padding: 16px;
-        margin: 24px;
-        border-radius: 5px;
-        background-color: #fff;
-        color: #757575;
-      }
-      .circle {
-        display: inline-block;
-        height: 64px;
-        width: 64px;
-        border-radius: 50%;
-        background: #ddd;
-        line-height: 64px;
+  <style is="custom-style" include="app-grid-style">
+
+    app-header {
+      background-color: var(--app-primary-color);
+      color: #FAFAFA;
+      font-family: 'Iron Russian Edition' !important;
+      --app-header-background-front-layer: {
+        background-image: url(http://localhost/img/static/homepage/gallery.jpg);
+        background-position: center center;
+      };
+    }
+
+    app-toolbar.tall {
+      height: 176px;
+    }
+    sample-content {
+      padding-top: 212px;
+    }
+    [main-title] {
+      font-weight: normal;
+      margin-left: 50px;
+      font-size: 60px;
+    }
+    [condensed-title] {
+      font-size: 40px;
+      font-weight: normal;
+      margin-left: 5px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    [condensed-title] i {
+      font-weight: 100;
+      font-style: normal;
+    }
+    @media (max-width: 639px) {
+      [main-title] {
+        margin-left: 50px;
         font-size: 30px;
-        color: #555;
-        text-align: center;
       }
-      h1 {
-        font-size: 22px;
-        margin: 16px 0;
-        color: #212121;
+      [condensed-title] {
+        font-size: 24px;
       }
-    </style>
+    }
 
-    <div class="card">
-      <div class="circle">1</div>
-      <h1>Gallery</h1>
-      <p>Ut labores minimum atomorum pro. Laudem tibique ut has.
-      <p>Lorem ipsum dolor sit amet, per in nusquam nominavi periculis, sit elit oportere ea.Lorem ipsum dolor sit amet, per in nusquam nominavi periculis, sit elit oportere ea.Cu mei vide viris gloriatur, at populo eripuit sit.</p>
-    </div>
+    app-toolbar {
+      color: white;
 
-  </template>
+    }
+
+    :host {
+      display: block;
+        --app-grid-columns: 3;
+        --app-grid-gutter: 5px;
+        --app-grid-expandible-item-columns: 2;
+        --app-grid-item-height: 20vw;
+    }
+
+    .item-title {
+      position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: linear-gradient(to bottom, rgba(0,0,0,0) 0%, rgba(0,0,0,0.8) 100%);
+        color: white;
+        padding: 20px;
+        @apply(--paper-font-subhead);
+        transition: opacity 0.1s;
+      }
+
+      .item-title-count {
+        float: right;
+      }
+
+      iron-icon {
+        --iron-icon-height: 21px;
+        --iron-icon-width: 21px;
+      }
+
+    ul {
+        padding: 0;
+        list-style: none;
+    }
+
+    .item {
+        cursor: pointer;
+        min-height: 250px;
+        list-style: none;
+        background-color: white;
+        position: relative;
+        background-color: white;
+        background-size: cover;
+        background-position: center center;
+    }
+
+    @media (min-width: 800px) {
+    .item:nth-child(5n+1) {
+        @apply(--app-grid-expandible-item);
+      }
+    }
+
+    @media (max-width: 799px) {
+      :host {
+        --app-grid-columns: 2;
+        --app-grid-gutter: 5px;
+        --app-grid-expandible-item-columns: 2;
+      }
+
+      .item:nth-child(3n+1) {
+         @apply(--app-grid-expandible-item);
+      }
+    }
+
+    ul a {
+      color: -webkit-link;
+      text-decoration: none;
+      cursor: auto;
+    }
+
+    #ripple {
+      position: fixed;
+          top: 0;
+          left: 0;
+          height: 100vh;
+          width: 100vw;
+          background-color: var(--app-lower-layer-color);
+          z-index: -5;
+    }
+
+  </style>
+
+
+  <app-header id="header" condenses reveals effects="waterfall resize-title blend-background parallax-background">
+    <app-toolbar>
+      <content></content>
+      <h3 condensed-title>Галерея</h3>
+    </app-toolbar>
+    <app-toolbar class="tall">
+      <h1 main-title>Галерея</h1>
+    </app-toolbar>
+  </app-header>
+
+  <iron-ajax auto
+             url="http://localhost:80/api/v1/albums/"
+             handle-as="json"
+             last-response="{{response}}"></iron-ajax>
+
+  <div id="ripple"></div>
+  <div id="content">
+    <ul class="app-grid">
+       <template items="[[response]]" is="dom-repeat" on-dom-change="_doAnimation">
+           <li class="item" style="background-image: url([[item.main_image.thumbnail]]);" on-tap="_itemTapHandler">
+             <div class="item-title">[[item.event.name]]<div class="item-title-count">
+              <iron-icon icon="photo-camera"></iron-icon> &nbsp [[item.image_count]]
+            </div></div>
+            <paper-ripple></paper-ripple>
+           </li>
+       </template>
+    </ul>
+  </div>
+
+
+</template>
 
   <script>
 
     Polymer({
 
-      is: 'md-gallery'
+      is: 'md-gallery',
+
+      properties: {
+        active: {
+          type: Boolean,
+          value: false,
+          reflectToAttribute: true
+        },
+
+        animationConfig: {
+          value: function() {
+            return {
+              'entry': [
+                {
+                  name: 'ripple-animation',
+                  id: 'gallery-ripple',
+                  toPage: this,
+                  timing: {duration: 700},
+                }, {
+                  name: 'hero-animation',
+                  id: 'gallery-hero',
+                  toPage: this,
+                  timing: {duration: 400},
+                }, {
+                  name: 'cascaded-animation',
+                  animation: 'slide-from-bottom-animation',
+                  timing: {delay: 300}
+                }, {
+                  name: 'fade-in-animation',
+                  node: this.$.content,
+                  timing: {delay: 350}
+                }],
+              'exit': [
+                {
+                  name: 'fade-out-animation',
+                  node: this,
+                }, {
+                  name: 'hero-animation',
+                  id: 'album-hero',
+                  fromPage: this,
+                }, {
+                  name: 'ripple-animation',
+                  id: 'album-ripple',
+                  fromPage: this,
+                }]
+            }
+          }
+        },
+
+        sharedElements: {
+          value: function() {
+            return {
+              'gallery-hero': this.$.header,
+              'gallery-ripple': this.$.ripple,
+            }
+          }
+        },
+      },
+
+      behaviors: [
+        Polymer.NeonSharedElementAnimatableBehavior,
+        Polymer.IronResizableBehavior],
+
+      listeners: {
+        'md-render-neon-page': '_renderNeonPage',
+      },
+
+      _renderNeonPage: function(e) {
+          layout = document.createElement('app-header-layout');
+          layout.id = "layout";
+          childNodes = Polymer.dom(this.root).childNodes;
+          for (var i = 0; i < childNodes.length; i++) {
+            Polymer.dom(layout).appendChild(childNodes[i]);
+          }
+          Polymer.dom(this.root).appendChild(layout);
+          this.unlisten(this, 'md-render-neon-page', '_renderNeonPage');
+      },
+
+      _doAnimation: function(e) {
+        var items, itemsArray;
+        items = Polymer.dom(this.root).querySelectorAll('.item');
+        itemsArray = Array.prototype.slice.call(items);
+        this.animationConfig.entry[2].nodes = itemsArray;
+      },
+
+      attached: function() {
+        this._updateGridStyles = this._updateGridStyles || function() {
+          this.updateStyles();
+        }.bind(this);
+        window.addEventListener('resize', this._updateGridStyles);
+      },
+
+      detached: function() {
+        window.removeEventListener('resize', this._updateGridStyles);
+      },
+
+      _itemTapHandler: function(e) {
+        this.sharedElements['album-hero'] = e.currentTarget;
+        this.sharedElements['album-ripple'] = e.currentTarget;
+        this.fire('redirect-to-album', {'pk': e.model.item.pk});
+      }
 
     });
 

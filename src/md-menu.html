@@ -10,10 +10,29 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 <link rel="import" href="../bower_components/polymer/polymer.html">
 <link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
-<link rel="import" href="../bower_components/paper-card/paper-card.html">
 <link rel="import" href="../bower_components/paper-tabs/paper-tabs.html">
 <link rel="import" href="../bower_components/iron-pages/iron-pages.html">
 
+
+<link rel="import" href="../bower_components/app-layout/app-header/app-header.html">
+<link rel="import" href="../bower_components/app-layout/app-toolbar/app-toolbar.html">
+<link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../bower_components/paper-menu-button/paper-menu-button.html">
+<link rel="import" href="../bower_components/app-layout/app-header-layout/app-header-layout.html">
+
+<link rel="import" href="../bower_components/neon-animation/neon-shared-element-animatable-behavior.html">
+<link rel="import" href="../bower_components/neon-animation/animations/hero-animation.html">
+<link rel="import" href="../bower_components/neon-animation/animations/ripple-animation.html">
+<link rel="import" href="../bower_components/neon-animation/animations/fade-out-animation.html">
+<link rel="import" href="../bower_components/neon-animation/animations/fade-in-animation.html">
+<link rel="import" href="../bower_components/neon-animation/animations/slide-left-animation.html">
+<link rel="import" href="../bower_components/neon-animation/animations/slide-right-animation.html">
+<link rel="import" href="../bower_components/neon-animation/animations/slide-from-left-animation.html">
+<link rel="import" href="../bower_components/neon-animation/animations/slide-from-right-animation.html">
+
+<link rel="import" href="../bower_components/neon-animation/neon-animated-pages.html">
+
+<link rel="import" href="md-menu-main.html">
 
 <dom-module id="md-menu">
 
@@ -22,35 +41,65 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <style>
       :host {
         display: block;
-
-      }
-      .card {
-        box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
-        padding: 16px;
-        margin: 24px;
-        border-radius: 5px;
-        background-color: #fff;
-        color: #757575;
-      }
-      .circle {
-        display: inline-block;
-        height: 64px;
-        width: 64px;
-        border-radius: 50%;
-        background: #ddd;
-        line-height: 64px;
-        font-size: 30px;
-        color: #555;
-        text-align: center;
+        height: 100vh;
+        --paper-input-container-focus-color: var(--app-primary-color);
+        --paper-input-container-input-color: #212121;
+        --paper-input-container: {
+          padding-bottom: 2px;
+          padding-top: 0px;
+        };
       }
 
-      .menu-price {
-        float: right;
-        vertical-align: middle;
+      .search-btn {
+        background-color: transparent;
       }
 
-      .menu-center {
-        text-align: center;
+      app-header {
+        background-color: var(--app-primary-color);
+        color: #FAFAFA;
+        font-family: 'Iron Russian Edition' !important;
+
+        --app-header-background-front-layer: {
+          background-image: url(http://localhost/img/static/homepage/menu.jpg);
+          background-position: left center;
+        };
+      }
+
+
+      app-toolbar.tall {
+        height: 176px;
+      }
+      sample-content {
+        padding-top: 212px;
+      }
+      [main-title] {
+        font-weight: normal;
+        margin-left: 50px;
+        font-size: 60px;
+      }
+      [condensed-title] {
+        font-size: 40px;
+        font-weight: normal;
+        margin-left: 5px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      [condensed-title] i {
+
+        font-style: normal;
+      }
+      @media (max-width: 639px) {
+        [main-title] {
+          margin-left: 50px;
+          font-size: 30px;
+        }
+        [condensed-title] {
+          font-size: 24px;
+        }
+      }
+
+      app-toolbar {
+        color: white;
       }
 
       paper-tabs {
@@ -59,98 +108,59 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           color: #fff;
           background-color: var(--app-primary-color);
         }
-        --paper-tabs-selection-bar: {
-          color: #fff;
-        }
       }
 
-
-      paper-card {
-        text-align: left;
-        box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
-        max-width: 340px;
-        margin-left: 10px;
-        margin-top: 10px;
-        --paper-card-background-color: #424242;
-        --paper-card-content: {
-          color: #fff;
-        }
-        --paper-card-header-text: {
-          color: #fff;
-        }
-
-        --paper-card-actions: {
-          color: #fff;
-          border-color: #212121;
-        }
+      #ripple {
+        position: fixed;
+            top: 0;
+            left: 0;
+            height: 100vh;
+            width: 100vw;
+            background-color: var(--app-lower-layer-color);
+            z-index: -5;
       }
 
-      iron-image {
-        height: 164px;
-        width: 164px;
-      }
-      h1 {
-        font-size: 22px;
-        color: var(--app-primary-color);
-      }
     </style>
 
-    <iron-ajax auto
-               url="http://localhost:80/api/v1/menu/"
-               handle-as="json"
-               last-response="{{response}}"></iron-ajax>
+        <app-header id="header"  condenses reveals  effects="waterfall resize-title blend-background parallax-background" >
+          <app-toolbar>
+            <content select="[drawer-toggle]"></content>
+            <h3 condensed-title>Меню</h3>
+            <!--
+            <paper-menu-button horizontal-align="right" vertical-offset=15>
+              <paper-icon-button icon="icons:search" class="dropdown-trigger"></paper-icon-button>
+              <paper-input class="dropdown-content search-btn" no-label-float value="{{searchFilter}}"></paper-input>
+            </paper-menu-button>
+            <paper-menu-button horizontal-align="right" vertical-offset=15>
+              <paper-icon-button icon="icons:more-vert" class="dropdown-trigger"></paper-icon-button>
+              <paper-menu class="dropdown-content">
+                <template is="dom-repeat" items={{categories}} as="category">
+                  <paper-item>{{category.name}}</paper-item>
+                </template>
+              </paper-menu>
+            </paper-menu-button>
+            -->
 
+          </app-toolbar>
+          <app-toolbar class="tall">
+            <h1 main-title>Меню</h1>
+          </app-toolbar>
+        </app-header>
 
-    <paper-tabs selected="{{selected}}">
-        <paper-tab>Основное меню</paper-tab>
-        <paper-tab>Бизнес ланч</paper-tab>
-        <paper-tab>Карта бара</paper-tab>
-    </paper-tabs>
+      <div id="ripple"></div>
+      <div class="content">
+        <paper-tabs selected="{{tab}}" attr-for-selected="group" >
+            <paper-tab group="main" on-tap="_mainTapped">Основное</paper-tab>
+            <paper-tab group="bar">Карта бара</paper-tab>
+            <paper-tab group="other" on-tap="_otherTapped">Фруктовый пар</paper-tab>
+        </paper-tabs>
 
-    <iron-pages id='pages' selected="{{selected}}">
-        <div class="menu-center">
-            <template is="dom-repeat" items="{{response}}" filter="isFood">
-
-              <paper-card image="{{item.photo.thumbnail}}" preload-image fade-image>
-                <div class="card-content">
-                  <h1>{{item.name}}</h1>
-                  <p>{{item.description}}</p>
-                </div>
-                <div class="card-actions">
-                  <template is="dom-repeat" items="{{item.prices}}" as="price">
-                    <span>Выход: {{price.count}} {{price.measure}}</span> <span class="menu-price">{{price.value}} р.</span>
-                  </template>
-                </div>
-              </paper-card>
-            </template>
-        </div>
-        <div class="menu-center">
-          <template is="dom-repeat" items="{{response}}" filter="isLunch">
-
-            <paper-card image="{{item.photo.thumbnail}}" preload-image fade-image>
-              <div class="card-content">
-                <h1>{{item.name}}</h1>
-                <p>{{item.description}}</p>
-              </div>
-              <div class="card-actions">Is lunch? {{item.is_lunch}}</div>
-            </paper-card>
-          </template>
-        </div>
-        <div class="menu-center">
-          <template is="dom-repeat" items="{{response}}" filter="isAlcohol">
-
-            <paper-card image="{{item.photo.thumbnail}}" preload-image fade-image>
-              <div class="card-content">
-                <h1>{{item.name}}</h1>
-                <p>{{item.description}}</p>
-              </div>
-              <div class="card-actions">Is lunch? {{item.is_lunch}}</div>
-            </paper-card>
-          </template>
-        </div>
-    </iron-pages>
-
-
+        <neon-animated-pages selected="{{tab}}" attr-for-selected="group" entry-animation="[[_tabEntryAnimation]]" exit-animation="[[_tabExitAnimation]]">
+            <md-menu-main group="main" entry-animation="slide-from-left-animation" exit-animation="slide-left-animation"></md-menu-main>
+            <md-menu-bar group="bar" entry-animation="[[middleEntryAnimation]]" exit-animation="[[middleExitAnimation]]"></md-menu-bar>
+            <md-menu-other group="other" entry-animation="slide-from-right-animation" exit-animation="slide-right-animation"></md-menu-other>
+        </neon-animated-pages>
+      </div>
 
   </template>
 
@@ -159,30 +169,91 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     Polymer({
 
       is: 'md-menu',
-      isFood: function(item) {
-          return this.food.indexOf(item.category.name) > -1;
-      },
-      isAlcohol: function(item) {
-          return this.alcohol.indexOf(item.category.name) > -1;
-      },
-      isLunch: function(item) {
-          return item.is_lunch;
-      },
-
-      ready: function() {
-        this.$.pages.selected = 0;
-      },
 
       properties: {
-        alcohol: {
-          type: Array,
-          value: ['Пиво', 'Водка', 'Чай', 'Кофе']
+        tab: {
+          type: String,
+          observer: '_tabChanged'
         },
-        food: {
-          type: Array,
-          value: ['Салаты', 'Горячее', 'Горячие закуски', 'Супа']
+
+        middleEntryAnimation: {
+          type: String,
+          value: 'slide-from-right-animation',
         },
-      }
+
+        middleExitAnimation: {
+          type: String,
+          value: 'slide-right-animation',
+        },
+
+        animationConfig: {
+          value: function() {
+            return {
+              'entry': [
+                {
+                  name: 'ripple-animation',
+                  id: 'menu-ripple',
+                  toPage: this,
+                }, {
+                  name: 'hero-animation',
+                  id: 'menu-hero',
+                  toPage: this,
+                  timing: {duration: 400},
+                }, {
+                  name: 'fade-in-animation',
+                  node: this.$.content,
+                  timing: {delay: 150},
+                }],
+              'exit': {
+                  name: 'fade-out-animation',
+                  node: this,
+              },
+            }
+          }
+        },
+
+        sharedElements: {
+          value: function() {
+            return {
+              'menu-hero': this.$.header,
+              'menu-ripple': this.$.ripple,
+            }
+          }
+        },
+      },
+
+      listeners: {
+        'md-render-neon-page': '_renderNeonPage',
+      },
+
+      _renderNeonPage: function(e) {
+          layout = document.createElement('app-header-layout');
+          childNodes = Polymer.dom(this.root).childNodes;
+          for (var i = 0; i < childNodes.length; i++) {
+            Polymer.dom(layout).appendChild(childNodes[i]);
+          }
+          Polymer.dom(this.root).appendChild(layout);
+          this.unlisten(this, 'md-render-neon-page', '_renderNeonPage');
+          this.tab = "main";
+      },
+
+      behaviors: [
+        Polymer.NeonSharedElementAnimatableBehavior,
+        Polymer.IronResizableBehavior],
+
+      _tabChanged: function(tab, oldTab) {
+        this.importHref(this.resolveUrl('md-menu-' + tab + '.html'), null, null, true);
+      },
+
+      _mainTapped: function(e) {
+        this.middleEntryAnimation = 'slide-from-right-animation';
+        this.middleExitAnimation = 'slide-right-animation';
+      },
+
+      _otherTapped: function(e) {
+        this.middleEntryAnimation = 'slide-from-left-animation';
+        this.middleExitAnimation = 'slide-left-animation';
+      },
 
     });
 

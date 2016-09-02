@@ -10,6 +10,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 <link rel="import" href="../bower_components/polymer/polymer.html">
 
+<link rel="import" href="../bower_components/neon-animation/neon-shared-element-animatable-behavior.html">
+<link rel="import" href="../bower_components/neon-animation/animations/hero-animation.html">
+<link rel="import" href="../bower_components/neon-animation/animations/ripple-animation.html">
+<link rel="import" href="../bower_components/neon-animation/animations/fade-out-animation.html">
+<link rel="import" href="../bower_components/neon-animation/animations/fade-in-animation.html">
+<link rel="import" href="../bower_components/neon-animation/animations/ripple-animation.html">
+
 <dom-module id="md-about">
 
   <template>
@@ -17,7 +24,51 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <style>
       :host {
         display: block;
-        padding: 10px;
+      }
+      app-header {
+        background-color: var(--app-primary-color);
+        color: #FAFAFA;
+        font-family: 'Iron Russian Edition' !important;
+        --app-header-background-front-layer: {
+          background-image: url(http://localhost/img/static/homepage/онас.jpg);
+          background-position: left center;
+        };
+      }
+
+      app-toolbar.tall {
+        height: 176px;
+      }
+      sample-content {
+        padding-top: 212px;
+      }
+      [main-title] {
+        font-weight: normal;
+        margin-left: 50px;
+        font-size: 60px;
+      }
+      [condensed-title] {
+        font-weight: normal;
+        font-size: 40px;
+        margin-left: 5px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      [condensed-title] i {
+        font-style: normal;
+      }
+      @media (max-width: 639px) {
+        [main-title] {
+          margin-left: 50px;
+          font-size: 30px;
+        }
+        [condensed-title] {
+          font-size: 24px;
+        }
+      }
+
+      app-toolbar {
+        color: white;
+
       }
       .card {
         box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
@@ -38,19 +89,38 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         color: #555;
         text-align: center;
       }
-      h1 {
-        font-size: 22px;
-        margin: 16px 0;
-        color: #212121;
+      #ripple {
+        position: fixed;
+            top: 0;
+            left: 0;
+            height: 100vh;
+            width: 100vw;
+            background-color: var(--app-lower-layer-color);
+            z-index: -5;
       }
     </style>
 
-    <div class="card">
+
+
+        <app-header id="header" condenses reveals  effects="waterfall resize-title blend-background parallax-background">
+          <app-toolbar>
+            <content></content>
+            <h3 condensed-title>О нас</h3>
+          </app-toolbar>
+          <app-toolbar class="tall">
+            <h1 main-title>О нас</h1>
+          </app-toolbar>
+        </app-header>
+
+
+    <div id="ripple"></div>
+    <div class="card" id="content">
       <div class="circle">2</div>
       <h1>About</h1>
       <p>Ea duis bonorum nec, falli paulo aliquid ei eum.</p>
       <p>Id nam odio natum malorum, tibique copiosae expetenda mel ea.Detracto suavitate repudiandae no eum. Id adhuc minim soluta nam.Id nam odio natum malorum, tibique copiosae expetenda mel ea.</p>
     </div>
+
 
   </template>
 
@@ -58,7 +128,65 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     Polymer({
 
-      is: 'md-about'
+      is: 'md-about',
+
+      properties: {
+        animationConfig: {
+          value: function() {
+            return {
+              'entry': [{
+                  name: 'ripple-animation',
+                  id: 'about-ripple',
+                  toPage: this,
+                },{
+                name: 'hero-animation',
+                id: 'about-hero',
+                toPage: this,
+              }, {
+                name: 'fade-in-animation',
+                node: this.$.content,
+                timing: {
+                    delay: 150
+                },
+              }],
+              'exit': {
+                name: 'fade-out-animation',
+                node: this,
+              },
+            }
+          }
+        },
+        sharedElements: {
+          value: function() {
+            return {
+              'about-hero': this.$.header,
+              'about-ripple': this.$.ripple,
+            }
+          }
+        },
+      },
+
+      listeners: {
+        'md-render-neon-page': '_renderNeonPage',
+      },
+
+      _renderNeonPage: function(e) {
+          layout = document.createElement('app-header-layout');
+          layout.id = "layout";
+          childNodes = Polymer.dom(this.root).childNodes;
+
+          for (var i = 0; i < childNodes.length; i++) {
+            Polymer.dom(layout).appendChild(childNodes[i]);
+          }
+          Polymer.dom(this.root).appendChild(layout);
+          this.unlisten(this, 'md-render-neon-page', '_renderNeonPage');
+      },
+
+
+
+      behaviors: [Polymer.NeonSharedElementAnimatableBehavior,
+      Polymer.IronResizableBehavior],
+
 
     });
 

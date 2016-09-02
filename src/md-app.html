@@ -8,94 +8,248 @@ Code distributed by Google as part of the polymer project is also
 subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
 -->
 <link rel="import" href="../bower_components/polymer/polymer.html">
+
 <link rel="import" href="../bower_components/app-route/app-location.html">
 <link rel="import" href="../bower_components/app-route/app-route.html">
+
 <link rel="import" href="../bower_components/app-layout/app-drawer-layout/app-drawer-layout.html">
 <link rel="import" href="../bower_components/app-layout/app-drawer/app-drawer.html">
-<link rel="import" href="../bower_components/app-layout/app-scroll-effects/app-scroll-effects.html">
 <link rel="import" href="../bower_components/app-layout/app-header/app-header.html">
 <link rel="import" href="../bower_components/app-layout/app-header-layout/app-header-layout.html">
+<link rel="import" href="../bower_components/app-layout/app-scroll-effects/app-scroll-effects.html">
 <link rel="import" href="../bower_components/app-layout/app-toolbar/app-toolbar.html">
+<link rel="import" href="../bower_components/paper-styles/typography.html">
+<link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout.html">
 <link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../bower_components/iron-image/iron-image.html">
 <link rel="import" href="../bower_components/iron-pages/iron-pages.html">
 <link rel="import" href="../bower_components/iron-selector/iron-selector.html">
-<link rel="import" href="../bower_components/paper-drawer-panel/paper-drawer-panel.html">
-<link rel="import" href="../bower_components/iron-icons/iron-icons.html">
-<link rel="import" href="../bower_components/iron-icons/communication-icons.html">
-<link rel="import" href="../bower_components/iron-icons/device-icons.html">
-<link rel="import" href="../bower_components/iron-icon/iron-icon.html">
+
+<link rel="import" href="md-icons.html">
+<link rel="import" href="../bower_components/paper-dialog/paper-dialog.html">
+<link rel="import" href="../bower_components/iron-overlay-behavior/iron-overlay-behavior.html">
+<link rel="import" href="../bower_components/neon-animation/neon-animated-pages.html">
+<link rel="import" href="../bower_components/neon-animation/animations/scale-up-animation.html">
+<link rel="import" href="../bower_components/neon-animation/animations/fade-out-animation.html">
+
+<link rel="import" href="md-events.html">
+<link rel="import" href="md-event.html">
+<link rel="import" href="md-menu.html">
+<link rel="import" href="md-gallery.html">
+<link rel="import" href="md-album.html">
+<link rel="import" href="md-about.html">
+<link rel="import" href="md-reservation.html">
 
 <dom-module id="md-app">
 
   <template>
 
-    <style>
+  <style>
 
-      :host {
-        display: block;
-        --app-primary-color: #F44336;
-        --app-secondary-color: #212121;
-        --app-accent-color: #172C50;
-        --paper-button-ink-color: var(--app-accent-color);
-        --paper-icon-button-ink-color: var(--app-accent-color);
-        --paper-spinner-color: var(--app-accent-color);
+    :host {
+      overflow: hidden;
+      @apply(--layout-fullbleed);
+      --app-primary-color: #F44336;
+      --app-secondary-color: #212121;
+      --app-lower-layer-color: #202020;
+      --app-upper-layer-color: #252525;
+      --app-accent-color: #172C50;
+      --paper-button-ink-color: var(--app-accent-color);
+      --paper-icon-button-ink-color: var(--app-accent-color);
+      --paper-spinner-color: var(--app-accent-color);
+    }
+
+    [hidden] {
+      display: none;
+    }
+
+    app-drawer {
+      box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
+      --app-drawer-width: 250px;
+      --app-drawer-content-container: {
+        background-color: var(--app-upper-layer-color);
       }
+    }
+
+    app-drawer a {
+      text-decoration: none;
+    }
+
+    .flex-drawer {
+      @apply(--layout-vertical);
+      height: 100%;
+    }
+
+    .flex-nav {
+      @apply(--layout-flex);
+    }
+
+    app-header paper-icon-button {
+      --paper-icon-button-ink-color: #fff;
+    }
+
+    .drawer-list {
+      margin: 0 20px;
+    }
 
 
-      app-header {
-        background-color: var(--app-primary-color);
-        color: #FAFAFA;
-      }
-
-      app-toolbar {
-        color: white;
-      }
-
-      app-drawer {
-        box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
-        --app-drawer-width: 220px;
-        --app-drawer-content-container: {
-          background-color: #212121;
-        }
-      }
-
-      iron-icon {
-        --iron-icon-fill-color: #fff;
-      }
-      app-header paper-icon-button {
-        --paper-icon-button-ink-color: white;
-      }
-
-      .drawer-list {
-        margin: 0 20px;
-      }
-      .drawer-list a {
+    .drawer-list a {
         display: block;
         padding: 0 16px;
+        margin-left: 6px;
         line-height: 40px;
         text-decoration: none;
-        color: white;
-      }
-      .drawer-list a.iron-selected {
-        color: var(--app-primary-color);
-      }
-      .drawer-list a.subroute {
-        padding-left: 32px;
-      }
-
-      .contacts {
-
         color: #fff;
-        margin-left: 5px;
-        font-size: 15px;
       }
 
-      app-toolbar img {
-        width: 150px;
+    .drawer-list a.iron-selected {
+        margin-left: 0px;
+        border-left: 6px solid var(--app-primary-color);
+        color: var(--app-primary-color);
+        --iron-icon-fill-color: #FFFFFF;
       }
 
+    .drawer-list a.subroute {
+      padding-left: 32px;
+    }
 
-    </style>
+    .contacts {
+      color: #fff;
+      margin-left: 16px;
+    }
+
+    .contact-info {
+      margin-bottom: 24px;
+      margin-left: 16px;
+    }
+
+    .contacts iron-icon {
+      --iron-icon-fill-color: #FFFFFF;
+      --iron-icon-height: 21px;
+      --iron-icon-width: 21px;
+    }
+
+    .logo {
+      padding-top: 5px;
+      padding-bottom: 5px;
+      text-align: center;
+      border-bottom: 1px solid #fff;
+      margin-left: 20px;
+      margin-right: 20px;
+    }
+
+    .nav-icons {
+      margin-left: 10px;
+      margin-right: 10px;
+    }
+
+    .logo img {
+      width: 110px;
+    }
+
+    paper-dialog.menu-modal {
+      width: 40%;
+      background-color: #212121;
+      color: var(--app-primary-color);
+      @apply(--layout-flex);
+      flex-direction: column;
+      flex-wrap: wrap;
+    }
+
+    paper-dialog iron-image {
+      width: 100%;
+      height: 300px;
+    }
+
+    paper-dialog .modal-item-name-container {
+      position: relative;
+      margin-top: -5px;
+      background-color: var(--app-primary-color);
+      padding-left: 16px;
+      min-height: 70px;
+    }
+    paper-dialog .modal-item-name-box {
+      @apply(--paper-font-headline);
+      position: absolute;
+      color: #FFFFFF;
+      font-size: 26px;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+
+    paper-dialog .modal-item-description {
+      @apply(--paper-font-body1);
+      color: #FFFFFF;
+      padding-left: 16px;
+      padding-right: 16px;
+      padding-top: 16px;
+      margin-bottom: 16px;
+
+    }
+    paper-dialog .modal-item-bottom {
+      @apply(--paper-font-headline);
+      font-size: 28px;
+      color: var(--app-primary-color);
+      margin-left: 16px;
+    }
+
+    paper-dialog .modal-item-bottom-container {
+      padding-top: 32px;
+      @apply(--layout-horizontal);
+      @apply(--layout-end-justified);
+      margin-right: 16px;
+    }
+
+    paper-dialog .modal-item-weight {
+      margin-bottom: 16px;
+      @apply(--paper-font-subhead);
+      color: var(--app-primary-color);
+    }
+
+    paper-dialog .modal-item-detail {
+      @apply(--paper-font-subhead);
+      color: var(--app-primary-color);
+      margin: 16px 0;
+      @apply(--layout-horizontal);
+    }
+
+    .modal-item-detail-sale-description {
+      font-weight: bold;
+      width: 50px;
+      padding-right: 20px;
+      color: var(--app-primary-color);
+      text-align: right;
+    }
+
+    .modal-item-detail-sale-value {
+      @apply(--layout-flex);
+      color: #FFFFFF;
+      float: left
+    }
+
+    @media (max-width: 960px) {
+      paper-dialog.menu-modal {
+        width: 50%;
+      }
+
+      paper-dialog iron-image {
+        height: 250px;
+      }
+    }
+
+    @media (max-width: 750px) {
+      paper-dialog.menu-modal {
+        width: 75%;
+      }
+
+    }
+    @media (max-width: 450px) {
+      paper-dialog.menu-modal {
+        width: 99%;
+      }
+    }
+
+  </style>
 
     <app-location route="{{route}}" use-hash-as-path></app-location>
     <app-route
@@ -104,55 +258,119 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         data="{{routeData}}"
         tail="{{subroute}}"></app-route>
 
-    <app-drawer-layout responsive-width="750px" fullbleed>
+
+
+    <app-drawer-layout responsive-width="750px">
 
       <!-- Drawer content -->
       <app-drawer id="drawer">
-        <app-toolbar>Бешеная Собака</app-toolbar>
-        <iron-selector selected="[[page]]"
-                       attr-for-selected="name"
-                       class="drawer-list"
-                       role="navigation"
-                       on-iron-activate="_drawerSelected">
-          <a name="home" href="#/home">Главная</a>
-          <a name="menu" href="#/menu">Меню</a>
-          <a name="events" href="#/events">Мероприятия</a>
-          <a name="gallery" href="#/gallery">Галлерея</a>
-          <a name="reservation" href="#/reservation">Бронирование</a>
-          <a name="about" href="#/about">О нас</a>
-        </iron-selector>
-        <br><br><br><br><br><br><br><br>
-        <span class="contacts">  <iron-icon icon="communication:location-on"></iron-icon>&nbsp Кирова 7а</span><br>
-        <span class="contacts">  <iron-icon icon="icons:today"></iron-icon>&nbsp Ср - Вс</span><br>
-        <span class="contacts">  <iron-icon icon="device:access-time"></iron-icon>&nbsp 22:00 - 03:00</span><br>
-        <span class="contacts">  <iron-icon icon="communication:phone"></iron-icon>&nbsp 240-2000</span>
+        <div class="flex-drawer">
+          <div class="flex-logo">
+            <a href="#/home">
+              <div class="logo">
+                <img src="http://localhost/img/static/new_logo_3.jpeg" alt="" />
+              </div>
+            </a>
+          </div>
+          <div class="flex-nav">
+            <iron-selector selected="[[pageSection]]"
+                           attr-for-selected="name"
+                           class="drawer-list"
+                           role="navigation"
+                           on-iron-activate="_drawerSelected">
 
-
-
+              <a name="home" href="#/home"><iron-icon class="nav-icons" icon="home"></iron-icon>Главная</a>
+              <a name="menu" href="#/menu"><iron-icon class="nav-icons" icon="restaurant-menu"></iron-icon> Меню</a>
+              <a name="events" href="#/events"><iron-icon class="nav-icons" icon="event"></iron-icon> События </paper-item></a>
+              <a name="gallery" href="#/gallery"><iron-icon class="nav-icons" icon="perm-media"></iron-icon> Галерея</a>
+              <a name="reservation" href="#/reservation"><iron-icon class="nav-icons" icon="event-available"></iron-icon> Бронирование</a>
+              <a name="about" href="#/about"><iron-icon class="nav-icons" icon="feedback"></iron-icon> О нас</a>
+            </iron-selector>
+          </div>
+          <div class="flex-contact">
+            <div class="contact-info">
+              <span class="contacts">  <iron-icon icon="location-on"></iron-icon>&nbsp&nbsp ул. Кирова, дом 7а</span><br>
+              <span class="contacts">  <iron-icon icon="access-time"></iron-icon>&nbsp&nbsp 22:00 - 03:00</span><br>
+              <span class="contacts">  <iron-icon icon="phone"></iron-icon>&nbsp&nbsp 240 - 20 - 00</span>
+            </div>
+          </div>
+        </div>
       </app-drawer>
 
       <!-- Main content -->
-      <app-header-layout has-scrolling-region>
 
-        <app-header condenses reveals effects="waterfall">
-          <app-toolbar>
+        <neon-animated-pages selected="[[page]]" attr-for-selected="name" on-iron-select="_neonPageChanged">
+          <md-home name="home">
             <paper-icon-button icon="menu" drawer-toggle></paper-icon-button>
-            <div title>{{pageTitle}}</div>
-          </app-toolbar>
-        </app-header>
-
-        <iron-pages role="main" selected="[[page]]" attr-for-selected="name">
-          <md-home name="home"></md-home>
-          <md-menu name="menu"></md-menu>
-          <md-events name="events"></md-events>
-          <md-gallery name="gallery"></md-gallery>
-          <md-reservation name="reservation"></md-reservation>
-          <md-about name="about"></md-about>
-        </iron-pages>
-
-      </app-header-layout>
+          </md-home>
+          <md-menu name="menu">
+            <paper-icon-button icon="menu" drawer-toggle></paper-icon-button>
+          </md-menu>
+          <md-events name="events">
+            <paper-icon-button icon="menu" drawer-toggle></paper-icon-button>
+          </md-events>
+          <md-event route={{subroute}} name="event"></md-event>
+          <md-gallery name="gallery">
+            <paper-icon-button icon="menu" drawer-toggle></paper-icon-button>
+          </md-gallery>
+          <md-album route={{subroute}} name="album"></md-album>
+          <md-reservation name="reservation">
+            <paper-icon-button icon="menu" drawer-toggle></paper-icon-button>
+          </md-reservation>
+          <md-about name="about">
+            <paper-icon-button icon="menu" drawer-toggle></paper-icon-button>
+          </md-about>
+          <md-flush name="flush"></md-flush>
+        </neon-animated-pages>
 
     </app-drawer-layout>
+
+    <paper-dialog id="modal" class="menu-modal" entry-animation="scale-up-animation" exit-animation="fade-out-animation" with-backdrop>
+        <div class="modal-img">
+          <iron-image src="{{modalItem.photo.original}}" sizing="cover" preload fade></iron-image>
+        </div>
+        <div class="modal-item-name-container">
+          <div class="modal-item-name-box">
+            {{modalItem.name}}
+          </div>
+        </div>
+        <div class="modal-item-description">
+          [[modalItem.description]]
+          <template is="dom-if" if=[[modalItem.detail.sale]]>
+            <div class="modal-item-detail">
+              <div class="modal-item-detail-sale-description">[[modalItem.detail.sale.description]]:</div>
+              <div class="modal-item-detail-sale-value">[[modalItem.detail.sale.value]]</div>
+            </div>
+          </template>
+
+          <div class="modal-item-bottom-container">
+            <template is="dom-repeat" items="{{modalItem.prices}}" as="price">
+              <div class="modal-item-bottom">
+                  {{price.value}} &#x20bd;
+                  <div class="modal-item-weight">
+                    за {{price.count}} {{price.measure}}
+                  </div>
+              </div>
+
+            </template>
+            <!--
+            <div class="modal-item-bottom">
+                <iron-icon icon="alarm"></iron-icon>
+                <div class="modal-item-weight">
+                  25 мин.
+                </div>
+            </div>
+            <div class="modal-item-bottom">
+                <iron-icon icon="favorite"></iron-icon>
+                <div class="modal-item-weight">
+                  47k
+                </div>
+            </div>
+
+          -->
+          </div>
+        </div>
+    </paper-dialog>
 
   </template>
 
@@ -163,53 +381,63 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       is: 'md-app',
 
       properties: {
-
-        pageTitle: {
-          type: String,
-        },
-
-        pageTitles: {
-          type: Object,
-          value: function() {
-            return {
-              'home': 'Главная',
-              'menu': 'Меню',
-              'events': 'Мероприятия',
-              'gallery': 'Галлерея',
-              'about': 'О нас'
-            };
-          },
-          readOnly: true,
-        },
-
         page: {
           type: String,
           reflectToAttribute: true,
           observer: '_pageChanged'
         },
 
-      },
+        modalItem: {
+          type: Object,
+        },
 
+      },
 
       observers: [
         '_routePageChanged(routeData.page)'
       ],
 
+      listeners: {
+        'redirect-to-album': '_redirectToAlbum',
+        'open-menu-modal': '_openMenuModal',
+      },
+
+      _neonPageChanged: function(e) {
+        this.fire('md-render-neon-page', {},{
+          node: e.detail.item,
+          bubbles: false,
+        });
+      },
+
+      _redirectToAlbum: function(e) {
+        this.set('route.path', "/album/" + e.detail.pk)
+      },
+
+      _openMenuModal: function(e) {
+        this.modalItem = e.detail;
+        this.$.modal.open();
+      },
+
       _routePageChanged: function(page) {
         this.page = page || 'home';
-        this.pageTitle = this.pageTitles[page];
       },
 
       _pageChanged: function(page) {
         // load page import on demand.
         this.importHref(
           this.resolveUrl('md-' + page + '.html'), null, null, true);
+          this._changeCategory(page);
       },
 
       _drawerSelected: function() {
         if (!this.$.drawer.persistent) this.$.drawer.close();
       },
 
+      _changeCategory: function(category) {
+        category = category === 'album' ? 'gallery' : category;
+        category = category === 'event' ? 'events' : category;
+        this.pageSection = category;
+      },
 
     });
   </script>

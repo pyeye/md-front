@@ -1,0 +1,240 @@
+<!--
+@license
+Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../bower_components/paper-card/paper-card.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tabs.html">
+<link rel="import" href="../bower_components/iron-pages/iron-pages.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../bower_components/paper-badge/paper-badge.html">
+<link rel="import" href="../bower_components/paper-ripple/paper-ripple.html">
+<link rel="import" href="../bower_components/paper-styles/typography.html">
+<link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout.html">
+
+<link rel="import" href="md-icons.html">
+
+<dom-module id="md-menu-bar">
+
+  <template>
+
+    <style>
+      :host {
+        display: block;
+      }
+
+      .menu-category {
+        padding-top: 24px;
+        @apply(--paper-font-headline);
+        font-size: 26px;
+        color: var(--app-primary-color);
+      }
+
+      paper-tabs {
+        --paper-tabs-selection-bar-color: #fff;
+        --paper-tabs: {
+          color: #fff;
+          background-color: var(--app-primary-color);
+        }
+      }
+
+      [hidden] {
+        display: none;
+      }
+
+    .content {
+      display: block;
+      position: relative;
+      max-width: 1000px;
+      margin: 5px auto;
+      padding-left: 16px;
+    }
+
+    paper-card {
+      position: relative;
+      display: inline-block;
+      width: 31%;
+      margin-right: 14px;
+      margin-top: 18px;
+      --paper-card-background-color: #272727;
+      --paper-card-actions : {
+        border-top: 1px solid #191919;
+      }
+      --paper-card-header-image: {
+        height: 250px;
+      }
+    }
+    .item-header {
+      height: 45px;
+    }
+
+    .item-name {
+      max-width: 65%;
+      display: inline-block;
+      @apply(--paper-font-title);
+      color: #FFFFFF;
+    }
+
+    .item-price {
+      display: inline-block;
+      float: right;
+      font-size: 20px;
+      color: #FFFFFF;
+    }
+
+    .item-weight {
+      font-size: 12px;
+      color: #FFFFFF;
+      opacity: 0.7;
+    }
+
+    paper-button {
+      margin-right: -5px;
+      float: right;
+      @apply(--paper-font-button);
+      color: #FFFFFF;
+    }
+
+    .sale-badge {
+      position: absolute;
+      left: -5px; top: -5px;
+      z-index: 1;
+      overflow: hidden;
+      width: 75px; height: 75px;
+      text-align: right;
+    }
+
+    .sale-badge span {
+      font-size: 12px;
+      font-weight: bold;
+      color: #FFF;
+      text-transform: uppercase;
+      text-align: center;
+      line-height: 20px;
+      transform: rotate(-45deg);
+      -webkit-transform: rotate(-45deg);
+      width: 100px;
+      display: block;
+      background-color: var(--app-primary-color) ;
+      box-shadow: 0 3px 10px -5px rgba(0, 0, 0, 1);
+      position: absolute;
+      top: 19px; left: -21px;
+    }
+
+    .sale-badge span::before {
+      content: "";
+      position: absolute; left: 0px; top: 100%;
+      z-index: -1;
+      border-left: 3px solid #8F0808;
+      border-right: 3px solid transparent;
+      border-bottom: 3px solid transparent;
+      border-top: 3px solid #8F0808;
+    }
+
+    .sale-badge span::after {
+      content: "";
+      position: absolute; right: 0px; top: 100%;
+      z-index: -1;
+      border-left: 3px solid transparent;
+      border-right: 3px solid #8F0808;
+      border-bottom: 3px solid transparent;
+      border-top: 3px solid #8F0808;
+    }
+  }
+
+
+
+    @media (max-width: 960px) {
+     .content {
+       max-width: 800px;
+     }
+     paper-card {
+       width: 46%;
+     }
+   }
+   @media (max-width: 719px) {
+     .content {
+       max-width: 400px;
+     }
+     paper-card {
+       width: 96%;
+     }
+   }
+
+    </style>
+
+    <iron-ajax auto
+               url="http://localhost:80/api/v1/menu/?group=bar&format=md_menu"
+               handle-as="json"
+               last-response="{{menuBar}}"></iron-ajax>
+
+
+    <div class="content">
+      <template is="dom-repeat" items="[[menuBar]]" as="main">
+        <div class="menu-category">
+          [[main.category]]
+        </div>
+        <template is="dom-repeat" items="[[main.items]]">
+            <paper-card image="[[item.photo.thumbnail]]" preload-image fade-image on-tap="handleTap">
+              <template is="dom-if" if="[[item.detail.sale]]">
+                <div class="sale-badge">
+                  <span>Акция!</span>
+                </div>
+              </template>
+              <div class="card-content">
+                <div class="item-header">
+                  <div class="item-name">[[item.name]]</div>
+                  <div class="item-price">
+                    <template is="dom-repeat" items="[[_getPrices(item.prices)]]" as="price">
+                       [[price.value]] &#x20bd;
+                        <div class="item-weight">
+                          за [[price.count]] [[price.measure]]
+                        </div>
+                    </template>
+                  </div>
+                </div>
+              </div>
+              <paper-ripple></paper-ripple>
+            </paper-card>
+        </template>
+      </template>
+    </div>
+</template>
+
+  <script>
+
+    Polymer({
+      is: 'md-menu-bar',
+
+      properties: {
+        menuBar: {
+          type: Array
+        },
+
+      },
+
+      _getPrices: function(prices) {
+        return prices.length > 1 ? [prices[0]] : prices;
+      },
+
+      handleTap: function(e) {
+        this.fire('open-menu-modal', e.model.item);
+      },
+
+      behaviors: [
+        Polymer.NeonAnimatableBehavior,
+        Polymer.IronResizableBehavior
+      ],
+
+    });
+
+  </script>
+
+</dom-module>

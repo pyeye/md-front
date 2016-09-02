@@ -9,6 +9,19 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 -->
 
 <link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/paper-material/paper-material.html">
+<link rel="import" href="../bower_components/neon-animation/neon-shared-element-animatable-behavior.html">
+<link rel="import" href="../bower_components/neon-animation/animations/hero-animation.html">
+<link rel="import" href="../bower_components/neon-animation/animations/ripple-animation.html">
+<link rel="import" href="../bower_components/neon-animation/animations/fade-out-animation.html">
+<link rel="import" href="../bower_components/neon-animation/animations/fade-in-animation.html">
+<link rel="import" href="../bower_components/app-layout/app-header/app-header.html">
+<link rel="import" href="../bower_components/app-layout/app-toolbar/app-toolbar.html">
+<link rel="import" href="../bower_components/app-layout/app-header-layout/app-header-layout.html">
+
+<link rel="import" href="md-icons.html">
+
+<link rel="import" href="md-reservation-form.html">
 
 <dom-module id="md-reservation">
 
@@ -17,40 +30,110 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <style>
       :host {
         display: block;
-        padding: 10px;
       }
-      .card {
-        box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
-        padding: 16px;
-        margin: 24px;
-        border-radius: 5px;
-        background-color: #fff;
-        color: #757575;
+
+      app-header {
+        background-color: var(--app-primary-color);
+        color: #FAFAFA;
+        font-family: 'Iron Russian Edition' !important;
+        --app-header-background-front-layer: {
+          background-image: url(http://localhost/img/static/homepage/reserved.jpg);
+          background-position: center center;
+        };
       }
-      .circle {
-        display: inline-block;
-        height: 64px;
-        width: 64px;
-        border-radius: 50%;
-        background: #ddd;
-        line-height: 64px;
-        font-size: 30px;
-        color: #555;
-        text-align: center;
+
+      app-toolbar.tall {
+        height: 176px;
       }
-      h1 {
-        font-size: 22px;
-        margin: 16px 0;
-        color: #212121;
+      sample-content {
+        padding-top: 212px;
       }
+      [main-title] {
+        font-weight: normal;
+        margin-left: 50px;
+        font-size: 60px;
+      }
+      [condensed-title] {
+        font-size: 40px;
+        font-weight: normal;
+        margin-left: 5px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      [condensed-title] i {
+        font-weight: 100;
+        font-style: normal;
+      }
+      @media (max-width: 639px) {
+        [main-title] {
+          margin-left: 50px;
+          font-size: 30px;
+        }
+        [condensed-title] {
+          font-size: 24px;
+        }
+      }
+
+      app-toolbar {
+        color: white;
+
+      }
+
+
+      .reservation-icons iron-icon {
+        --iron-icon-height: 21px;
+        --iron-icon-width: 21px;
+        --iron-icon-fill-color: #fff;
+      }
+
+
+    div .sub-right {
+      position: relative;
+      min-height: 60px;
+    }
+    paper-button {
+
+      background: var(--app-primary-color);
+      color: #fff;
+    }
+
+    paper-material {
+      width: 50%;
+      min-width: 450px;
+      margin: auto;
+      margin-top: 16px;
+      padding: 16px;
+      background-color: var(--app-upper-layer-color);
+    }
+
+    #ripple {
+      position: fixed;
+          top: 0;
+          left: 0;
+          height: 100vh;
+          width: 100vw;
+          background-color: var(--app-lower-layer-color);
+          z-index: -5;
+    }
+
     </style>
 
-    <div class="card">
-      <div class="circle">3</div>
-      <h1>Reservation</h1>
-      <p>Modus commodo minimum eum te, vero utinam assueverit per eu.</p>
-      <p>Ea duis bonorum nec, falli paulo aliquid ei eum.Has at minim mucius aliquam, est id tempor laoreet.Pro saepe pertinax ei, ad pri animal labores suscipiantur.</p>
-    </div>
+        <app-header id="header" condenses reveals  effects="waterfall resize-title blend-background parallax-background">
+          <app-toolbar>
+            <content select="[drawer-toggle]"></content>
+            <h3 condensed-title>Бронирование</h3>
+          </app-toolbar>
+          <app-toolbar class="tall">
+            <h1 main-title>Бронирование</h1>
+          </app-toolbar>
+        </app-header>
+
+    <div id="ripple"></div>
+    <div id="content">
+      <paper-material>
+        <md-reservation-form></md-reservation-form>
+      </paper-material>
+    <div>
 
   </template>
 
@@ -58,8 +141,62 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     Polymer({
 
-      is: 'md-reservation'
+      is: 'md-reservation',
 
+      properties: {
+        animationConfig: {
+          value: function() {
+            return {
+              'entry': [
+                {
+                  name: 'ripple-animation',
+                  id: 'reservation-ripple',
+                  toPage: this,
+                }, {
+                  name: 'fade-in-animation',
+                  node: this.$.content,
+                  timing: {delay: 150},
+                }, {
+                  name: 'hero-animation',
+                  id: 'reservation-hero',
+                  toPage: this,
+                }],
+              'exit': {
+                name: 'fade-out-animation',
+                node: this,
+              },
+            }
+          }
+        },
+
+        sharedElements: {
+          value: function() {
+            return {
+              'reservation-hero': this.$.header,
+              'reservation-ripple': this.$.ripple,
+            }
+          }
+        },
+      },
+
+      listeners: {
+        'md-render-neon-page': '_renderNeonPage',
+      },
+
+      _renderNeonPage: function(e) {
+          layout = document.createElement('app-header-layout');
+          layout.id = "layout";
+          childNodes = Polymer.dom(this.root).childNodes;
+          for (var i = 0; i < childNodes.length; i++) {
+            Polymer.dom(layout).appendChild(childNodes[i]);
+          }
+          Polymer.dom(this.root).appendChild(layout);
+          this.unlisten(this, 'md-render-neon-page', '_renderNeonPage');
+      },
+
+      behaviors: [
+        Polymer.NeonSharedElementAnimatableBehavior,
+        Polymer.IronResizableBehavior],
     });
 
   </script>

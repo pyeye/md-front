@@ -17,8 +17,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <title>Mad Dog</title>
 
   <link rel="shortcut icon" sizes="32x32" href="/images/app-icon-32.png">
+<link type="text/css" rel="stylesheet" href="bower_components/lightgallery.js/dist/css/lightgallery.min.css" />
 
   <meta name="theme-color" content="#fff">
+
   <link rel="manifest" href="/manifest.json">
 
   <script>
@@ -53,12 +55,19 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
   <style>
 
+  @font-face {
+      font-family: "Iron Russian Edition";
+      src: url('fonts/Iron_Russian_edition.ttf') format('truetype');
+
+  }
+
     body {
       margin: 0;
       font-family: 'Roboto', 'Noto', sans-serif;
       line-height: 1.5;
-      min-height: 100vh;
-      background-color: #303030;
+      height: 100%;
+
+      background-color: #202020;
     }
 
   </style>
@@ -66,7 +75,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 </head>
 <body>
 
+
+
+    <!-- lightgallery plugins -->
+<script src="bower_components/lightgallery.js/dist/js/lightgallery.min.js"></script>
+<script src="bower_components/lg-thumbnail.js/dist/lg-thumbnail.min.js"></script>
+
   <md-app></md-app>
+
+
 
 </body>
 </html>

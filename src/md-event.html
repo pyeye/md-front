@@ -1,0 +1,484 @@
+
+
+
+     <!--
+     @license
+     Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
+     This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+     The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+     The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+     Code distributed by Google as part of the polymer project is also
+     subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+     -->
+
+     <link rel="import" href="../bower_components/polymer/polymer.html">
+     <link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
+
+     <link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout.html">
+
+     <link rel="import" href="../bower_components/paper-card/paper-card.html">
+     <link rel="import" href="../bower_components/paper-fab/paper-fab.html">
+     <link rel="import" href="../bower_components/paper-button/paper-button.html">
+
+     <link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
+
+     <link rel="import" href="../bower_components/app-layout/app-header-layout/app-header-layout.html">
+     <link rel="import" href="../bower_components/app-layout/app-header/app-header.html">
+     <link rel="import" href="../bower_components/app-layout/app-box/app-box.html">
+     <link rel="import" href="../bower_components/app-layout/app-toolbar/app-toolbar.html">
+     <link rel="import" href="../bower_components/paper-styles/typography.html">
+
+
+     <link rel="import" href="../bower_components/neon-animation/neon-shared-element-animatable-behavior.html">
+     <link rel="import" href="../bower_components/neon-animation/animations/hero-animation.html">
+     <link rel="import" href="../bower_components/neon-animation/animations/ripple-animation.html">
+     <link rel="import" href="../bower_components/neon-animation/animations/fade-out-animation.html">
+     <link rel="import" href="../bower_components/neon-animation/animations/fade-in-animation.html">
+     <link rel="import" href="../bower_components/neon-animation/animations/slide-from-bottom-animation.html">
+
+     <link rel="import" href="md-icons.html">
+
+     <dom-module id="md-event">
+
+       <template>
+
+       <style>
+
+
+       :host {
+         display: block;
+         margin: 0;
+         --iron-icon-fill-color: #FFFFFF;
+       }
+
+       app-box {
+           position: absolute;;
+           top: 0;
+           bottom: 0;
+           left: 0;
+           right: 0;
+           height: 100%;
+           max-height: 650px;
+           --app-box-background-front-layer: {
+             background-image: var(--background-img);
+             background-repeat: no-repeat;
+             background-size: 100%;
+             padding-bottom: 1000px;
+           };
+         }
+
+       .content {
+           position: relative;
+           margin: 350px auto 5px;
+           width: 680px;
+       }
+
+       #header {
+           color: white;
+           --app-header-background-rear-layer: {
+             background-color: rgba(255, 0, 0, 0);
+           };
+       }
+
+       paper-card {
+         padding: 16px 0 16px 110px;
+         margin-bottom: 30px;
+         width: 100%;
+         sizing: border-box;
+         --paper-card-background-color: #272727;
+         --paper-card-content: {
+           color: var(--app-primary-color);
+         }
+         --paper-card-header-text: {
+           color: var(--app-primary-color);
+         }
+
+         }
+         paper-card p {
+           @apply(--paper-font-body1);
+           margin: 16px 6px;
+           color: #FFFFFF;
+         }
+         paper-fab {
+           position: absolute;
+           top: -42px;
+           right: 48px;
+           box-shadow: 0 4px 10px 0 rgba(0, 0, 0, 0.3);
+           --paper-fab-background: var(--app-primary-color);
+           --paper-fab-keyboard-focus-background: var(--app-primary-color);
+           --paper-fab-iron-icon: {
+             height: 32px;
+             width: 32px;
+             color: #FFFFFF;
+           }
+         }
+
+         paper-fab:hover {
+           box-shadow: 0 4px 10px 0 rgba(0, 0, 0, 0.3);
+         }
+
+         h4 {
+           color: var(--app-primary-color);
+           margin: 40px 0 12px;
+         }
+
+         @media (max-width: 720px) {
+
+           .content {
+             width: 100%;
+             margin: 150px 0 0;
+           }
+
+           paper-card {
+             margin-bottom: 0px;
+           }
+         }
+
+         paper-icon-button {
+         color: white;
+         --paper-icon-button-ink-color: white;
+       }
+
+       .ingredient-item {
+           margin: 20px 0;
+           @apply(--layout-horizontal);
+         }
+         .ingredient-amount {
+           @apply(--paper-font-subhead);
+           font-weight: bold;
+           margin-left: -95px;
+           width: 80px;
+           padding-right: 20px;
+           color: var(--app-primary-color);
+           text-align: right;
+         }
+         .ingredient-name {
+           @apply(--layout-flex);
+           @apply(--paper-font-subhead);
+           color: #FFFFFF;
+           float: left;
+           position: relative;
+         }
+
+         .event-header {
+             @apply(--layout-horizontal);
+             margin-bottom: 16px;
+          }
+
+         .event-name-box {
+           @apply(--layout-flex);
+           color: #fff;
+           float: left;
+           position: relative;
+         }
+
+         .event-name {
+             @apply(--paper-font-display2);
+             color: var(--app-primary-color);
+             position: absolute;
+             top: 50%;
+             transform: translateY(-50%);
+         }
+
+         .event-date {
+           @apply(--layout-vertical);
+           @apply(--paper-font-title);
+           margin-left: -95px;
+           width: 80px;
+           padding-right: 20px;
+           color: var(--app-primary-color);
+           text-align: center;
+
+         }
+
+         .event-date-weekday {
+           @apply(--paper-font-subhead);
+         }
+
+         .event-date-day {
+           @apply(--paper-font-display3);
+
+         }
+
+         .event-date-month {
+           @apply(--paper-font-subhead);
+         }
+
+         .pad {
+           @apply(--layout-flex);
+           @apply(--layout-vertical);
+           color: #FFFFFF;
+           float: left;
+           position: relative;
+           margin-right: 16px;
+         }
+         .primary {
+           @apply(--paper-font-subhead);
+
+         }
+         .secondary {
+           @apply(--paper-font-body1);
+           opacity: 0.7;
+         }
+         paper-button {
+           display: inline-block;
+           background: var(--app-primary-color);
+           color: #fff;
+         }
+
+         .reservation-form {
+           width: 70%;
+           margin-left: -25px;
+           margin-right: auto;
+         }
+
+         @media (max-width: 745px) {
+           .event-name {
+               @apply(--paper-font-display1);
+           }
+         }
+         #ripple {
+           position: fixed;
+               top: 0;
+               left: 0;
+               height: 100vh;
+               width: 100vw;
+               background-color: #191919;
+               z-index: -5;
+         }
+
+
+
+       </style>
+
+       <app-route route="[[route]]"
+                  pattern="/:event"
+                  data="{{eventData}}"></app-route>
+
+       <iron-ajax id="ajax"
+                  handle-as="json"
+                  on-response="handleResponse"></iron-ajax>
+
+       <app-header id="header" effects="fade-background" reveals>
+         <app-toolbar>
+           <a href="#/events" tabindex="-1">
+             <paper-icon-button icon="arrow-back"></paper-icon-button>
+           </a>
+         </app-toolbar>
+         <div title></div>
+       </app-header>
+
+       <div id="ripple"></div>
+       <app-box id="box"
+                effects="parallax-background"
+                effects-config='{"parallax-background": {"scalar": -0.1}}'></app-box>
+
+       <div class="content" id="content">
+         <paper-card id="card">
+           <div class="reservation-form" hidden$="[[!active]]">
+             <md-reservation-form></md-reservation-form>
+             <paper-button on-tap="_toggleForm">ОТМЕНА</paper-button>
+           </div>
+           <div class="card-content" hidden$="[[active]]">
+             <div class="event-header">
+               <div class="event-date">
+                 <div class="event-date-weekday">[[event.date.weekday]]</div>
+                 <div class="event-date-day">[[event.date.day]]</div>
+                 <div class="event-date-month">[[event.date.month]]</div>
+               </div>
+               <div class="event-name-box" >
+                 <div class="event-name">{{event.name}}</div>
+               </div>
+             </div>
+             <p>
+               {{event.info}}
+             </p>
+             <div class="ingredient-item">
+               <div class="ingredient-amount">Артисты:</div>
+               <template is="dom-repeat" items="{{event.artists}}" as="artist">
+                 <div class="pad">
+                   <div class="primary">
+                     [[artist.name]]
+                   </div>
+                   <div class="secondary">
+                     [[artist.style]]
+                   </div>
+                 </div>
+               </template>
+             </div>
+
+             <div class="ingredient-item">
+               <div class="ingredient-amount">Начало:</div>
+               <div class="ingredient-name">{{event.start}}</div>
+             </div>
+
+             <div class="ingredient-item">
+               <div class="ingredient-amount">Вход:</div>
+               <div class="ingredient-name">{{event.price}}
+                 <template is="dom-if" if="[[_showCurrency(event.price)]]">
+                   &#x20bd;
+                 </template>
+               </div>
+             </div>
+             <paper-fab icon="event-available" active on-tap="_toggleForm" raised></paper-fab>
+           </div>
+         </paper-card>
+     </template>
+
+     <script>
+
+     Polymer({
+
+       is: 'md-event',
+
+       properties: {
+         day: {
+           type: String,
+           computed: 'computeDate(item.date)',
+         },
+         event: {
+           type: Object,
+           notify: true,
+           observer: '_eventChanged'
+         },
+         active: {
+           type: Boolean,
+           value: false,
+         },
+         animationConfig: {
+           value: function() {
+             return {
+               'entry': [
+                 {
+                   name: 'ripple-animation',
+                   id: 'event-ripple',
+                   toPage: this,
+                   timing: {duration: 600}
+                 },{
+                   name: 'slide-from-bottom-animation',
+                   node: this.$.content,
+                   timing: {delay: 250}
+                 },{
+                   name: 'fade-in-animation',
+                   node: this.$.content,
+                   timing: {delay: 300}
+                 },{
+                   name: 'fade-in-animation',
+                   node: this.$.box,
+                   timing: {delay: 250}
+                 }],
+               'exit': {
+                 name: 'fade-out-animation',
+                 node: this,
+                },
+             }
+           }
+         },
+         sharedElements: {
+           value: function() {
+             return {
+               'event-ripple': this.$.ripple,
+             }
+           }
+         },
+       },
+
+       observers: [
+         '_eventPageChanged(eventData.event)'
+       ],
+
+       listeners: {
+         'md-render-neon-page': '_renderNeonPage',
+       },
+
+       behaviors: [
+         Polymer.NeonSharedElementAnimatableBehavior,
+         Polymer.IronResizableBehavior],
+
+       _toggleForm: function(e) {
+         this.active = !this.active;
+       },
+
+       _renderNeonPage: function(e) {
+         layout = document.createElement('app-header-layout');
+         layout.id = "layout";
+         childNodes = Polymer.dom(this.root).childNodes;
+         for (var i = 0; i < childNodes.length; i++) {
+           Polymer.dom(layout).appendChild(childNodes[i]);
+         }
+         Polymer.dom(this.root).appendChild(layout);
+         this.unlisten(this, 'md-render-neon-page', '_renderNeonPage');
+       },
+
+       _eventPageChanged: function(event) {
+         if(event !== undefined && this.route.prefix === '/event') {
+           this.$.ajax.url = ['http://localhost:80/api/v1/events', event].join('/') + '/';
+           this.$.ajax.generateRequest();
+         }
+       },
+
+       handleResponse: function(request) {
+         var index, len, date;
+         var response = request.detail.response;
+         var options = {
+           year: 'numeric',
+           month: 'long',
+           day: 'numeric',
+           weekday: 'long',
+         };
+         this.active = false;
+         response.start = response.start.slice(0, -3);
+         if(response.price == 0) {
+           response.price = 'Свободный';
+         }
+         date = new Date(response.date);
+         date = date.toLocaleString("ru", options).split(' ');
+         response.date = {
+           'weekday': date[0].slice(0, -1),
+           'day': date[1],
+           'month': date[2],
+           'year': date[3],
+           'original': response.date,
+         };
+         this.event = response;
+         this.async(this._scroll, 200);
+       },
+
+       _scroll: function() {
+         scroll(0,0);
+       },
+
+       _eventChanged: function(event) {
+         this._updateImg(event);
+       },
+
+       _updateImg: function(event) {
+         var img, index;
+         if(Object.getOwnPropertyNames(event.poster).length === 0) {
+           index = this._randomInteger(0, event.artists.length - 1);
+           img = event.artists[index].img.original;
+         } else {
+           img = event.poster.original;
+         }
+         this.customStyle['--background-img'] = 'url(' + img + ')';
+         this.updateStyles();
+       },
+
+       _randomInteger: function(min, max) {
+         var rand = min - 0.5 + Math.random() * (max - min + 1)
+         rand = Math.round(rand);
+         return rand;
+       },
+
+       _showCurrency: function(price) {
+         return price === 'Свободный' ? false : true;
+       },
+
+       computeDate: function(date) {
+         return date.split('-')[0];
+       },
+  });
+
+     </script>
+
+     </dom-module>
