@@ -2,11 +2,13 @@
   "entrypoint": "index.html",
   "shell": "src/md-app.html",
   "fragments": [
-    "src/md-main.html",
     "src/md-events.html",
+    "src/md-event.html",
     "src/md-gallery.html",
-    "src/md-menu.html"
-    "src/md-reservation.html"
+    "src/md-home.html",
+    "src/md-album.html",
+    "src/md-menu.html",
+    "src/md-reservation.html",
     "src/md-about.html"
   ]
 }
