@@ -32,6 +32,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/neon-animation/animations/scale-up-animation.html">
 <link rel="import" href="../bower_components/neon-animation/animations/fade-out-animation.html">
 
+<link rel="import" href="md-home.html">
 <link rel="import" href="md-events.html">
 <link rel="import" href="md-event.html">
 <link rel="import" href="md-menu.html">
@@ -422,9 +423,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       },
 
       _pageChanged: function(page) {
-        // load page import on demand.
-        this.importHref(
-          this.resolveUrl('md-' + page + '.html'), null, null, true);
           this._changeCategory(page);
       },
 

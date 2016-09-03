@@ -8,7 +8,6 @@ Code distributed by Google as part of the polymer project is also
 subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
 -->
 
-<link rel="import" href="../bower_components/polymer/polymer.html">
 <link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
 <link rel="import" href="../bower_components/paper-input/paper-input.html">
 <link rel="import" href="../bower_components/paper-input/paper-textarea.html">
@@ -21,10 +20,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
 <link rel="import" href="../bower_components/paper-styles/typography.html">
 <link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
+<link rel="import" href="../bower_components/vaadin-date-picker/vaadin-date-picker.html">
+
 
 <link rel="import" href="md-timepicker.html">
 
-<link rel="import" href="../bower_components/iron-icons/maps-icons.html">
 
 <dom-module id="md-reservation-form">
 
@@ -174,7 +175,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       </div>
 
     <paper-button raised on-tap="submitForm" disabled$="[[!validators.summary]]">
-      <iron-icon class="reservation-icons" icon="maps:near-me"></iron-icon>
+      <iron-icon class="reservation-icons" icon="near-me"></iron-icon>
       Отправить
     </paper-button>
 
@@ -294,13 +295,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           month = '0' + month;
         }
         return [d.getFullYear(),  month, date].join('-');
-      },
-
-      ready: function() {
-        this.importHref(
-          this.resolveUrl('../bower_components/vaadin-date-picker/vaadin-date-picker.html'), null, null, true);
-          this.importHref(
-            this.resolveUrl('../bower_components/paper-dropdown-menu/paper-dropdown-menu.html'), null, null, true);
       },
 
       submitForm: function() {

@@ -8,7 +8,6 @@ Code distributed by Google as part of the polymer project is also
 subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
 -->
 
-<link rel="import" href="../bower_components/polymer/polymer.html">
 <link rel="import" href="../bower_components/app-route/app-route.html">
 <link rel="import" href="../bower_components/polymer/polymer.html">
 <link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
@@ -66,9 +65,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   [main-title] {
     font-weight: normal;
     margin-left: 50px;
+
   }
 
   [condensed-title] {
+    font-size: 40px;
     font-weight: normal;
     margin-left: 5px;
     overflow: hidden;
@@ -92,10 +93,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
   app-toolbar {
     color: white;
-  }
-
-  paper-ripple {
-    color: var(--app-lower-layer-color);
   }
 
   .special-list {
