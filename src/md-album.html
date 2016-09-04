@@ -295,7 +295,7 @@ Polymer({
 
   _albumPageChanged: function(album) {
     if(album !== undefined && this.route.prefix === '/album') {
-      this.$.ajax.url = ['http://localhost:80/api/v1/albums', album].join('/') + '/';
+      this.$.ajax.url = ['http://146.185.165.166:80/api/v1/albums', album].join('/') + '/';
       this.$.ajax.generateRequest();
     }
   },
