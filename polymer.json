@@ -15,6 +15,7 @@
     "bower_components/vaadin-date-picker/vaadin-date-picker-overlay.html",
     "bower_components/vaadin-date-picker/vaadin-date-picker-behavior.html",
     "bower_components/vaadin-date-picker/vaadin-infinite-scroller.html",
-    "bower_components/vaadin-date-picker/vaadin-month-calendar.html"
+    "bower_components/vaadin-date-picker/vaadin-month-calendar.html",
+    "bower_components/webcomponentsjs/webcomponents-lite.min.js"
   ]
 }
