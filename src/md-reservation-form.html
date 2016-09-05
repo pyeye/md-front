@@ -25,6 +25,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 
 <link rel="import" href="md-timepicker.html">
+<link rel="import" href="md-icons.html">
 
 
 <dom-module id="md-reservation-form">
@@ -175,7 +176,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       </div>
 
     <paper-button raised on-tap="submitForm" disabled$="[[!validators.summary]]">
-      <iron-icon class="reservation-icons" icon="maps:near-me"></iron-icon>
+      <iron-icon class="reservation-icons" icon="near-me"></iron-icon>
       Отправить
     </paper-button>
 
@@ -295,11 +296,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           month = '0' + month;
         }
         return [d.getFullYear(),  month, date].join('-');
-      },
-
-      ready: function() {
-        this.importHref(
-          this.resolveUrl('../bower_components/vaadin-date-picker/vaadin-date-picker.html'), null, null, true);
       },
 
       submitForm: function() {
