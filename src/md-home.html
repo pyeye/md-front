@@ -37,7 +37,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     }
 
     .menu {
-      -webkit-transition: all .5s ease;
       position: relative;
       display: inline-block;
       float: left;
@@ -61,70 +60,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       @apply(--layout-center-center);
     }
 
-    .image {
-      -webkit-transition: all 0.2s linear;
-      -webkit-transform: scale3d(1, 1, 1);
-      transform: scale3d(1, 1, 1);
-      filter: url("data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\'><filter id=\'grayscale\'><feColorMatrix type=\'saturate\' values=\'1\'/></filter></svg>#grayscale"); /* Firefox 10+ */
-      filter: gray alpha(opacity=100); /* IE6-9 */
-      -webkit-filter: grayscale(100%); /* Chrome 19+ & Safari 6+ */
-      -webkit-backface-visibility: hidden; /* Fix for transition flickering */
-    }
 
-    .menu:hover .image{
-      -webkit-transform: scale3d(1.1, 1.1, 1);
-      transform: scale3d(1.1, 1.1, 1);
-      filter: none;
-      -webkit-filter: grayscale(0%);
-    }
-
-    .events:hover .image{
-      -webkit-transform: scale3d(1.1, 1.1, 1);
-      transform: scale3d(1.1, 1.1, 1);
-      filter: none;
-      -webkit-filter: grayscale(0%);
-    }
-
-    .reserve:hover .image{
-      -webkit-transform: scale3d(1.1, 1.1, 1);
-      transform: scale3d(1.1, 1.1, 1);
-      filter: none;
-      -webkit-filter: grayscale(0%);
-    }
-
-    .about:hover .image{
-      -webkit-transform: scale3d(1.1, 1.1, 1);
-      transform: scale3d(1.1, 1.1, 1);
-      filter: none;
-      -webkit-filter: grayscale(0%);
-    }
-
-    .gallery:hover .image{
-      -webkit-transform: scale3d(1.1, 1.1, 1);
-      transform: scale3d(1.1, 1.1, 1);
-      filter: none;
-      -webkit-filter: grayscale(0%);
-    }
-
-    .menu:hover .item-title{
-      color: white;
-    }
-
-    .events:hover .item-title{
-      color: white;
-    }
-
-    .reserve:hover .item-title{
-      color: white;
-    }
-
-    .about:hover .item-title{
-      color: white;
-    }
-
-    .gallery:hover .item-title{
-      color: white;
-    }
 
     .reserve {
       position: relative;
@@ -162,6 +98,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       @apply(--layout-center-center);
     }
 
+    .image {
+      -webkit-transition: all 0.2s linear;
+      transition: all 0.2s linear;
+      -webkit-transform: scale3d(1, 1, 1);
+      transform: scale3d(1, 1, 1);
+    }
+
     .item-title {
       position: absolute;
       bottom: 0;
@@ -171,9 +114,84 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       color: var(--app-primary-color);
       padding: 20px;
       @apply(--paper-font-display1);
-      transition: opacity 0.1s;
       transition: color 0.5s;
       z-index: 1;
+    }
+
+    .item-cover {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      top: 0;
+      background: #252525;
+      transition: opacity 0.5s;
+      opacity: 0.4;
+    }
+
+    .menu:hover .image{
+      -webkit-transform: scale3d(1.08, 1.08, 1);
+      transform: scale3d(1.08, 1.08, 1);
+    }
+
+    .events:hover .image{
+      -webkit-transform: scale3d(1.08, 1.08, 1);
+      transform: scale3d(1.08, 1.08, 1);
+    }
+
+    .reserve:hover .image{
+      -webkit-transform: scale3d(1.08, 1.08, 1);
+      transform: scale3d(1.08, 1.08, 1);
+    }
+
+    .about:hover .image{
+      -webkit-transform: scale3d(1.08, 1.08, 1);
+      transform: scale3d(1.08, 1.08, 1);
+    }
+
+    .gallery:hover .image{
+      -webkit-transform: scale3d(1.08, 1.08, 1);
+      transform: scale3d(1.08, 1.08, 1);
+    }
+
+    .menu:hover .item-title{
+      color: white;
+    }
+
+    .menu:hover .item-cover{
+      opacity: 0;
+    }
+
+    .events:hover .item-title{
+      color: white;
+    }
+
+    .events:hover .item-cover{
+      opacity: 0;
+    }
+
+    .reserve:hover .item-title{
+      color: white;
+    }
+
+    .reserve:hover .item-cover{
+      opacity: 0;
+    }
+
+    .about:hover .item-title{
+      color: white;
+    }
+
+    .about:hover .item-cover{
+      opacity: 0;
+    }
+
+    .gallery:hover .item-title{
+      color: white;
+    }
+
+    .gallery:hover .item-cover{
+      opacity: 0;
     }
 
     iron-image {
