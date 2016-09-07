@@ -136,16 +136,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                   name: 'ripple-animation',
                   id: 'about-ripple',
                   toPage: this,
+                  timing: {duration: 700},
                 },{
                 name: 'hero-animation',
                 id: 'about-hero',
                 toPage: this,
+                timing: {duration: 400},
               }, {
                 name: 'fade-in-animation',
                 node: this.$.content,
-                timing: {
-                    delay: 150
-                },
+                timing: {delay: 150},
               }],
               'exit': {
                 name: 'fade-out-animation',
