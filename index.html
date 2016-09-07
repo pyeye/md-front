@@ -16,45 +16,199 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
   <title>Mad Dog</title>
 
-  <link rel="shortcut icon" sizes="32x32" href="/images/app-icon-32.png">
+  <link rel="shortcut icon" sizes="32x32" href="/images/logo_32.png">
   <link type="text/css" rel="stylesheet" href="bower_components/lightgallery.js/dist/css/lightgallery.min.css" />
-
-
-  <meta name="theme-color" content="#fff">
-
+  <script src="bower_components/lightgallery.js/dist/js/lightgallery.min.js" async></script>
+  <script src="bower_components/lg-thumbnail.js/dist/lg-thumbnail.min.js" async></script>
   <link rel="manifest" href="/manifest.json">
 
   <script>
 
-    // setup Polymer options
-    window.Polymer = {lazyRegister: true, dom: 'shadow'};
 
-    // load webcomponents polyfills
-    (function() {
-      if ('registerElement' in document
-          && 'import' in document.createElement('link')
-          && 'content' in document.createElement('template')) {
-        // browser has web components
-      } else {
-        // polyfill web components
-        var e = document.createElement('script');
-        e.src = '/bower_components/webcomponentsjs/webcomponents-lite.min.js';
-        document.head.appendChild(e);
-      }
-    })();
-
-    // load pre-caching service worker
-    if ('serviceWorker' in navigator) {
-      window.addEventListener('load', function() {
-        navigator.serviceWorker.register('/service-worker.js');
-      });
-    }
 
   </script>
 
-  <link rel="import" href="/src/md-app.html">
+  <link rel="import" id="bundle" href="/src/md-app.html" async>
 
   <style>
+
+    body.loading #splash {
+      opacity: 1;
+    }
+
+    #splash {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      transition: opacity 300ms cubic-bezier(0,0,0.2,1);
+      opacity: 0;
+      will-change: opacity;
+      z-index: 1;
+      background-color: #252525;
+    }
+
+    #splash-logo {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 2;
+    }
+
+    #splash-logo img {
+      width: 180px;
+    }
+
+    #splash-logo svg {
+      position: relative;
+      left: -113.7px;
+      top: -27.8px;
+      width: 41px;
+      height: 41px;
+    }
+
+
+
+    @media (max-width: 480px) {
+      #splash-logo img {
+        width: 150px;
+      }
+
+      #splash-logo {
+        transform: translate(-40%, -50%);
+      }
+
+      #splash-logo svg {
+        left: -95.5px;
+        top: -22.6px;
+        width: 35px;
+        height: 35px;
+      }
+    }
+
+    @media (max-width: 380px) {
+      #splash-logo img {
+        width: 125px;
+      }
+
+      #splash-logo {
+        transform: translate(-40%, -50%);
+      }
+
+      #splash-logo svg {
+        left: -80.2px;
+        top: -19.1px;
+        width: 28px;
+        height: 28px;
+      }
+    }
+
+
+
+
+
+    .spinner {
+      -webkit-animation: rotator 1.4s linear infinite;
+      animation: rotator 1.4s linear infinite;
+    }
+
+    @-webkit-keyframes rotator {
+      0% {
+        -webkit-transform: rotate(0deg);
+        transform: rotate(0deg);
+      }
+      100% {
+        -webkit-transform: rotate(270deg);
+        transform: rotate(270deg);
+      }
+    }
+
+    @keyframes rotator {
+      0% {
+        -webkit-transform: rotate(0deg);
+        transform: rotate(0deg);
+      }
+      100% {
+        -webkit-transform: rotate(270deg);
+        transform: rotate(270deg);
+      }
+    }
+    .path {
+      stroke-dasharray: 187;
+      stroke-dashoffset: 0;
+      -webkit-transform-origin: center;
+      transform-origin: center;
+      -webkit-animation: dash 1.4s ease-in-out infinite, colors 5.6s ease-in-out infinite;
+      animation: dash 1.4s ease-in-out infinite, colors 5.6s ease-in-out infinite;
+    }
+
+    @-webkit-keyframes colors {
+      0% {
+        stroke: #F44336;
+      }
+      25% {
+        stroke: #F44336;
+      }
+      50% {
+        stroke: #F44336;
+      }
+      75% {
+        stroke: #F44336;
+      }
+      100% {
+        stroke: #F44336;
+      }
+    }
+
+    @keyframes colors {
+      0% {
+        stroke: #F44336;
+      }
+      25% {
+        stroke: #F44336;
+      }
+      50% {
+        stroke: #F44336;
+      }
+      75% {
+        stroke: #F44336;
+      }
+      100% {
+        stroke: #F44336;
+      }
+    }
+    @-webkit-keyframes dash {
+      0% {
+        stroke-dashoffset: 187;
+      }
+      50% {
+        stroke-dashoffset: 46.75;
+        -webkit-transform: rotate(135deg);
+        transform: rotate(135deg);
+      }
+      100% {
+        stroke-dashoffset: 187;
+        -webkit-transform: rotate(450deg);
+        transform: rotate(450deg);
+      }
+    }
+    @keyframes dash {
+      0% {
+        stroke-dashoffset: 187;
+      }
+      50% {
+        stroke-dashoffset: 46.75;
+        -webkit-transform: rotate(135deg);
+        transform: rotate(135deg);
+      }
+      100% {
+        stroke-dashoffset: 187;
+        -webkit-transform: rotate(450deg);
+        transform: rotate(450deg);
+      }
+    }
 
     body {
       margin: 0;
@@ -67,10 +221,19 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   </style>
 
 </head>
-<body>
-  <script src="bower_components/lightgallery.js/dist/js/lightgallery.min.js"></script>
-  <script src="bower_components/lg-thumbnail.js/dist/lg-thumbnail.min.js"></script>
+<body class="loading">
+  <div id="splash">
+    <div id="splash-logo">
+      <img src="http://localhost/img/static/new_logo_3_ripple.jpeg" alt="" />
+      <svg class="spinner" width="65px" height="65px" viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg">
+        <circle class="path" fill="none" stroke-width="6" stroke-linecap="round" cx="33" cy="33" r="30"></circle>
+      </svg>
+    </div>
+  </div>
+
   <md-app></md-app>
+  <script src="app.js" async></script>
+
 
 </body>
 </html>

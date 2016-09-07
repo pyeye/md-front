@@ -8,6 +8,7 @@
   ],
   "includeDependencies": [
     "manifest.json",
+    "app.js",
     "bower_components/lightgallery.js/dist/**/*",
     "bower_components/lg-thumbnail.js/dist/lg-thumbnail.min.js",
     "bower_components/lightgallery.js/dist/css/lightgallery.min.css",
