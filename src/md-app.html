@@ -85,6 +85,36 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       @apply(--layout-flex);
     }
 
+    .social {
+      display:flex;
+      justify-content: center;
+      margin-bottom: 12px;
+
+    }
+
+    .social-icon {
+      --iron-icon-height: 29px;
+      --iron-icon-width: 29px;
+      margin-left: 18px;
+      margin-right: 18px;
+    }
+
+    .social-icon-container {
+      display: inline-block;
+      transition: color 0.5s;
+      color: #FFFFFF;
+    }
+
+    .social-icon-container a {
+      transition: color 0.5s;
+      color: #FFFFFF;
+    }
+
+    .social-icon-container:hover a {
+      color: var(--app-primary-color);
+    }
+
+
     app-header paper-icon-button {
       --paper-icon-button-ink-color: #fff;
     }
@@ -145,7 +175,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     }
 
     .logo img {
-      width: 110px;
+      width: 100px;
     }
 
     paper-dialog.menu-modal {
@@ -287,6 +317,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               <a name="reservation" href="#/reservation"><iron-icon class="nav-icons" icon="event-available"></iron-icon> Бронирование</a>
               <a name="about" href="#/about"><iron-icon class="nav-icons" icon="feedback"></iron-icon> О нас</a>
             </iron-selector>
+          </div>
+          <div class="social">
+            <div class="social-icon-container">
+              <a target="_blank" href="https://www.instagram.com/mad_dog_club/"><iron-icon class="social-icon" icon="instagram"></iron-icon></a>
+            </div>
+            <div class="social-icon-container">
+              <a target="_blank" href="https://vk.com/club_maddog"><iron-icon class="social-icon" icon="vk"></iron-icon></a>
+            </div>
           </div>
           <div class="flex-contact">
             <div class="contact-info">
