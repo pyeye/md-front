@@ -33,7 +33,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       return result;
     };
     // (Optional) Use native Shadow DOM if availabe in the browser.
-    window.Polymer = window.Polymer || {dom: 'shadow'};
+    window.Polymer = window.Polymer || {lazyRegister: true, dom: 'shadow'};
     // 1. Create deferred Promise to capture async import's load.
     var importsLoadedDeferred = deferred();
     function onImportsLoaded(e) {
