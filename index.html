@@ -17,18 +17,32 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <title>Mad Dog</title>
 
   <link rel="shortcut icon" sizes="32x32" href="/images/logo_32.png">
-  <link type="text/css" rel="stylesheet" href="bower_components/lightgallery.js/dist/css/lightgallery.min.css" />
-  <script src="bower_components/lightgallery.js/dist/js/lightgallery.min.js" async></script>
-  <script src="bower_components/lg-thumbnail.js/dist/lg-thumbnail.min.js" async></script>
+  <link type="text/css" rel="stylesheet" href="bower_components/lightgallery.js/dist/css/lightgallery.min.css" async>
   <link rel="manifest" href="/manifest.json">
 
   <script>
-
-
-
+    // Note: this version requires Promises, which are in all the
+    // latest browsers except IE 11. Edge will ship them.
+    // Note: native Promise.defer() is deprecated. Have to create our own.
+    function deferred() {
+      var result = {};
+      result.promise = new Promise(function(resolve, reject) {
+        result.resolve = resolve;
+        result.reject = reject;
+      });
+      return result;
+    };
+    // (Optional) Use native Shadow DOM if availabe in the browser.
+    window.Polymer = window.Polymer || {dom: 'shadow'};
+    // 1. Create deferred Promise to capture async import's load.
+    var importsLoadedDeferred = deferred();
+    function onImportsLoaded(e) {
+      // 3. Resolve the Promise when the async import has loaded.
+      importsLoadedDeferred.resolve(e.target);
+    }
   </script>
 
-  <link rel="import" id="bundle" href="/src/md-app.html" async>
+  <link rel="import" href="/src/md-app.html" onload="onImportsLoaded(event)" async>
 
   <style>
 
@@ -45,7 +59,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       transition: opacity 300ms cubic-bezier(0,0,0.2,1);
       opacity: 0;
       will-change: opacity;
-      z-index: 1;
+      z-index: -111;
       background-color: #252525;
     }
 
@@ -230,6 +244,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       </svg>
     </div>
   </div>
+
+  <script src="bower_components/lightgallery.js/dist/js/lightgallery.min.js" async></script>
+  <script src="bower_components/lg-thumbnail.js/dist/lg-thumbnail.min.js" async></script>
 
   <md-app></md-app>
   <script src="app.js" async></script>
