@@ -94,10 +94,69 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     color: white;
   }
 
+  .content {
+    @apply(--layout-horizontal);
+  }
+
   .special-list {
-    width: 65%;
+    width: 40%;
     margin:auto;
-    margin-bottom: 16px;
+    margin-top: 16px;
+
+  }
+
+  .news-title-casting {
+    position: absolute;
+    width: 35%;
+    bottom: 0;
+    left: 0;
+    top: 0;
+    background: rgba(0,0,0,0.6);
+    color: white;
+    padding: 20px;
+    @apply(--paper-font-subhead);
+  }
+
+  .news-title-jazz {
+    position: absolute;
+    width: 35%;
+    bottom: 0;
+    left: 0;
+    top: 0;
+    background: rgba(230, 81, 0,0.6);
+    color: white;
+    padding: 20px;
+    @apply(--paper-font-subhead);
+  }
+
+  .news-title-stand-up {
+    position: absolute;
+    width: 35%;
+    bottom: 0;
+    left: 0;
+    top: 0;
+    background: rgba(183, 28, 28,0.6);
+    color: white;
+    padding: 20px;
+    @apply(--paper-font-subhead);
+  }
+
+  .events-list {
+    width: 60%;
+    margin: 16px auto;
+  }
+
+  .events-material {
+    position: relative;
+    width: 80%;
+    margin: 16px auto;
+  }
+
+  .material-news {
+    position: relative;
+    width: 90%;
+    margin-right: auto;
+    height: 170px;
   }
 
   @media (max-width: 745px) {
@@ -112,7 +171,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
   paper-material {
     margin-top: 16px;
-    border-radius: 5px;
   }
 
   .event {
@@ -121,12 +179,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     cursor: pointer;
     padding: 16px 22px;
     border-bottom: 1px solid #191919;
-    background-color: #272727;
+    background-color: #252525;
   }
 
   .artist-container {
     @apply(--layout-horizontal);
-
   }
 
   .artist-title {
@@ -144,36 +201,36 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   .event-date {
     @apply(--layout-vertical);
     @apply(--paper-font-title);
-    width: 15%;
-    min-width: 90px;
+    width: 20%;
+    min-width: 100px;
     color: var(--app-primary-color);
     text-align: center;
     margin-top: auto;
     margin-bottom: auto;
-
   }
 
   .event-date-soon {
     @apply(--paper-font-headline);
-
   }
 
   .event-date-weekday {
     @apply(--paper-font-subhead);
+    font-size: 15px;
   }
 
   .event-date-day {
-    @apply(--paper-font-display3);
-    font-size: 50px;
+    @apply(--paper-font-display1);
+    font-size: 38px;
   }
 
   .event-date-month {
     @apply(--paper-font-subhead);
+    font-size: 15px;
   }
 
   .event-title {
     padding: 16px;
-    @apply(--paper-font-display1);
+    @apply(--paper-font-display2);
     color: #FFFFFF;
   }
 
@@ -181,6 +238,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     @apply(--layout-flex);
     @apply(--layout-vertical);
     padding: 0 16px;
+    margin-top: auto;
+    margin-bottom: auto;
   }
 
   .artist-name {
@@ -196,15 +255,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
   .primary {
     @apply(--paper-font-headline);
-    color: var(--app-primary-color);
+    color: #FFFFFF;
+    font-size: 26px;
   }
 
   .secondary {
-    @apply(--paper-font-body1);
+    @apply(--paper-font-subhead);
     color: #FFFFFF;
     opacity: 0.7;
-    font-size: 14px;
-    margin-bottom: 8px;
     display: block; /* Fallback for non-webkit */
     display: -webkit-box;
     -webkit-line-clamp: 2;
@@ -219,6 +277,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
   paper-ripple {
     color: var(--app-primary-color);
+  }
+
+  .news-image {
+    position: relative;
+    min-height: 170px;
+    height: 100%;
+    width: 100%;
+    max-width: 400px;
+
+    background-color: #252525;
   }
 
   #ripple {
@@ -254,57 +322,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 
   <div id="ripple"></div>
-  <div id="content">
-    <template is="dom-if" if="[[showSpecial]]">
-      <div class="special-list">
-        <div class="event-title">
-          Не пропустите
-        </div>
-          <template is="dom-repeat" items="[[specialEvents]]">
-            <paper-material id$="r_[[item.pk]]" on-tap="_heroAnimationHandler">
-              <a href="#/event/[[item.pk]]">
-                <div class="event">
-                  <div class="event-date">
-                    <div class="event-date-weekday">[[item.date.weekday]]</div>
-                    <div class="event-date-soon">[[item.date.soon]]</div>
-                    <div class="event-date-day">[[item.date.day]]</div>
-                    <div class="event-date-month">[[item.date.month]]</div>
-                  </div>
-                  <div class="pad">
-                    <div class="primary">[[item.name]]</div>
-                    <div class="secondary">[[item.info]]</div>
-                    <div class="artist-container">
-                      <div class="artist-title">
-                        Артисты:
-                      </div>
-                      <template is="dom-repeat" items="{{item.artists}}" as="artist">
-                        <div class="artist-box">
-                          <div class="artist-name">
-                            [[artist.name]]
-                          </div>
-                          <div class="artist-style">
-                            [[artist.style]]
-                          </div>
-                        </div>
-                      </template>
-                    </div>
-                  </div>
-                  <paper-ripple></paper-ripple>
-                </div>
-              </a>
-            </paper-material>
-          </template>
-      </div>
-    </template>
-
-    <div class="special-list">
-      <div class="event-title">
-        Ближайшие мероприятия
-      </div>
+  <div id="content" class="content">
+    <div class="events-list">
+    <paper-material class="events-material">
       <template is="dom-repeat" items="[[regularEvents]]">
-        <paper-material id$="r_[[item.pk]]" on-tap="_heroAnimationHandler">
           <a href="#/event/[[item.pk]]">
-            <div class="event">
+            <div class="event" on-tap="_heroAnimationHandler">
               <div class="event-date">
                 <div class="event-date-weekday">[[item.date.weekday]]</div>
                 <div class="event-date-soon">[[item.date.soon]]</div>
@@ -313,28 +336,58 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               </div>
               <div class="pad">
                 <div class="primary">[[item.name]]</div>
-                <div class="secondary">[[item.info]]</div>
-                <div class="artist-container">
-                  <div class="artist-title">
-                    Артисты:
-                  </div>
-                  <template is="dom-repeat" items="{{item.artists}}" as="artist">
-                    <div class="artist-box">
-                      <div class="artist-name">
-                        [[artist.name]]
-                      </div>
-                      <div class="artist-style">
-                        [[artist.style]]
-                      </div>
-                    </div>
-                  </template>
-                </div>
+                <div class="secondary">Stand Up | Вход по билетам</div>
               </div>
               <paper-ripple></paper-ripple>
             </div>
           </a>
-        </paper-material>
+
       </template>
+      </paper-material>
+    </div>
+    <div class="special-list">
+        <paper-material class="material-news">
+          <iron-image class="news-image" sizing="cover" preload fade src="http://localhost/img/static/events/casting.jpg"></iron-image>
+          <div class="news-title-casting">
+            <div class="news-date">
+              Каждую среду
+            </div>
+            <div class="news-date">
+              18:00
+            </div>
+            <div class="news-info">
+              Кастинг молодых исполнителей
+            </div>
+          </div>
+        </paper-material>
+        <paper-material class="material-news">
+          <iron-image class="news-image" sizing="cover" preload fade src="http://localhost/img/static/events/jazz.jpg"></iron-image>
+          <div class="news-title-jazz">
+            <div class="news-date">
+              Каждый четверг
+            </div>
+            <div class="news-date">
+              21:00
+            </div>
+            <div class="news-info">
+              Джазовый вечер
+            </div>
+          </div>
+        </paper-material>
+        <paper-material class="material-news">
+          <iron-image class="news-image" sizing="cover" preload fade src="http://localhost/img/static/events/stand_up.jpg"></iron-image>
+          <div class="news-title-stand-up">
+            <div class="news-date">
+              Каждое воскресенье
+            </div>
+            <div class="news-date">
+              21:00
+            </div>
+            <div class="news-info">
+              Stand Up выступления
+            </div>
+          </div>
+        </paper-material>
     </div>
   </div>
 
