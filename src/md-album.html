@@ -27,7 +27,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
   :host {
     display: block;
-    --app-header-image: url(http://localhost/img/static/homepage/мероприятия3.jpg);
+    --app-header-image: url(http://146.185.165.166/img/static/homepage/мероприятия3.jpg);
     --app-grid-columns: 4;
     --app-grid-gutter: 5px;
     --app-grid-item-height: 20vw;
@@ -295,7 +295,7 @@ Polymer({
 
   _albumPageChanged: function(album) {
     if(album !== undefined && this.route.prefix === '/album') {
-      this.$.ajax.url = ['http://localhost:80/api/v1/albums', album].join('/') + '/';
+      this.$.ajax.url = ['http://146.185.165.166:80/api/v1/albums', album].join('/') + '/';
       this.$.ajax.generateRequest();
     }
   },
