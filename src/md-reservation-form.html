@@ -25,6 +25,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 
 <link rel="import" href="md-timepicker.html">
+<link rel="import" href="md-icons.html">
 
 
 <dom-module id="md-reservation-form">
@@ -91,7 +92,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     </style>
 
     <iron-ajax id="ajax"
-               url="http://146.185.165.166/api/v1/reservation/"
+               url="http://localhost/api/v1/reservation/"
                method="POST"
                handle-as="json"
                on-response="handleResponse"></iron-ajax>
@@ -135,11 +136,33 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                                 i18n="[[i18n]]"></vaadin-date-picker>
           </div>
           <div class="form-item">
-            <paper-input-container  attr-for-value="value" id="time">
-              <label>Время*</label>
-              <md-timepicker class="paper-input-input" value="{{form.time}}"></md-timepicker>
-              <paper-input-error>Это обязательное поле!</paper-input-error>
-            </paper-input-container>
+            <paper-dropdown-menu id="time" label="Время*" value="{{form.time}}">
+              <paper-listbox class="dropdown-content">
+                <paper-item>&nbsp&nbsp&nbsp 16:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                <paper-item>&nbsp&nbsp&nbsp 16:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                <paper-item>&nbsp&nbsp&nbsp 17:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                <paper-item>&nbsp&nbsp&nbsp 17:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                <paper-item>&nbsp&nbsp&nbsp 18:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                <paper-item>&nbsp&nbsp&nbsp 18:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                <paper-item>&nbsp&nbsp&nbsp 19:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                <paper-item>&nbsp&nbsp&nbsp 19:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                <paper-item>&nbsp&nbsp&nbsp 20:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                <paper-item>&nbsp&nbsp&nbsp 20:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                <paper-item>&nbsp&nbsp&nbsp 21:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                <paper-item>&nbsp&nbsp&nbsp 21:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                <paper-item>&nbsp&nbsp&nbsp 22:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                <paper-item>&nbsp&nbsp&nbsp 22:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                <paper-item>&nbsp&nbsp&nbsp 23:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                <paper-item>&nbsp&nbsp&nbsp 23:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                <paper-item>&nbsp&nbsp&nbsp 00:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                <paper-item>&nbsp&nbsp&nbsp 00:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                <paper-item>&nbsp&nbsp&nbsp 01:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                <paper-item>&nbsp&nbsp&nbsp 01:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                <paper-item>&nbsp&nbsp&nbsp 02:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                <paper-item>&nbsp&nbsp&nbsp 02:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+                <paper-item>&nbsp&nbsp&nbsp 03:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
+              </paper-listbox>
+            </paper-dropdown-menu>
           </div>
         </div>
       </div>
@@ -195,7 +218,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 name: '',
                 phone: '',
                 date: '',
-                time: new Date().getHours() + ':' + new Date().getMinutes() + ':00',
+                time: '',
                 is_vip: false,
             }
           },
@@ -232,15 +255,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               today: 'Сегодня',
               cancel: 'Отмена',
               formatDate: function(d) {
+                var options = {
+                  month: 'long',
+                  day: 'numeric',
+                };
+                var local = d.toLocaleString("ru", options).split(' ');
                 var date = d.getDate();
-                var month = d.getMonth() + 1;
                 if(date < 10) {
                   date = '0' + date;
                 }
-                if(month < 10) {
-                  month = '0' + month;
-                }
-                return [date, month, d.getFullYear()].join('.');
+                return [date, local[1], d.getFullYear()].join(' ');
               },
               formatTitle: function(monthName, fullYear) {
                 return monthName + ' ' + fullYear;
@@ -254,8 +278,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         '_formNameChanged(form.name)',
         '_formPhoneChanged(form.phone)',
         '_formDateChanged(form.date)',
+        '_formTimeChanged(form.time)',
         '_formPeopleChanged(form.count_people)',
-        '_formValid(validators.name, validators.phone, validators.count_peeople)',
+        '_formValid(validators.name, validators.phone, validators.count_peeople, validators.date, validators.time)',
       ],
 
       _formTimeInitial: function(newValue, oldValue) {
@@ -271,9 +296,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       },
 
       _formDateChanged: function(newValue, oldValue) {
-        if(newValue.length === 0) {
-          this.set('form.date', this._initialDate());
-        }
+        this.set('validators.date', newValue.length !== 0);
+      },
+
+      _formTimeChanged: function(newValue, oldValue) {
+        this.set('validators.time', newValue.length !== 0);
       },
 
       _formPeopleChanged: function(newValue, oldValue) {
@@ -294,7 +321,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         if(month < 10) {
           month = '0' + month;
         }
-        return [d.getFullYear(),  month, date].join('-');
+        return [d.getFullYear(),  month, date].join('-') + 'г.';
       },
 
       submitForm: function() {

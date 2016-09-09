@@ -85,6 +85,37 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       @apply(--layout-flex);
     }
 
+    .social {
+      display: -ms-flexbox;
+      display: -webkit-flex;
+      display: flex;
+      justify-content: center;
+      margin-bottom: 24px;
+    }
+
+    .social-icon {
+      --iron-icon-height: 29px;
+      --iron-icon-width: 29px;
+      margin-left: 18px;
+      margin-right: 18px;
+    }
+
+    .social-icon-container {
+      display: inline-block;
+      transition: color 0.5s;
+      color: #FFFFFF;
+    }
+
+    .social-icon-container a {
+      transition: color 0.5s;
+      color: #FFFFFF;
+    }
+
+    .social-icon-container:hover a {
+      color: var(--app-primary-color);
+    }
+
+
     app-header paper-icon-button {
       --paper-icon-button-ink-color: #fff;
     }
@@ -120,7 +151,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     }
 
     .contact-info {
-      margin-bottom: 24px;
+      margin-bottom: 12px;
       margin-left: 16px;
     }
 
@@ -145,7 +176,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     }
 
     .logo img {
-      width: 110px;
+      width: 100px;
     }
 
     paper-dialog.menu-modal {
@@ -238,7 +269,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
     }
 
-    @media (max-width: 750px) {
+    @media (max-width: 768px) {
       paper-dialog.menu-modal {
         width: 75%;
       }
@@ -261,7 +292,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 
 
-    <app-drawer-layout responsive-width="750px">
+    <app-drawer-layout responsive-width="768px">
 
       <!-- Drawer content -->
       <app-drawer id="drawer">
@@ -269,7 +300,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           <div class="flex-logo">
             <a href="#/home">
               <div class="logo">
-                <img src="http://146.185.165.166/img/static/new_logo_3.jpeg" alt="" />
+                <img src="http://localhost/img/static/new_logo_3.jpeg" alt="" />
               </div>
             </a>
           </div>
@@ -288,11 +319,20 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               <a name="about" href="#/about"><iron-icon class="nav-icons" icon="feedback"></iron-icon> О нас</a>
             </iron-selector>
           </div>
+
           <div class="flex-contact">
             <div class="contact-info">
-              <span class="contacts">  <iron-icon icon="location-on"></iron-icon>&nbsp&nbsp ул. Кирова, дом 7а</span><br>
-              <span class="contacts">  <iron-icon icon="access-time"></iron-icon>&nbsp&nbsp 22:00 - 03:00</span><br>
-              <span class="contacts">  <iron-icon icon="phone"></iron-icon>&nbsp&nbsp 240 - 20 - 00</span>
+              <span class="contacts">  <iron-icon icon="location-on"></iron-icon>&nbsp&nbsp ул. Кирова, 7а</span><br>
+              <span class="contacts">  <iron-icon icon="access-time"></iron-icon>&nbsp&nbsp 16:00 - 03:00</span><br>
+              <span class="contacts">  <iron-icon icon="phone"></iron-icon>&nbsp&nbsp 8 (351) 240 - 20 - 00</span>
+            </div>
+          </div>
+          <div class="social">
+            <div class="social-icon-container">
+              <a target="_blank" href="https://vk.com/club_maddog"><iron-icon class="social-icon" icon="vk"></iron-icon></a>
+            </div>
+            <div class="social-icon-container">
+              <a target="_blank" href="https://www.instagram.com/mad_dog_club/"><iron-icon class="social-icon" icon="instagram"></iron-icon></a>
             </div>
           </div>
         </div>

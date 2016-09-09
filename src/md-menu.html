@@ -59,7 +59,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         background-color: var(--app-primary-color);
         color: #FAFAFA;
         --app-header-background-front-layer: {
-          background-image: url(http://146.185.165.166/img/static/homepage/menu.jpg);
+          background-image: url(http://localhost/img/static/homepage/menu.jpg);
           background-position: left center;
         };
       }
@@ -145,7 +145,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         </app-header>
 
       <div id="ripple"></div>
-      <div class="content">
+      <div id="content">
         <paper-tabs selected="{{tab}}" attr-for-selected="group" >
             <paper-tab group="main" on-tap="_mainTapped">Основное</paper-tab>
             <paper-tab group="bar">Карта бара</paper-tab>
@@ -195,11 +195,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                   name: 'hero-animation',
                   id: 'menu-hero',
                   toPage: this,
-                  timing: {duration: 400},
                 }, {
                   name: 'fade-in-animation',
                   node: this.$.content,
-                  timing: {delay: 150},
+                  timing: {delay: 300},
                 }],
               'exit': {
                   name: 'fade-out-animation',

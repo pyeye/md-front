@@ -35,7 +35,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         background-color: var(--app-primary-color);
         color: #FAFAFA;
         --app-header-background-front-layer: {
-          background-image: url(http://146.185.165.166/img/static/homepage/reserved.jpg);
+          background-image: url(http://localhost/img/static/homepage/reserved.jpg);
           background-position: center center;
         };
       }
@@ -153,6 +153,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                   name: 'ripple-animation',
                   id: 'reservation-ripple',
                   toPage: this,
+                  timing: {duration: 700},
                 }, {
                   name: 'fade-in-animation',
                   node: this.$.content,
@@ -161,6 +162,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                   name: 'hero-animation',
                   id: 'reservation-hero',
                   toPage: this,
+                  timing: {duration: 400},
                 }],
               'exit': {
                 name: 'fade-out-animation',

@@ -37,13 +37,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     }
 
     .menu {
-      -webkit-transition: all .5s ease;
       position: relative;
       display: inline-block;
       float: left;
       vertical-align: top;
-      width: calc(100% / 3);
-      height: 100%;
+      width: 50%;
+      height: calc(100% / 3);
       @apply(--paper-font-title);
       @apply(--layout-vertical);
       @apply(--layout-center-center);
@@ -54,84 +53,21 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       display: inline-block;
       float: left;
       vertical-align: top;
-      width: calc(100% / 3 * 2);
+      width: 100%;
       height: calc(100% / 3);
       @apply(--paper-font-title);
       @apply(--layout-vertical);
       @apply(--layout-center-center);
     }
 
-    .image {
-      -webkit-transition: all 0.2s linear;
-      -webkit-transform: scale3d(1, 1, 1);
-      transform: scale3d(1, 1, 1);
-      filter: url("data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\'><filter id=\'grayscale\'><feColorMatrix type=\'saturate\' values=\'1\'/></filter></svg>#grayscale"); /* Firefox 10+ */
-      filter: gray alpha(opacity=100); /* IE6-9 */
-      -webkit-filter: grayscale(100%); /* Chrome 19+ & Safari 6+ */
-      -webkit-backface-visibility: hidden; /* Fix for transition flickering */
-    }
 
-    .menu:hover .image{
-      -webkit-transform: scale3d(1.1, 1.1, 1);
-      transform: scale3d(1.1, 1.1, 1);
-      filter: none;
-      -webkit-filter: grayscale(0%);
-    }
-
-    .events:hover .image{
-      -webkit-transform: scale3d(1.1, 1.1, 1);
-      transform: scale3d(1.1, 1.1, 1);
-      filter: none;
-      -webkit-filter: grayscale(0%);
-    }
-
-    .reserve:hover .image{
-      -webkit-transform: scale3d(1.1, 1.1, 1);
-      transform: scale3d(1.1, 1.1, 1);
-      filter: none;
-      -webkit-filter: grayscale(0%);
-    }
-
-    .about:hover .image{
-      -webkit-transform: scale3d(1.1, 1.1, 1);
-      transform: scale3d(1.1, 1.1, 1);
-      filter: none;
-      -webkit-filter: grayscale(0%);
-    }
-
-    .gallery:hover .image{
-      -webkit-transform: scale3d(1.1, 1.1, 1);
-      transform: scale3d(1.1, 1.1, 1);
-      filter: none;
-      -webkit-filter: grayscale(0%);
-    }
-
-    .menu:hover .item-title{
-      color: white;
-    }
-
-    .events:hover .item-title{
-      color: white;
-    }
-
-    .reserve:hover .item-title{
-      color: white;
-    }
-
-    .about:hover .item-title{
-      color: white;
-    }
-
-    .gallery:hover .item-title{
-      color: white;
-    }
 
     .reserve {
       position: relative;
       display: inline-block;
       float: left;
       vertical-align: top;
-      width: calc(100% / 3);
+      width: 50%;
       height: calc(100% / 3);
       @apply(--paper-font-title);
       @apply(--layout-vertical);
@@ -143,7 +79,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       display: inline-block;
       float: left;
       vertical-align: top;
-      width: calc(100% / 3);
+      width: 50%;
       height: calc(100% / 3);
       @apply(--paper-font-title);
       @apply(--layout-vertical);
@@ -155,11 +91,18 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       display: inline-block;
       float: left;
       vertical-align: top;
-      width: calc(100% / 3 * 2);
+      width: 50%;
       height: calc(100% / 3);
       @apply(--paper-font-title);
       @apply(--layout-vertical);
       @apply(--layout-center-center);
+    }
+
+    .image {
+      -webkit-transition: all 0.2s linear;
+      transition: all 0.2s linear;
+      -webkit-transform: scale3d(1, 1, 1);
+      transform: scale3d(1, 1, 1);
     }
 
     .item-title {
@@ -171,9 +114,84 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       color: var(--app-primary-color);
       padding: 20px;
       @apply(--paper-font-display1);
-      transition: opacity 0.1s;
       transition: color 0.5s;
       z-index: 1;
+    }
+
+    .item-cover {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      top: 0;
+      background: #252525;
+      transition: opacity 0.5s;
+      opacity: 0.25;
+    }
+
+    .menu:hover .image{
+      -webkit-transform: scale3d(1.08, 1.08, 1);
+      transform: scale3d(1.08, 1.08, 1);
+    }
+
+    .events:hover .image{
+      -webkit-transform: scale3d(1.08, 1.08, 1);
+      transform: scale3d(1.08, 1.08, 1);
+    }
+
+    .reserve:hover .image{
+      -webkit-transform: scale3d(1.08, 1.08, 1);
+      transform: scale3d(1.08, 1.08, 1);
+    }
+
+    .about:hover .image{
+      -webkit-transform: scale3d(1.08, 1.08, 1);
+      transform: scale3d(1.08, 1.08, 1);
+    }
+
+    .gallery:hover .image{
+      -webkit-transform: scale3d(1.08, 1.08, 1);
+      transform: scale3d(1.08, 1.08, 1);
+    }
+
+    .menu:hover .item-title{
+      color: white;
+    }
+
+    .menu:hover .item-cover{
+      opacity: 0;
+    }
+
+    .events:hover .item-title{
+      color: white;
+    }
+
+    .events:hover .item-cover{
+      opacity: 0;
+    }
+
+    .reserve:hover .item-title{
+      color: white;
+    }
+
+    .reserve:hover .item-cover{
+      opacity: 0;
+    }
+
+    .about:hover .item-title{
+      color: white;
+    }
+
+    .about:hover .item-cover{
+      opacity: 0;
+    }
+
+    .gallery:hover .item-title{
+      color: white;
+    }
+
+    .gallery:hover .item-cover{
+      opacity: 0;
     }
 
     iron-image {
@@ -188,7 +206,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     </style>
 
-    <iron-media-query query="max-width: 750px" query-matches="{{smallScreen}}"></iron-media-query>
+    <iron-media-query query="max-width: 768px" query-matches="{{smallScreen}}"></iron-media-query>
 
     <app-header-layout>
       <template is="dom-if" if="{{smallScreen}}">
@@ -201,9 +219,21 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       </template>
 
       <div class="container">
+
+      <a href="#/events">
+        <div class="events item" id="events">
+          <iron-image class="image" sizing="cover" preload fade src="http://localhost/img/static/homepage/мероприятия3.jpg"></iron-image>
+          <div class="item-title">
+            События
+          </div>
+          <div class="item-cover"></div>
+        </div>
+      </a>
+
+
         <a href="#/menu">
           <div class="menu item" id="menu">
-            <iron-image class="image" sizing="cover" preload fade src="http://146.185.165.166/img/static/homepage/menu.jpg"></iron-image>
+            <iron-image class="image" sizing="cover" preload fade src="http://localhost/img/static/homepage/menu.jpg"></iron-image>
             <div class="item-title">
               Меню
             </div>
@@ -211,11 +241,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           </div>
         </a>
 
-        <a href="#/events">
-          <div class="events item" id="events">
-            <iron-image class="image" sizing="cover" preload fade src="http://146.185.165.166/img/static/homepage/мероприятия3.jpg"></iron-image>
+        <a href="#/gallery">
+          <div class="gallery item" id="gallery">
+            <iron-image class="image" sizing="cover" preload fade src="http://localhost/img/static/homepage/gallery.jpg"></iron-image>
             <div class="item-title">
-              События
+              Галерея
             </div>
             <div class="item-cover"></div>
           </div>
@@ -223,7 +253,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         <a href="#/reservation">
           <div class="reserve item" id="reservation">
-            <iron-image class="image" sizing="cover" preload fade src="http://146.185.165.166/img/static/homepage/reserved.jpg"></iron-image>
+            <iron-image class="image" sizing="cover" preload fade src="http://localhost/img/static/homepage/reserved.jpg"></iron-image>
             <div class="item-title">
               Бронирование
             </div>
@@ -233,7 +263,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         <a href="#/about">
           <div class="about item" id="about">
-            <iron-image class="image" sizing="cover" preload fade src="http://146.185.165.166/img/static/homepage/онас.jpg"></iron-image>
+            <iron-image class="image" sizing="cover" preload fade src="http://localhost/img/static/homepage/онас.jpg"></iron-image>
             <div class="item-title">
               О нас
             </div>
@@ -241,15 +271,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           </div>
         </a>
 
-        <a href="#/gallery">
-          <div class="gallery item" id="gallery">
-            <iron-image class="image" sizing="cover" preload fade src="http://146.185.165.166/img/static/homepage/gallery.jpg"></iron-image>
-            <div class="item-title">
-              Галерея
-            </div>
-            <div class="item-cover"></div>
-          </div>
-        </a>
+
 
       </div>
     </app-header-layout>
