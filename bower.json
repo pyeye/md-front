@@ -37,7 +37,8 @@
     "lg-thumbnail.js": "^0.0.4",
     "paper-badge": "PolymerElements/paper-badge#^1.1.3",
     "paper-fab": "PolymerElements/paper-fab#^1.2.0",
-    "gold-phone-input": "PolymerElements/gold-phone-input#^1.1.0"
+    "gold-phone-input": "PolymerElements/gold-phone-input#^1.1.0",
+    "app-storage": "PolymerElements/app-storage#^0.9.5"
   },
   "devDependencies": {
     "web-component-tester": "^4.0.0"

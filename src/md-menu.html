@@ -152,7 +152,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             <paper-tab group="other" on-tap="_otherTapped">Фруктовый пар</paper-tab>
         </paper-tabs>
 
-        <neon-animated-pages selected="{{tab}}" attr-for-selected="group" entry-animation="[[_tabEntryAnimation]]" exit-animation="[[_tabExitAnimation]]">
+        <neon-animated-pages selected="{{tab}}" attr-for-selected="group" on-iron-select="_menuTabChanged">
             <md-menu-main group="main" entry-animation="slide-from-left-animation" exit-animation="slide-left-animation"></md-menu-main>
             <md-menu-bar group="bar" entry-animation="[[middleEntryAnimation]]" exit-animation="[[middleExitAnimation]]"></md-menu-bar>
             <md-menu-other group="other" entry-animation="slide-from-right-animation" exit-animation="slide-right-animation"></md-menu-other>
@@ -170,7 +170,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       properties: {
         tab: {
           type: String,
-          observer: '_tabChanged'
         },
 
         middleEntryAnimation: {
@@ -237,8 +236,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         Polymer.NeonSharedElementAnimatableBehavior,
         Polymer.IronResizableBehavior],
 
-      _tabChanged: function(tab, oldTab) {
-
+      _menuTabChanged: function(e) {
+        this.fire('md-load-menu', {},{
+          node: e.detail.item,
+          bubbles: false,
+        });
       },
 
       _mainTapped: function(e) {

@@ -169,7 +169,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     </style>
 
-    <iron-ajax auto
+    <iron-ajax id="ajax"
                url="http://146.185.165.166:80/api/v1/menu/?group=bar&format=md_menu"
                handle-as="json"
                last-response="{{menuBar}}"></iron-ajax>
@@ -217,6 +217,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           type: Array
         },
 
+      },
+
+      listeners: {
+        'md-load-menu': '_loadMenu',
+      },
+
+      _loadMenu: function(e) {
+        this.$.ajax.generateRequest();
+        this.unlisten(this, 'md-load-menu', '_loadMenu');
       },
 
       _getPrices: function(prices) {

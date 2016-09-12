@@ -29,6 +29,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/neon-animation/animations/fade-out-animation.html">
 <link rel="import" href="../bower_components/neon-animation/animations/fade-in-animation.html">
 
+<link rel="import" href="../bower_components/app-storage/app-localstorage/app-localstorage-document.html">
+
 
 <link rel="import" href="md-icons.html">
 
@@ -310,29 +312,29 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     </app-toolbar>
   </app-header>
 
-  <iron-ajax auto
-             url="http://146.185.165.166:80/api/v1/events/?special=true"
+  <iron-ajax id="ajax"
+             url="http://146.185.165.166:80/api/v1/events/"
              handle-as="json"
-             on-response="handleSpecialResponse"></iron-ajax>
+             on-response="handleResponse"></iron-ajax>
 
-  <iron-ajax auto
-             url="http://146.185.165.166:80/api/v1/events/?regular=true"
-             handle-as="json"
-             on-response="handleRegularResponse"></iron-ajax>
-
+  <app-localstorage-document key="events" data={{events}}></app-localstorage-document>
 
   <div id="ripple"></div>
   <div id="content" class="content">
     <div class="events-list">
     <paper-material class="events-material">
-      <template is="dom-repeat" items="[[regularEvents]]">
+      <template is="dom-repeat" items="[[events]]">
           <a href="#/event/[[item.pk]]">
             <div class="event" on-tap="_heroAnimationHandler">
               <div class="event-date">
-                <div class="event-date-weekday">[[item.date.weekday]]</div>
-                <div class="event-date-soon">[[item.date.soon]]</div>
-                <div class="event-date-day">[[item.date.day]]</div>
-                <div class="event-date-month">[[item.date.month]]</div>
+                <template is="dom-if" if="[[_shouldRenderDate(item.date)]]">
+                    <div class="event-date-soon">[[item.date.soon]]</div>
+                </template>
+                <template is="dom-if" if$="[[!_shouldRenderDate(item.date)]]">
+                  <div class="event-date-weekday">[[item.date.weekday]]</div>
+                  <div class="event-date-day">[[item.date.day]]</div>
+                  <div class="event-date-month">[[item.date.month]]</div>
+                </template>
               </div>
               <div class="pad">
                 <div class="primary">[[item.name]]</div>
@@ -400,28 +402,9 @@ Polymer({
   is: 'md-events',
 
   properties: {
-    day: {
-      type: String,
-      computed: 'computeDate(item.date)',
-    },
 
-    specialEvents: {
+    events: {
       type: Array
-    },
-
-    showSpecial: {
-      type: Boolean,
-      value: false,
-    },
-
-    regularEvents: {
-      type: Array
-    },
-
-    active: {
-      type: Boolean,
-      value: false,
-      reflectToAttribute: true
     },
 
     animationConfig: {
@@ -473,6 +456,7 @@ Polymer({
   },
 
   _renderNeonPage: function(e) {
+      this.$.ajax.generateRequest();
       layout = document.createElement('app-header-layout');
       layout.id = "layout";
       childNodes = Polymer.dom(this.root).childNodes;
@@ -483,20 +467,16 @@ Polymer({
       this.unlisten(this, 'md-render-neon-page', '_renderNeonPage');
   },
 
+  _shouldRenderDate: function(date) {
+    return !!date.soon;
+  },
+
   behaviors: [
     Polymer.NeonSharedElementAnimatableBehavior,
     Polymer.IronResizableBehavior],
 
-  handleSpecialResponse: function(request) {
-    this.specialEvents = this._handleResponse(request.detail.response);
-    this.showSpecial = this.specialEvents.length > 0 ? true : false;
-  },
-
-  handleRegularResponse: function(request) {
-    this.regularEvents = this._handleResponse(request.detail.response);
-  },
-
-  _handleResponse: function(response) {
+  handleResponse: function(request) {
+    var response = request.detail.response;
     var index, len, date, today;
     var options = {
       year: 'numeric',
@@ -508,37 +488,28 @@ Polymer({
       response[index].start = response[index].start.slice(0, -3);
       if(response[index].price == 0) {
         response[index].price = 'Свободный';
-      } else {
-        response[index].price += ' &#x20bd;'
       }
       date = new Date(response[index].date);
       today = new Date();
       today = today.toLocaleString("ru", options).split(' ');
       date = date.toLocaleString("ru", options).split(' ');
+      response[index].date = {
+        'weekday': date[0].slice(0, -1),
+        'day': date[1],
+        'month': date[2],
+        'year': date[3],
+        'original': response[index].date,
+      };
+
       if(date[1] === today[1] && date[2] === today[2]) {
-        response[index].date = {
-          'soon': 'Сегодня',
-        };
+        response[index].date['soon'] = 'Сегодня';
       } else if(date[1] == (parseInt(today[1]) + 1) && date[2] === today[2]) {
-        response[index].date = {
-          'soon': 'Завтра',
-        };
-      } else {
-        response[index].date = {
-          'weekday': date[0].slice(0, -1),
-          'day': date[1],
-          'month': date[2],
-          'year': date[3],
-          'original': response[index].date,
-        };
+        response[index].date['soon'] = 'Завтра';
       }
     };
-    return response;
+    this.events = response;
   },
 
-  computeDate: function(date) {
-    return date.split('-')[0];
-  },
 });
 
 </script>

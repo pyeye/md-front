@@ -178,6 +178,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   </app-header>
 
   <iron-ajax auto
+             id="ajax"
              url="http://146.185.165.166:80/api/v1/albums/"
              handle-as="json"
              last-response="{{response}}"></iron-ajax>
@@ -269,6 +270,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       },
 
       _renderNeonPage: function(e) {
+          //this.$.ajax.generateRequest();
           layout = document.createElement('app-header-layout');
           layout.id = "layout";
           childNodes = Polymer.dom(this.root).childNodes;

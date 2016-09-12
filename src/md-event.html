@@ -35,6 +35,8 @@
      <link rel="import" href="../bower_components/neon-animation/animations/fade-in-animation.html">
      <link rel="import" href="../bower_components/neon-animation/animations/slide-from-bottom-animation.html">
 
+     <link rel="import" href="../bower_components/app-storage/app-localstorage/app-localstorage-document.html">
+
      <link rel="import" href="md-icons.html">
 
      <dom-module id="md-event">
@@ -258,6 +260,8 @@
                   handle-as="json"
                   on-response="handleResponse"></iron-ajax>
 
+      <app-localstorage-document id="storage" key="events" data={{events}}></app-localstorage-document>
+
        <app-header id="header" effects="fade-background" reveals>
          <app-toolbar>
            <a href="#/events" tabindex="-1">
@@ -411,9 +415,27 @@
 
        _eventPageChanged: function(event) {
          if(event !== undefined && this.route.prefix === '/event') {
-           this.$.ajax.url = ['http://146.185.165.166:80/api/v1/events', event].join('/') + '/';
-           this.$.ajax.generateRequest();
+           var storageEvent = this._getEventFromStorage(event);
+           if (storageEvent !== null) {
+             this.event = storageEvent;
+             this.async(this._scroll, 200);
+           } else {
+             this.$.ajax.url = ['http://146.185.165.166:80/api/v1/events', event].join('/') + '/';
+             this.$.ajax.generateRequest();
+           }
          }
+       },
+
+       _getEventFromStorage: function(event) {
+         if (this.events === undefined) {
+           return null;
+         }
+         for (var i = 0, item; item = this.events[i]; ++i) {
+           if (item.pk == event) {
+             return item;
+           }
+         }
+         return null;
        },
 
        handleResponse: function(request) {
