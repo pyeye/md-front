@@ -51,7 +51,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     background-color: var(--app-primary-color);
     color: #fff;
     --app-header-background-front-layer: {
-      background-image: url(http://localhost/img/static/homepage/events.jpg);
+      background-image: url(http://146.185.165.166/img/static/homepage/events.jpg);
       background-position: center center;
     };
   }
@@ -334,7 +334,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   </app-header>
 
   <iron-ajax id="ajax"
-             url="http://localhost:80/api/v1/events/"
+             url="http://146.185.165.166:80/api/v1/events/"
              handle-as="json"
              on-response="handleResponse"></iron-ajax>
 
@@ -367,17 +367,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               </div>
               <template is="dom-if" if="[[_shouldRenderJazzBadge(item.extra)]]">
                 <div class="badge">
-                  <img class="item-badge" src="http://localhost/img/static/badges/events-jazz.png" alt="" />
+                  <img class="item-badge" src="http://146.185.165.166/img/static/badges/events-jazz.png" alt="" />
                 </div>
               </template>
               <template is="dom-if" if="[[_shouldRenderCastingBadge(item.extra)]]">
                 <div class="badge">
-                  <img class="item-badge" src="http://localhost/img/static/badges/events-casting5.png" alt="" />
+                  <img class="item-badge" src="http://146.185.165.166/img/static/badges/events-casting5.png" alt="" />
                 </div>
               </template>
               <template is="dom-if" if="[[_shouldRenderStandUpBadge(item.extra)]]">
                 <div class="badge">
-                  <img class="item-badge" src="http://localhost/img/static/badges/events-stand-up.png" alt="" />
+                  <img class="item-badge" src="http://146.185.165.166/img/static/badges/events-stand-up.png" alt="" />
                 </div>
               </template>
 

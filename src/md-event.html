@@ -441,7 +441,7 @@
              this.event = storageEvent;
              this.async(this._scroll, 200);
            } else {
-             this.$.ajax.url = ['http://localhost:80/api/v1/events', event].join('/') + '/';
+             this.$.ajax.url = ['http://146.185.165.166:80/api/v1/events', event].join('/') + '/';
              this.$.ajax.generateRequest();
            }
          }
