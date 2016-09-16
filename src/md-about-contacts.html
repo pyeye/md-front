@@ -1,0 +1,199 @@
+<!--
+@license
+Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+
+<link rel="import" href="../bower_components/neon-animation/neon-shared-element-animatable-behavior.html">
+<link rel="import" href="../bower_components/neon-animation/animations/hero-animation.html">
+<link rel="import" href="../bower_components/neon-animation/animations/ripple-animation.html">
+<link rel="import" href="../bower_components/neon-animation/animations/fade-out-animation.html">
+<link rel="import" href="../bower_components/neon-animation/animations/fade-in-animation.html">
+<link rel="import" href="../bower_components/neon-animation/animations/ripple-animation.html">
+<link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="../bower_components/iron-pages/iron-pages.html">
+<link rel="import" href="../bower_components/paper-material/paper-material.html">
+<link rel="import" href="../bower_components/paper-styles/typography.html">
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../bower_components/paper-input/paper-textarea.html">
+<link rel="import" href="../bower_components/google-map/google-map.html">
+<link rel="import" href="../bower_components/google-map/google-map-marker.html">
+<link rel="import" href="../bower_components/gold-email-input/gold-email-input.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
+
+<link rel="import" href="md-icons.html">
+
+<dom-module id="md-about-contacts">
+
+  <template>
+
+    <style>
+      :host {
+        display: block;
+        min-width: 870px;
+      }
+
+
+      paper-material {
+        padding: 16px;
+        margin: 24px;
+        background-color: #252525;
+        color: #FFFFFF;
+      }
+
+      .about-row {
+        @apply(--layout-horizontal);
+        justify-content: space-between;
+      }
+
+      .common {
+        margin-left: 12px;
+        width: 55%;
+      }
+
+
+
+      .title {
+        @apply(--paper-font-headline);
+        color: var(--app-primary-color);
+      }
+
+      .common-primary {
+        @apply(--paper-font-title);
+        color: var(--app-primary-color);
+      }
+
+      .common-secondary {
+        @apply(--paper-font-subhead);
+      }
+
+      a {
+        text-decoration: none;
+      }
+
+      .social-icon {
+        --iron-icon-height: 35px;
+        --iron-icon-width: 35px;
+        color: #FFFFFF;
+        cursor: pointer;
+      }
+
+      .social a {
+        color: #FFFFFF;
+      }
+
+      .social-url {
+        @apply(--paper-font-subhead);
+        margin-left: 16px;
+        cursor: pointer;
+      }
+
+      .pad {
+        @apply(--layout-flex);
+        @apply(--layout-vertical);
+        width: 45%;
+        float: left;
+      }
+
+      google-map {
+        width: 100%;
+        height: 400px;
+      }
+
+
+
+    </style>
+
+
+
+    <div class="main-content">
+      <div class="about-row">
+        <div class="common">
+            <p class="title">Клуб живой музыки MAD DOG</p>
+            <p class="common-primary">Адрес:</p>
+            <p class="common-secondary">г. Челябинск ул. Кирова, 7а</p>
+            <p class="common-primary">Время работы:</p>
+            <p class="common-secondary">16:00 - 02:00</p>
+            <p class="common-secondary">12:00 - 14:00 - Бизнес ланч</p>
+            <p class="common-primary">Телефон:</p>
+            <p class="common-secondary"> 8 (351) 240 - 20 - 00 - для справок</p>
+            <p class="common-secondary"> 8 (919) 349 - 29 - 33 - для сотрудничества</p>
+            <p class="common-primary">Электронная почта:</p>
+            <p class="common-secondary">admin@email.com</p>
+        </div>
+        <div class="pad">
+          <div class="social">
+            <p class="title">Мы в социальных сетях:</p>
+            <p class="social-link">
+              <a target="_blank" href="https://vk.com/club_maddog"><iron-icon class="social-icon" icon="vk"></iron-icon><span class="social-url">/club_maddog</span></a>
+            </p>
+            <p class="social-link">
+              <a target="_blank" href="https://www.facebook.com/clubmaddog/"><iron-icon class="social-icon" id="fb-icon" icon="facebook"></iron-icon><span class="social-url">/clubmaddog</span></a>
+            </p>
+            <p class="social-link">
+                <a target="_blank" href="https://www.instagram.com/mad_dog_club/"><iron-icon class="social-icon" icon="instagram"></iron-icon><span class="social-url">/mad_dog_club</span></a>
+            </p>
+          </div>
+          <div class="message">
+            <p class="title">Обратная связь</p>
+            <paper-input auto-validate
+                         maxlength="20"
+                         char-counter
+                         error-message="Это обязательное поле!"
+                         label="Имя"
+                         required></paper-input>
+
+            <paper-input auto-validate
+                         maxlength="20"
+                         char-counter
+                         error-message="Это обязательное поле!"
+                         label="Эл. почта"
+                         required></paper-input>
+
+            <paper-textarea auto-validate
+                            label="Комментарий"
+                            maxlength="100"
+                            char-counter
+                            error-message="Это обязательное поле!"
+                            required></paper-textarea>
+                            <br>
+                            <paper-button raised on-tap="submitForm">
+                              <iron-icon class="reservation-icons" icon="near-me"></iron-icon>
+                              Отправить
+                            </paper-button>
+          </div>
+        </div>
+      </div>
+
+      <div class="map">
+        <p class="title">
+          Мы на карте:
+        </p>
+        <google-map fit-to-markers zoom="16" api-key="AIzaSyBpkU5yuBZCCd_djT8mhfl5s0yHqIPCVWU">
+          <google-map-marker api-key="AIzaSyBpkU5yuBZCCd_djT8mhfl5s0yHqIPCVWU" latitude="55.180348" longitude="61.400013" title="Go Giants!"></google-map-marker>
+        <google-map>
+      </div>
+    </div>
+
+
+
+
+
+  </template>
+
+  <script>
+
+    Polymer({
+
+      is: 'md-about-contacts',
+
+    });
+
+  </script>
+
+</dom-module>
