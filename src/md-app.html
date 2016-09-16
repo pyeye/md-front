@@ -66,7 +66,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     app-drawer {
       box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
-      --app-drawer-width: 250px;
+      --app-drawer-width: 260px;
       --app-drawer-content-container: {
         background-color: var(--app-upper-layer-color);
       }
@@ -90,7 +90,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       display: -webkit-flex;
       display: flex;
       justify-content: center;
-      margin-bottom: 24px;
+      margin-bottom: 12px;
     }
 
     .social-icon {
@@ -98,6 +98,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       --iron-icon-width: 29px;
       margin-left: 18px;
       margin-right: 18px;
+    }
+
+    #fb-icon {
+      --iron-icon-height: 25px;
+      --iron-icon-width: 25px;
     }
 
     .social-icon-container {
@@ -151,7 +156,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     }
 
     .contact-info {
-      margin-bottom: 12px;
+      margin-bottom: 24px;
       margin-left: 16px;
     }
 
@@ -168,6 +173,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       border-bottom: 1px solid #fff;
       margin-left: 20px;
       margin-right: 20px;
+      color: var(--app-primary-color);
     }
 
     .nav-icons {
@@ -177,6 +183,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     .logo img {
       width: 100px;
+    }
+
+    .logo .logo-text {
+      width: 210px;
     }
 
     paper-dialog.menu-modal {
@@ -298,11 +308,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       <app-drawer id="drawer">
         <div class="flex-drawer">
           <div class="flex-logo">
-            <a href="#/home">
+
               <div class="logo">
-                <img src="http://146.185.165.166/img/static/new_logo_3.jpeg" alt="" />
+                <a href="#/home">
+                <img src="http://localhost/img/static/new_logo_3.jpeg" alt="" />
+                <img class="logo-text" src="http://localhost/img/static/logo-text.png" alt="" />
+                  </a>
               </div>
-            </a>
+
+
+
           </div>
           <div class="flex-nav">
             <iron-selector selected="[[pageSection]]"
@@ -313,28 +328,31 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
               <a name="home" href="#/home"><iron-icon class="nav-icons" icon="home"></iron-icon>Главная</a>
               <a name="menu" href="#/menu"><iron-icon class="nav-icons" icon="restaurant-menu"></iron-icon> Меню</a>
-              <a name="events" href="#/events"><iron-icon class="nav-icons" icon="event"></iron-icon> События </paper-item></a>
+              <a name="events" href="#/events"><iron-icon class="nav-icons" icon="event"></iron-icon> Афиша </paper-item></a>
               <a name="gallery" href="#/gallery"><iron-icon class="nav-icons" icon="perm-media"></iron-icon> Галерея</a>
               <a name="reservation" href="#/reservation"><iron-icon class="nav-icons" icon="event-available"></iron-icon> Бронирование</a>
               <a name="about" href="#/about"><iron-icon class="nav-icons" icon="feedback"></iron-icon> О нас</a>
             </iron-selector>
-          </div>
-
-          <div class="flex-contact">
-            <div class="contact-info">
-              <span class="contacts">  <iron-icon icon="location-on"></iron-icon>&nbsp&nbsp ул. Кирова, 7а</span><br>
-              <span class="contacts">  <iron-icon icon="access-time"></iron-icon>&nbsp&nbsp 16:00 - 03:00</span><br>
-              <span class="contacts">  <iron-icon icon="phone"></iron-icon>&nbsp&nbsp 8 (351) 240 - 20 - 00</span>
-            </div>
           </div>
           <div class="social">
             <div class="social-icon-container">
               <a target="_blank" href="https://vk.com/club_maddog"><iron-icon class="social-icon" icon="vk"></iron-icon></a>
             </div>
             <div class="social-icon-container">
+              <a target="_blank" href="https://www.facebook.com/clubmaddog/"><iron-icon id="fb-icon" class="social-icon" icon="facebook"></iron-icon></a>
+            </div>
+            <div class="social-icon-container">
               <a target="_blank" href="https://www.instagram.com/mad_dog_club/"><iron-icon class="social-icon" icon="instagram"></iron-icon></a>
             </div>
           </div>
+          <div class="flex-contact">
+            <div class="contact-info">
+              <span class="contacts">  <iron-icon icon="location-on"></iron-icon>&nbsp&nbsp ул. Кирова, 7а</span><br>
+              <span class="contacts">  <iron-icon icon="access-time"></iron-icon>&nbsp&nbsp 16:00 - 02:00</span><br>
+              <span class="contacts">  <iron-icon icon="phone"></iron-icon>&nbsp&nbsp 8 (351) 240 - 20 - 00</span>
+            </div>
+          </div>
+
         </div>
       </app-drawer>
 
@@ -366,9 +384,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     </app-drawer-layout>
 
     <paper-dialog id="modal" class="menu-modal" entry-animation="scale-up-animation" exit-animation="fade-out-animation" with-backdrop>
-        <div class="modal-img">
+
           <iron-image src="{{modalItem.photo.original}}" sizing="cover" preload fade></iron-image>
-        </div>
+
         <div class="modal-item-name-container">
           <div class="modal-item-name-box">
             {{modalItem.name}}

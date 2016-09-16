@@ -92,8 +92,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     </style>
 
     <iron-ajax id="ajax"
-               url="http://146.185.165.166/api/v1/reservation/"
+               url="http://localhost/api/v1/reservation/"
                method="POST"
+               content-type="application/json"
                handle-as="json"
                on-response="handleResponse"></iron-ajax>
 
@@ -326,7 +327,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       submitForm: function() {
         this.form.phone = '+7' + this.form.phone.replace(/-/g, '');
-        this.$.ajax.body = this.form;
+        this.$.ajax.body = JSON.stringify(this.form);
         this.$.ajax.generateRequest();
       },
 

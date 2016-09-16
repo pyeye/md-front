@@ -317,13 +317,34 @@
 
              <div class="ingredient-item">
                <div class="ingredient-amount">Вход:</div>
-               <div class="ingredient-name">{{event.price}}
-                 <template is="dom-if" if="[[_showCurrency(event.price)]]">
-                   &#x20bd;
-                 </template>
-               </div>
+               <template is="dom-if" if="[[_isFreeEnter(event.extra.enter)]]">
+                 <div class="ingredient-name">Свободный</div>
+               </template>
+               <template is="dom-if" if="[[_isTicketsEnter(event.extra.enter)]]">
+                 <div class="pad">
+                   <div class="primary">
+                     По билетам
+                   </div>
+                   <div class="secondary">
+                     Стоимость билета [[event.extra.enter.value.price]] &#x20bd;
+                   </div>
+                 </div>
+               </template>
+               <template is="dom-if" if="[[_isPaidEnter(event.extra.enter)]]">
+                 <div class="pad">
+                   <div class="primary">
+                     [[event.extra.enter.value.price]] &#x20bd;
+                   </div>
+                   <div class="secondary">
+                     Девушкам до 21:00 вход свободный
+                   </div>
+                 </div>
+               </template>
              </div>
+             <!--
              <paper-fab icon="event-available" active on-tap="_toggleForm" raised></paper-fab>
+              -->
+
            </div>
          </paper-card>
      </template>
@@ -420,7 +441,7 @@
              this.event = storageEvent;
              this.async(this._scroll, 200);
            } else {
-             this.$.ajax.url = ['http://146.185.165.166:80/api/v1/events', event].join('/') + '/';
+             this.$.ajax.url = ['http://localhost:80/api/v1/events', event].join('/') + '/';
              this.$.ajax.generateRequest();
            }
          }
@@ -491,8 +512,16 @@
          return rand;
        },
 
-       _showCurrency: function(price) {
-         return price === 'Свободный' ? false : true;
+       _isFreeEnter: function(enter) {
+          return enter.code === 'free';
+       },
+
+       _isTicketsEnter: function(enter) {
+          return enter.code === 'tickets';
+       },
+
+       _isPaidEnter: function(enter) {
+          return enter.code === 'paid';
        },
 
        computeDate: function(date) {

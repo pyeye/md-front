@@ -15,6 +15,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/neon-animation/animations/fade-out-animation.html">
 <link rel="import" href="../bower_components/neon-animation/animations/fade-in-animation.html">
 <link rel="import" href="../bower_components/neon-animation/animations/ripple-animation.html">
+<link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="../bower_components/iron-pages/iron-pages.html">
+<link rel="import" href="../bower_components/paper-material/paper-material.html">
+<link rel="import" href="../bower_components/paper-styles/typography.html">
+
+<link rel="import" href="md-about-contacts.html">
+<link rel="import" href="md-about-story.html">
 
 <dom-module id="md-about">
 
@@ -68,25 +75,28 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         color: white;
 
       }
-      .card {
-        box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
+
+      .content-container {
+        @apply(--layout-horizontal);
+        justify-content: space-between;
+      }
+
+      paper-material {
         padding: 16px;
         margin: 24px;
-        border-radius: 5px;
-        background-color: #fff;
-        color: #757575;
+        background-color: #252525;
+        color: #FFFFFF;
+        min-width: 750px;
       }
-      .circle {
-        display: inline-block;
-        height: 64px;
-        width: 64px;
-        border-radius: 50%;
-        background: #ddd;
-        line-height: 64px;
-        font-size: 30px;
-        color: #555;
-        text-align: center;
+
+      iron-selector {
+        color: #FFFFFF;
       }
+
+      iron-selector .iron-selected {
+        color: var(--app-primary-color);
+      }
+
       #ripple {
         position: fixed;
             top: 0;
@@ -112,12 +122,28 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 
     <div id="ripple"></div>
-    <div class="card" id="content">
-      <div class="circle">2</div>
-      <h1>About</h1>
-      <p>Ea duis bonorum nec, falli paulo aliquid ei eum.</p>
-      <p>Id nam odio natum malorum, tibique copiosae expetenda mel ea.Detracto suavitate repudiandae no eum. Id adhuc minim soluta nam.Id nam odio natum malorum, tibique copiosae expetenda mel ea.</p>
+    <div class="content-container" id="content">
+      <div class="content">
+        <paper-material>
+          <iron-pages selected="{{aboutSection}}" attr-for-selected="name">
+            <md-about-story name="story"></md-about-story>
+            <md-about-contacts name="contacts"></md-about-contacts>
+          </iron-pages>
+        </paper-material>
+      </div>
+      <div class="nav">
+        <iron-selector selected="{{aboutSection}}"
+                       attr-for-selected="name"
+                       class="drawer-list"
+                       role="navigation">
+
+          <span name="story">Наша история</span>
+          <span name="contacts">Наши контакты</span>
+        </iron-selector>
+      </div>
+
     </div>
+
 
 
   </template>
@@ -178,6 +204,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           }
           Polymer.dom(this.root).appendChild(layout);
           this.unlisten(this, 'md-render-neon-page', '_renderNeonPage');
+          this.aboutSection = "contacts";
       },
 
 

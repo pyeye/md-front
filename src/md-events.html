@@ -51,7 +51,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     background-color: var(--app-primary-color);
     color: #fff;
     --app-header-background-front-layer: {
-      background-image: url(http://146.185.165.166/img/static/homepage/мероприятия3.jpg);
+      background-image: url(http://localhost/img/static/homepage/events.jpg);
       background-position: center center;
     };
   }
@@ -59,24 +59,19 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   app-toolbar.tall {
     height: 176px;
   }
-
   sample-content {
     padding-top: 212px;
   }
-
   [main-title] {
     font-weight: normal;
     margin-left: 50px;
-
   }
-
   [condensed-title] {
     font-weight: normal;
     margin-left: 5px;
     overflow: hidden;
     text-overflow: ellipsis;
   }
-
   [condensed-title] i {
     font-weight: 100;
     font-style: normal;
@@ -109,38 +104,35 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
   .news-title-casting {
     position: absolute;
-    width: 35%;
+    right: 0;
     bottom: 0;
     left: 0;
     top: 0;
-    background: rgba(0,0,0,0.6);
+    background: rgba(55,71,79, 0.6);
     color: white;
-    padding: 20px;
-    @apply(--paper-font-subhead);
+    padding: 24px;
   }
 
   .news-title-jazz {
     position: absolute;
-    width: 35%;
+    right: 0;
     bottom: 0;
     left: 0;
     top: 0;
-    background: rgba(230, 81, 0,0.6);
+    background: rgba(55,71,79, 0.6);
     color: white;
-    padding: 20px;
-    @apply(--paper-font-subhead);
+    padding: 24px;
   }
 
   .news-title-stand-up {
     position: absolute;
-    width: 35%;
+    right: 0;
     bottom: 0;
     left: 0;
     top: 0;
-    background: rgba(183, 28, 28,0.6);
+    background: rgba(55,71,79, 0.6);
     color: white;
-    padding: 20px;
-    @apply(--paper-font-subhead);
+    padding: 24px;
   }
 
   .events-list {
@@ -157,6 +149,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   .material-news {
     position: relative;
     width: 90%;
+    max-width: 400px;
     margin-right: auto;
     height: 170px;
   }
@@ -182,6 +175,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     padding: 16px 22px;
     border-bottom: 1px solid #191919;
     background-color: #252525;
+    min-height: 60px;
   }
 
   .artist-container {
@@ -287,8 +281,31 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     height: 100%;
     width: 100%;
     max-width: 400px;
-
     background-color: #252525;
+  }
+
+  .news-date {
+    @apply(--paper-font-subhead);
+    font-weight: normal;
+  }
+
+  .news-time {
+    @apply(--paper-font-title);
+
+  }
+
+  .news-info {
+    @apply(--paper-font-headline);
+  }
+
+  .news-title {
+    position: absolute;
+    bottom: 0;
+    margin-bottom: 24px;
+  }
+
+  .special-event {
+    color: var(--app-primary-color);
   }
 
   #ripple {
@@ -301,19 +318,23 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         z-index: -5;
   }
 
+  .item-badge {
+    width: 100px;
+  }
+
   </style>
   <app-header id="header" condenses reveals  effects="waterfall resize-title blend-background parallax-background">
-    <app-toolbar>
+    <app-toolbar class="small">
       <content select="[drawer-toggle]"></content>
-      <h3 condensed-title>События</h3>
+      <h3 condensed-title>Афиша</h3>
     </app-toolbar>
     <app-toolbar class="tall">
-      <h1 main-title>События</h1>
+      <h1 main-title>Афиша</h1>
     </app-toolbar>
   </app-header>
 
   <iron-ajax id="ajax"
-             url="http://146.185.165.166:80/api/v1/events/"
+             url="http://localhost:80/api/v1/events/"
              handle-as="json"
              on-response="handleResponse"></iron-ajax>
 
@@ -337,9 +358,29 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 </template>
               </div>
               <div class="pad">
-                <div class="primary">[[item.name]]</div>
-                <div class="secondary">Stand Up | Вход по билетам</div>
+                <div class$="[[_createEventClass(item)]]" class="primary">[[item.name]]</div>
+                <div class="secondary">
+                  <template is="dom-if" if="[[_shouldRenderEnter(item.extra.enter.code)]]">
+                    [[item.extra.enter.value.type]]
+                  </template>
+                </div>
               </div>
+              <template is="dom-if" if="[[_shouldRenderJazzBadge(item.extra)]]">
+                <div class="badge">
+                  <img class="item-badge" src="http://localhost/img/static/badges/events-jazz.png" alt="" />
+                </div>
+              </template>
+              <template is="dom-if" if="[[_shouldRenderCastingBadge(item.extra)]]">
+                <div class="badge">
+                  <img class="item-badge" src="http://localhost/img/static/badges/events-casting5.png" alt="" />
+                </div>
+              </template>
+              <template is="dom-if" if="[[_shouldRenderStandUpBadge(item.extra)]]">
+                <div class="badge">
+                  <img class="item-badge" src="http://localhost/img/static/badges/events-stand-up.png" alt="" />
+                </div>
+              </template>
+
               <paper-ripple></paper-ripple>
             </div>
           </a>
@@ -351,42 +392,39 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <paper-material class="material-news">
           <iron-image class="news-image" sizing="cover" preload fade src="http://146.185.165.166/img/static/events/casting.jpg"></iron-image>
           <div class="news-title-casting">
-            <div class="news-date">
-              Каждую среду
-            </div>
-            <div class="news-date">
-              18:00
-            </div>
-            <div class="news-info">
-              Кастинг молодых исполнителей
+            <div class="news-title">
+              <div class="news-info">
+                Кастинг молодых исполнителей
+              </div>
+              <div class="news-date">
+                Каждую среду в 18:00
+              </div>
             </div>
           </div>
         </paper-material>
         <paper-material class="material-news">
           <iron-image class="news-image" sizing="cover" preload fade src="http://146.185.165.166/img/static/events/jazz.jpg"></iron-image>
           <div class="news-title-jazz">
-            <div class="news-date">
-              Каждый четверг
-            </div>
-            <div class="news-date">
-              21:00
-            </div>
-            <div class="news-info">
-              Джазовый вечер
+            <div class="news-title">
+              <div class="news-info">
+                Джазовый вечер
+              </div>
+              <div class="news-date">
+                Каждый четверг в 21:00
+              </div>
             </div>
           </div>
         </paper-material>
         <paper-material class="material-news">
           <iron-image class="news-image" sizing="cover" preload fade src="http://146.185.165.166/img/static/events/stand_up.jpg"></iron-image>
           <div class="news-title-stand-up">
-            <div class="news-date">
-              Каждое воскресенье
-            </div>
-            <div class="news-date">
-              21:00
-            </div>
-            <div class="news-info">
-              Stand Up выступления
+            <div class="news-title">
+              <div class="news-info">
+                Stand Up выступление
+              </div>
+              <div class="news-date">
+                Каждое воскресенье в 21:00
+              </div>
             </div>
           </div>
         </paper-material>
@@ -469,6 +507,27 @@ Polymer({
 
   _shouldRenderDate: function(date) {
     return !!date.soon;
+  },
+
+  _shouldRenderEnter: function(enter) {
+    return enter !== 'paid';
+  },
+
+  _shouldRenderJazzBadge: function(extra) {
+    return extra.type.code === 'jazz';
+  },
+
+  _shouldRenderCastingBadge: function(extra) {
+    return extra.type.code === 'casting';
+  },
+
+  _shouldRenderStandUpBadge: function(extra) {
+    return extra.type.code === 'stand-up';
+  },
+
+  _createEventClass: function(event) {
+      var is_special = event.is_special ? ' special-event' : '';
+      return 'primary' + is_special;
   },
 
   behaviors: [
