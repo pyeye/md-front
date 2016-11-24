@@ -1,0 +1,370 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/paper-dialog-behavior/paper-dialog-behavior.html">
+<link rel="import" href="../bower_components/paper-dialog-scrollable/paper-dialog-scrollable.html">
+<link rel="import" href="../bower_components/paper-ripple/paper-ripple.html">
+<link rel="import" href="../bower_components/paper-badge/paper-badge.html">
+<link rel="import" href="../bower_components/neon-animation/neon-animation-runner-behavior.html">
+<link rel="import" href="../bower_components/iron-image/iron-image.html">
+<link rel="import" href="../bower_components/iron-media-query/iron-media-query.html">
+
+<dom-module id="md-menu-modal">
+
+  <template>
+
+  <style>
+
+    :host {
+       display: block;
+
+       background-color: #212121;
+       box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+       color: var(--app-primary-color);
+       width: 45%;
+       max-width: 640px;
+       @apply(--layout-vertical);
+
+     }
+
+     paper-dialog-scrollable {
+       height: 100%;
+     }
+
+     iron-image {
+       width: 100%;
+       height: 330px;
+     }
+
+     .modal-item-name-container {
+       position: relative;
+       margin-top: -7px;
+       background-color: var(--app-primary-color);
+       padding-left: 16px;
+       min-height: 70px;
+     }
+     .modal-item-name-box {
+       @apply(--paper-font-headline);
+       position: absolute;
+       color: #FFFFFF;
+       font-size: 26px;
+       top: 50%;
+       transform: translateY(-50%);
+     }
+
+     .modal-item-description {
+       @apply(--paper-font-subhead);
+       color: #FFFFFF;
+       padding: 16px;
+       @apply(--layout-flex);
+       flex-basis: 0;
+
+     }
+     .modal-item-bottom {
+       @apply(--paper-font-headline);
+       font-size: 31px;
+       margin-left: 16px;
+     }
+
+     .modal-item-bottom-sales {
+       @apply(--paper-font-headline);
+       font-size: 31px;
+       margin-left: 16px;
+     }
+
+     .modal-item-bottom-container {
+       color: #FFFFFF;
+       padding-bottom: 16px;
+       @apply(--layout-horizontal);
+       @apply(--layout-end-justified);
+       margin-right: 16px;
+       margin-top: 24px;
+       align-items: center;
+     }
+
+     .sales {
+       position: relative;
+       margin-right: 16px;
+     }
+
+     .sale-badge {
+       position: absolute;
+       top: -25px;
+       width: 104px;
+     }
+
+     .sales-prices {
+       @apply(--layout-horizontal);
+       color: var(--app-primary-color);
+       font-size: 28px;
+       justify-content: center;
+     }
+
+     .modal-item-weight {
+       @apply(--paper-font-subhead);
+       font-size: 17px;
+     }
+
+     .modal-item-weight-sales {
+       @apply(--paper-font-subhead);
+       font-size: 17px;
+     }
+
+     .modal-item-detail {
+       @apply(--paper-font-subhead);
+       color: var(--app-primary-color);
+       margin: 16px 0;
+       @apply(--layout-horizontal);
+     }
+
+     .modal-item-detail-sale-description {
+       font-weight: bold;
+       width: 50px;
+       padding-right: 20px;
+       color: var(--app-primary-color);
+       text-align: right;
+     }
+
+     .modal-item-detail-sale-value {
+       @apply(--layout-flex);
+       color: #FFFFFF;
+       float: left
+     }
+
+     .action-bar {
+       position: absolute;
+       left: 0;
+       bottom: 0;
+       right: 0;
+       text-align: center;
+       background-color: #212121;
+       border-top: 1px solid #191919;
+     }
+
+     .close-container {
+       position: relative;
+       padding: 16px;
+     }
+
+     .close-btn {
+       color: #FFFFFF;
+     }
+
+     .ribbon {
+  position: absolute;
+  right: -5px; top: -5px;
+  z-index: 1;
+  overflow: hidden;
+  width: 75px; height: 75px;
+  text-align: right;
+}
+.ribbon span {
+  font-size: 10px;
+  color: #FFF;
+  text-align: center;
+  line-height: 13px;
+  transform: rotate(48deg);
+  -webkit-transform: rotate(48deg);
+  width: 100px;
+  display: block;
+  background: #79A70A;
+  background: linear-gradient(#F44336 0%, #F44336 100%);
+  box-shadow: 0 3px 10px -5px rgba(0, 0, 0, 1);
+  position: absolute;
+  top: 19px; right: -21px;
+}
+     @media (max-width: 1400px) {
+
+       iron-image {
+         height: 280px;
+       }
+     }
+
+     @media (max-width: 960px) {
+       :host {
+         width: 50%;
+       }
+
+       iron-image {
+         height: 250px;
+       }
+     }
+
+     @media (max-width: 768px) {
+       :host {
+         width: 100%;
+         height: 100%;
+         max-height: 100%;
+       }
+
+       iron-image {
+         height: 300px;
+       }
+
+     }
+
+     @media (max-width: 400px) {
+       :host {
+         width: 100%;
+         height: 100%;
+       }
+
+
+
+       .modal-item-bottom-container {
+         padding-bottom: 52px;
+       }
+
+     }
+
+     @media (max-width: 320px) {
+
+
+       iron-image {
+         height: 250px;
+       }
+
+
+     }
+
+  </style>
+
+  <iron-media-query query="max-width: 480px" query-matches="{{smallScreen}}"></iron-media-query>
+
+    <iron-image src="{{item.photo.original}}" sizing="cover" preload fade></iron-image>
+    <div class="modal-item-name-container">
+      <div class="modal-item-name-box">
+        {{item.name}}
+      </div>
+    </div>
+    <div class="modal-item-description">
+      [[item.description]]
+      <template is="dom-if" if=[[item.detail.sale]]>
+        <div class="modal-item-detail">
+          <div class="modal-item-detail-sale-description">[[item.detail.sale.description]]:</div>
+          <div class="modal-item-detail-sale-value">[[item.detail.sale.value]]</div>
+        </div>
+      </template>
+
+    </div>
+
+    <div class="modal-item-bottom-container">
+
+      <template is="dom-repeat" items="{{item.prices}}" as="price">
+        <div class="modal-item-bottom">
+          {{price.value}} &#x20bd;
+          <div class="modal-item-weight">
+            за {{price.count}} {{price.measure}}
+          </div>
+        </div>
+      </template>
+      <div class="sales"  hidden$="[[!isLunch]]">
+        <div class="box">
+          <div class="ribbon"><span>с 12<sup>00</sup> до 16<sup>00</sup></span></div>
+        </div>
+        <div class="sales-prices">
+          <template is="dom-repeat" items="{{item.prices}}" as="price">
+            <div class="modal-item-bottom-sales">
+              {{price.lunch_value}} &#x20bd;
+              <div class="modal-item-weight-sales">
+                за {{price.count}} {{price.measure}}
+              </div>
+            </div>
+          </template>
+        </div>
+      </div>
+    </div>
+
+  <div class="action-bar"  hidden$="[[!smallScreen]]">
+    <div class="close-container">
+      <div class="close-btn">
+        ЗАКРЫТЬ
+      </div>
+      <paper-ripple></paper-ripple>
+    </div>
+  </div>
+
+      <!--
+      <div class="modal-item-bottom">
+      <iron-icon icon="alarm"></iron-icon>
+      <div class="modal-item-weight">
+      25 мин.
+    </div>
+  </div>
+  <div class="modal-item-bottom">
+  <iron-icon icon="favorite"></iron-icon>
+  <div class="modal-item-weight">
+  47k
+</div>
+</div>
+рекомендации и каллорийность
+
+-->
+
+
+  </template>
+
+  <script>
+
+    Polymer({
+      is: 'md-menu-modal',
+
+      properties: {
+        item: {
+          type: Object,
+        },
+        group: {
+          type: String,
+          observer: "_groupChanged"
+        },
+
+        isLunch: {
+          type: Boolean,
+        },
+      },
+
+      behaviors: [
+        Polymer.PaperDialogBehavior,
+        Polymer.NeonAnimationRunnerBehavior
+      ],
+
+
+      listeners: {
+        'neon-animation-finish': '_onNeonAnimationFinish',
+        'tap': '_closeModal'
+      },
+
+      _renderOpened: function() {
+        this.cancelAnimation();
+        this.playAnimation('entry');
+      },
+
+      _renderClosed: function() {
+        this.cancelAnimation();
+        this.playAnimation('exit');
+      },
+
+      _onNeonAnimationFinish: function() {
+        if (this.opened) {
+          this._finishRenderOpened();
+        } else {
+          this._finishRenderClosed();
+        }
+      },
+
+      setMenuItem: function(item) {
+        this.item = item.value;
+        this.group = item.group;
+      },
+
+      _closeModal: function(e) {
+        this.close();
+      },
+
+      _groupChanged: function(group) {
+        this.isLunch = group === 'main';
+        console.log(this.isLunch);
+      },
+    });
+
+  </script>
+
+</dom-module>
