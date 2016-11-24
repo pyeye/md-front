@@ -13,6 +13,12 @@ if (!webComponentsSupported) {
   finishLazyLoading();
 }
 
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', function() {
+    navigator.serviceWorker.register('/service-worker.js');
+  });
+}
+
 function finishLazyLoading() {
   // 5. Wait on importsLoadedDeferred to resolve. When it does,
   // the import has loaded.

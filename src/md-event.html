@@ -36,6 +36,8 @@
      <link rel="import" href="../bower_components/neon-animation/animations/slide-from-bottom-animation.html">
 
      <link rel="import" href="../bower_components/app-storage/app-localstorage/app-localstorage-document.html">
+     <link rel="import" href="../bower_components/iron-media-query/iron-media-query.html">
+
 
      <link rel="import" href="md-icons.html">
 
@@ -70,19 +72,20 @@
 
        .content {
            position: relative;
-           margin: 350px auto 5px;
-           width: 680px;
+           margin: 450px auto 5px;
+           width: 80%;
+           max-width: 1000px;
        }
 
        #header {
            color: white;
            --app-header-background-rear-layer: {
-             background-color: rgba(255, 0, 0, 0);
+             background-color: rgba(0, 0, 0, 0.4);
            };
        }
 
        paper-card {
-         padding: 16px 0 16px 110px;
+         padding: 16px 0 16px 100px;
          margin-bottom: 30px;
          width: 100%;
          sizing: border-box;
@@ -97,7 +100,7 @@
          }
          paper-card p {
            @apply(--paper-font-body1);
-           margin: 16px 6px;
+           margin: 16px 0;
            color: #FFFFFF;
          }
          paper-fab {
@@ -123,17 +126,7 @@
            margin: 40px 0 12px;
          }
 
-         @media (max-width: 720px) {
 
-           .content {
-             width: 100%;
-             margin: 150px 0 0;
-           }
-
-           paper-card {
-             margin-bottom: 0px;
-           }
-         }
 
          paper-icon-button {
          color: white;
@@ -146,10 +139,9 @@
          }
          .ingredient-amount {
            @apply(--paper-font-subhead);
-           font-weight: bold;
            margin-left: -95px;
            width: 80px;
-           padding-right: 20px;
+           padding-right: 16px;
            color: var(--app-primary-color);
            text-align: right;
          }
@@ -175,34 +167,39 @@
 
          .event-name {
              @apply(--paper-font-display2);
-             color: var(--app-primary-color);
              position: absolute;
              top: 50%;
              transform: translateY(-50%);
          }
 
          .event-date {
+           text-align: center;
            @apply(--layout-vertical);
            @apply(--paper-font-title);
            margin-left: -95px;
            width: 80px;
-           padding-right: 20px;
+           padding-right: 16px;
            color: var(--app-primary-color);
-           text-align: center;
+
 
          }
 
          .event-date-weekday {
            @apply(--paper-font-subhead);
+           white-space: nowrap;
+           overflow: hidden;
+           text-overflow: ellipsis;
          }
 
          .event-date-day {
            @apply(--paper-font-display3);
 
+
          }
 
          .event-date-month {
            @apply(--paper-font-subhead);
+           line-height: 12px;
          }
 
          .pad {
@@ -233,11 +230,42 @@
            margin-right: auto;
          }
 
-         @media (max-width: 745px) {
-           .event-name {
-               @apply(--paper-font-display1);
+         @media (max-width: 938px) {
+
+           .content {
+             margin: 350px auto 5px;
+             width: 100%;
            }
          }
+
+         @media (max-width: 720px) {
+
+           .content {
+             width: 100%;
+             margin: 150px 0 0;
+           }
+
+           paper-card {
+             margin-bottom: 0px;
+           }
+         }
+
+         @media (max-width: 540px) {
+
+           .event-date-day {
+             font-size: 48px;
+             line-height: 50px;
+           }
+
+           .event-name {
+             font-size: 32px;
+           }
+         }
+
+
+
+
+
          #ripple {
            position: fixed;
                top: 0;
@@ -262,6 +290,8 @@
 
       <app-localstorage-document id="storage" key="events" data={{events}}></app-localstorage-document>
 
+      <iron-media-query query="max-width: 540px" query-matches="{{smallScreen}}"></iron-media-query>
+
        <app-header id="header" effects="fade-background" reveals>
          <app-toolbar>
            <a href="#/events" tabindex="-1">
@@ -278,16 +308,12 @@
 
        <div class="content" id="content">
          <paper-card id="card">
-           <div class="reservation-form" hidden$="[[!active]]">
-             <md-reservation-form></md-reservation-form>
-             <paper-button on-tap="_toggleForm">ОТМЕНА</paper-button>
-           </div>
            <div class="card-content" hidden$="[[active]]">
              <div class="event-header">
                <div class="event-date">
-                 <div class="event-date-weekday">[[event.date.weekday]]</div>
                  <div class="event-date-day">[[event.date.day]]</div>
                  <div class="event-date-month">[[event.date.month]]</div>
+                 <div class="event-date-weekday">[[event.date.weekday]]</div>
                </div>
                <div class="event-name-box" >
                  <div class="event-name">{{event.name}}</div>
@@ -435,13 +461,29 @@
        },
 
        _eventPageChanged: function(event) {
+         var date, storageEvent;
+         var options = {
+           year: 'numeric',
+           month: 'long',
+           day: 'numeric',
+           weekday: 'long',
+         };
          if(event !== undefined && this.route.prefix === '/event') {
-           var storageEvent = this._getEventFromStorage(event);
+           storageEvent = this._getEventFromStorage(event);
            if (storageEvent !== null) {
+             date = new Date(storageEvent.date.original);
+             date = date.toLocaleString("ru", options).split(' ');
+             storageEvent.date = {
+               'weekday': date[0].slice(0, -1),
+               'day': date[1],
+               'month': date[2],
+               'year': date[3],
+               'original': storageEvent.date.original,
+             };
              this.event = storageEvent;
              this.async(this._scroll, 200);
            } else {
-             this.$.ajax.url = ['http://146.185.165.166:80/api/v1/events', event].join('/') + '/';
+             this.$.ajax.url = ['https://maddogclub.com/api/v1/events', event].join('/') + '/';
              this.$.ajax.generateRequest();
            }
          }
@@ -484,6 +526,7 @@
          };
          this.event = response;
          this.async(this._scroll, 200);
+         this.notifyResize();
        },
 
        _scroll: function() {
@@ -498,9 +541,9 @@
          var img, index;
          if(Object.getOwnPropertyNames(event.poster).length === 0) {
            index = this._randomInteger(0, event.artists.length - 1);
-           img = event.artists[index].img.original;
+           img = this.smallScreen ? event.artists[index].img.thumbnail : event.artists[index].img.original;
          } else {
-           img = event.poster.original;
+           img = this.smallScreen ? event.poster.thumbnail : event.poster.original;
          }
          this.customStyle['--background-img'] = 'url(' + img + ')';
          this.updateStyles();

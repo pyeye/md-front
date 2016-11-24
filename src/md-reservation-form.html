@@ -22,6 +22,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout.html">
 <link rel="import" href="../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
 <link rel="import" href="../bower_components/vaadin-date-picker/vaadin-date-picker.html">
+<link rel="import" href="../bower_components/iron-media-query/iron-media-query.html">
 
 
 <link rel="import" href="md-timepicker.html">
@@ -49,6 +50,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         }
       }
 
+      [hidden] {
+        display: none;
+      }
+
       .reservation-icons iron-icon {
         --iron-icon-height: 21px;
         --iron-icon-width: 21px;
@@ -62,10 +67,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     }
 
     .form-container {
-      width: 80%;
-
-      margin-left: auto;
-      margin-right: auto;
+      width: 95%;
     }
 
     .form-title {
@@ -78,7 +80,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       margin-top: 16px;
       margin-right: 24px;
       min-width: 120px;
+    }
 
+    .form-item span {
+      color: #fff;
     }
 
     .form-row {
@@ -92,11 +97,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     </style>
 
     <iron-ajax id="ajax"
-               url="http://146.185.165.166/api/v1/reservation/"
+               url="https://maddogclub.com/api/v1/reservation/"
                method="POST"
                content-type="application/json"
                handle-as="json"
                on-response="handleResponse"></iron-ajax>
+
+    <iron-media-query query="max-width: 540px" query-matches="{{smallScreen}}"></iron-media-query>
 
     <div class="form-container">
       <div class="form-block">
@@ -120,7 +127,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                             always-float-label
                             error-message="Это обязательное поле!"
                             label="Номер телефона*"
-                            value="{{form.phone}}"></gold-phone-input>
+                            value="{{form.phone_number}}"></gold-phone-input>
         </div>
       </div>
 
@@ -187,10 +194,22 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               </paper-listbox>
             </paper-dropdown-menu>
           </div>
+
+        </div>
+        <div class="form-row">
           <div class="form-item">
             <paper-checkbox on-change="_handleCheckbox">Вип столик</paper-checkbox>
           </div>
         </div>
+
+        <template is="dom-if" if="[[form.is_vip]]">
+          <div class="form-row">
+            <div class="form-item">
+              <span>Внимание! Для бронирования вип столика требуется вложение депозита. Подробности вы сможете узнать у администратора клуба по телефону 8 (351) 240 - 20 - 00</span>
+            </div>
+          </div>
+        </template>
+
 
         <div class="form-item">
           <paper-textarea label="Комментарий" value="{{form.comment}}" maxlength="100"
@@ -217,7 +236,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           value: function() {
             return {
                 name: '',
-                phone: '',
+                phone_number: '',
                 date: '',
                 time: '',
                 is_vip: false,
@@ -230,7 +249,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           value: function() {
             return {
               name: false,
-              phone: false,
+              phone_number: false,
             }
           }
         },
@@ -262,10 +281,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 };
                 var local = d.toLocaleString("ru", options).split(' ');
                 var date = d.getDate();
+                var year = this.smallScreen ? d.getFullYear() : '';
+                console.log(year);
                 if(date < 10) {
                   date = '0' + date;
                 }
-                return [date, local[1], d.getFullYear()].join(' ');
+                return [date, local[1], year].join(' ');
               },
               formatTitle: function(monthName, fullYear) {
                 return monthName + ' ' + fullYear;
@@ -277,11 +298,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       observers: [
         '_formNameChanged(form.name)',
-        '_formPhoneChanged(form.phone)',
+        '_formPhoneChanged(form.phone_number)',
         '_formDateChanged(form.date)',
         '_formTimeChanged(form.time)',
         '_formPeopleChanged(form.count_people)',
-        '_formValid(validators.name, validators.phone, validators.count_peeople, validators.date, validators.time)',
+        '_formValid(validators.name, validators.phone_number, validators.count_peeople, validators.date, validators.time)',
       ],
 
       _formTimeInitial: function(newValue, oldValue) {
@@ -293,7 +314,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       },
 
       _formPhoneChanged: function(newValue, oldValue) {
-        this.set('validators.phone', (newValue.length !== 0 && newValue.length === 12));
+        this.set('validators.phone_number', (newValue.length !== 0 && newValue.length === 12));
       },
 
       _formDateChanged: function(newValue, oldValue) {
@@ -308,8 +329,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         this.set('validators.count_peeople', newValue !== 0);
       },
 
-      _formValid: function(name, phone) {
-        this.set('validators.summary', (name && phone));
+      _formValid: function(name, phone_number) {
+        this.set('validators.summary', (name && phone_number));
       },
 
       _initialDate: function() {
@@ -326,7 +347,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       },
 
       submitForm: function() {
-        this.form.phone = '+7' + this.form.phone.replace(/-/g, '');
+        this.form.phone_number = '+7' + this.form.phone_number.replace(/-/g, '');
         this.$.ajax.body = JSON.stringify(this.form);
         this.$.ajax.generateRequest();
       },

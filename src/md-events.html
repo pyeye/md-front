@@ -8,18 +8,14 @@ Code distributed by Google as part of the polymer project is also
 subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
 -->
 
-<link rel="import" href="../bower_components/app-route/app-route.html">
 <link rel="import" href="../bower_components/polymer/polymer.html">
 <link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
 <link rel="import" href="../bower_components/paper-ripple/paper-ripple.html">
-<link rel="import" href="../bower_components/paper-dialog/paper-dialog.html">
-<link rel="import" href="../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout.html">
-<link rel="import" href="../bower_components/paper-card/paper-card.html">
+<link rel="import" href="../bower_components/iron-media-query/iron-media-query.html">
 <link rel="import" href="../bower_components/paper-material/paper-material.html">
 <link rel="import" href="../bower_components/paper-styles/typography.html">
 
-<link rel="import" href="../bower_components/app-layout/app-drawer/app-drawer.html">
 <link rel="import" href="../bower_components/app-layout/app-header/app-header.html">
 <link rel="import" href="../bower_components/app-layout/app-toolbar/app-toolbar.html">
 
@@ -28,6 +24,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/neon-animation/animations/ripple-animation.html">
 <link rel="import" href="../bower_components/neon-animation/animations/fade-out-animation.html">
 <link rel="import" href="../bower_components/neon-animation/animations/fade-in-animation.html">
+<link rel="import" href="../bower_components/neon-animation/animations/slide-from-bottom-animation.html">
 
 <link rel="import" href="../bower_components/app-storage/app-localstorage/app-localstorage-document.html">
 
@@ -37,540 +34,714 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 <dom-module id="md-events">
 
-  <template>
+    <template>
 
-  <style>
-  :host {
-    display: block;
-    position: absolute;
-    left: 0;
-    height: 100vh;
-  }
+        <style>
+            :host {
+                display: block;
+                position: absolute;
+                left: 0;
+                height: 100vh;
+            }
 
-  app-header {
-    background-color: var(--app-primary-color);
-    color: #fff;
-    --app-header-background-front-layer: {
-      background-image: url(http://146.185.165.166/img/static/homepage/events.jpg);
-      background-position: center center;
-    };
-  }
+            app-header {
+                background-color: var(--app-primary-color);
+                color: #fff;
+                --app-header-background-front-layer: {
+                    background-image: url(https://maddogclub.com/img/static/homepage/events.jpg);
+                    background-position: center center;
+                };
+            }
 
-  app-toolbar.tall {
-    height: 176px;
-  }
-  sample-content {
-    padding-top: 212px;
-  }
-  [main-title] {
-    font-weight: normal;
-    margin-left: 50px;
-  }
-  [condensed-title] {
-    font-weight: normal;
-    margin-left: 5px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-  [condensed-title] i {
-    font-weight: 100;
-    font-style: normal;
-  }
+            app-toolbar.tall {
+              height: 300px;
+              padding-left: 20px;
+            }
+            sample-content {
+              padding-top: 212px;
+            }
 
-  @media (max-width: 639px) {
-    [main-title] {
-      margin-left: 50px;
-      font-size: 30px;
-    }
-    [condensed-title] {
-      font-size: 24px;
-    }
-  }
+            [main-title] {
+              font-weight: normal;
+              -webkit-transform-origin: center top !important;
+              transform-origin: center top !important;
+              display: -ms-flexbox;
+              display: -webkit-flex;
+              display: flex;
+              justify-content: center;
+              font-size: 38px;
+            }
 
-  app-toolbar {
-    color: white;
-  }
+            [main-title] iron-icon {
+              --iron-icon-fill-color: #FFFFFF;
+              --iron-icon-height: 35px;
+              --iron-icon-width: 24px;
+            }
 
-  .content {
-    @apply(--layout-horizontal);
-  }
+            [main-title] .title-label {
+              @apply(--paper-font-display1);
+              margin-left: 40px;
+              margin-right: 40px;
+              font-size: 38px;
+              letter-spacing: 1.5px;
+            }
 
-  .special-list {
-    width: 40%;
-    margin:auto;
-    margin-top: 16px;
 
-  }
 
-  .news-title-casting {
-    position: absolute;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    top: 0;
-    background: rgba(55,71,79, 0.6);
-    color: white;
-    padding: 24px;
-  }
+            [condensed-title] {
+              font-weight: normal;
+              overflow: hidden;
+              text-overflow: ellipsis;
+              display: -ms-flexbox;
+              display: -webkit-flex;
+              display: flex;
+              justify-content: center;
+              font-size: 20px;
+            }
 
-  .news-title-jazz {
-    position: absolute;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    top: 0;
-    background: rgba(55,71,79, 0.6);
-    color: white;
-    padding: 24px;
-  }
+            [condensed-title] .title-label {
+              @apply(--paper-font-title);
+              margin-left: 24px;
+              margin-right: 24px;
+              letter-spacing: 1.5px;
+            }
 
-  .news-title-stand-up {
-    position: absolute;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    top: 0;
-    background: rgba(55,71,79, 0.6);
-    color: white;
-    padding: 24px;
-  }
+            [condensed-title] iron-icon {
+              --iron-icon-fill-color: #FFFFFF;
+              --iron-icon-height: 26px;
+              --iron-icon-width: 18px;
+            }
 
-  .events-list {
-    width: 60%;
-    margin: 16px auto;
-  }
+            [condensed-title] i {
+                font-weight: 100;
+                font-style: normal;
+            }
 
-  .events-material {
-    position: relative;
-    width: 80%;
-    margin: 16px auto;
-  }
 
-  .material-news {
-    position: relative;
-    width: 90%;
-    max-width: 400px;
-    margin-right: auto;
-    height: 170px;
-  }
 
-  @media (max-width: 745px) {
-    .special-list {
-      width: 100%;
-    }
+            app-toolbar {
+                color: white;
+            }
 
-    app-toolbar.tall {
-      height: 146px;
-    }
-  }
+            .content {
+                @apply(--layout-horizontal);
+            }
 
-  paper-material {
-    margin-top: 16px;
-  }
+            .special-list {
+                width: 30%;
+                margin: auto;
+                margin-top: 16px;
+            }
 
-  .event {
-    position: relative;
-    @apply(--layout-horizontal);
-    cursor: pointer;
-    padding: 16px 22px;
-    border-bottom: 1px solid #191919;
-    background-color: #252525;
-    min-height: 60px;
-  }
+            .news-title-casting {
+                position: absolute;
+                right: 0;
+                bottom: 0;
+                left: 0;
+                top: 0;
+                background: rgba(55, 71, 79, 0.6);
+                color: white;
+                padding: 24px;
+            }
 
-  .artist-container {
-    @apply(--layout-horizontal);
-  }
+            .news-title-jazz {
+                position: absolute;
+                right: 0;
+                bottom: 0;
+                left: 0;
+                top: 0;
+                background: rgba(55, 71, 79, 0.6);
+                color: white;
+                padding: 24px;
+            }
 
-  .artist-title {
-    @apply(--paper-font-subhead);
-    text-decoration: none;
-    color: var(--app-primary-color);
-    margin-right: 8px;
-  }
+            .news-title-stand-up {
+                position: absolute;
+                right: 0;
+                bottom: 0;
+                left: 0;
+                top: 0;
+                background: rgba(55, 71, 79, 0.6);
+                color: white;
+                padding: 24px;
+            }
 
-  .artist-box {
-    @apply(--layout-vertical);
-    margin-right: 16px;
-  }
+            .events-list {
+                width: 70%;
+                margin: 16px auto;
+            }
 
-  .event-date {
-    @apply(--layout-vertical);
-    @apply(--paper-font-title);
-    width: 20%;
-    min-width: 100px;
-    color: var(--app-primary-color);
-    text-align: center;
-    margin-top: auto;
-    margin-bottom: auto;
-  }
+            .events-material {
+                position: relative;
+                width: 85%;
+                margin: 16px auto;
+            }
 
-  .event-date-soon {
-    @apply(--paper-font-headline);
-  }
+            .material-news {
+                position: relative;
+                width: 90%;
+                max-width: 400px;
+                margin-right: auto;
+                height: 170px;
+            }
 
-  .event-date-weekday {
-    @apply(--paper-font-subhead);
-    font-size: 15px;
-  }
+            paper-material {
+                margin-top: 16px;
+            }
 
-  .event-date-day {
-    @apply(--paper-font-display1);
-    font-size: 38px;
-  }
+            .event {
+                position: relative;
+                @apply(--layout-horizontal);
+                cursor: pointer;
+                padding: 16px;
+                border-bottom: 1px solid #191919;
+                background-color: #252525;
+                min-height: 60px;
+            }
 
-  .event-date-month {
-    @apply(--paper-font-subhead);
-    font-size: 15px;
-  }
+            .artist-container {
+                @apply(--layout-horizontal);
+            }
 
-  .event-title {
-    padding: 16px;
-    @apply(--paper-font-display2);
-    color: #FFFFFF;
-  }
+            .artist-title {
+                @apply(--paper-font-subhead);
+                text-decoration: none;
+                color: var(--app-primary-color);
+                margin-right: 8px;
+            }
 
-  .pad {
-    @apply(--layout-flex);
-    @apply(--layout-vertical);
-    padding: 0 16px;
-    margin-top: auto;
-    margin-bottom: auto;
-  }
+            .artist-box {
+                @apply(--layout-vertical);
+                margin-right: 16px;
+            }
 
-  .artist-name {
-    @apply(--paper-font-subhead);
-    color: #FFFFFF;
-  }
+            .event-date {
+                @apply(--layout-horizontal);
+                @apply(--paper-font-title);
+                width: 30%;
+                min-width: 100px;
+                max-width: 160px;
+                color: var(--app-primary-color);
+                text-align: center;
+                margin-top: auto;
+                margin-bottom: auto;
+            }
 
-  .artist-style {
-    @apply(--paper-font-body1);
-    color: #FFFFFF;
-    opacity: 0.7;
-  }
+            .event-date-vertical {
+                @apply(--layout-vertical);
+                text-align: left;
+                margin-left: 8px;
+                margin-top: auto;
+                margin-bottom: auto;
+            }
 
-  .primary {
-    @apply(--paper-font-headline);
-    color: #FFFFFF;
-    font-size: 26px;
-  }
+            .event-date-soon {
+                @apply(--paper-font-headline);
+                margin-left: auto;
+                margin-right: auto;
+            }
 
-  .secondary {
-    @apply(--paper-font-subhead);
-    color: #FFFFFF;
-    opacity: 0.7;
-    display: block; /* Fallback for non-webkit */
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
+            .event-date-container {
+              margin-left: auto;
+              margin-right: auto;
+            }
 
-  a {
-    text-decoration: none;
-  }
+            .event-date-weekday {
+                @apply(--paper-font-subhead);
+            }
 
-  paper-ripple {
-    color: var(--app-primary-color);
-  }
+            .event-date-day {
+                @apply(--paper-font-display2);
+                margin-top: auto;
+                margin-bottom: auto;
+                width: 55px;
+                text-align: right;
+                font-size: 40px;
+            }
 
-  .news-image {
-    position: relative;
-    min-height: 170px;
-    height: 100%;
-    width: 100%;
-    max-width: 400px;
-    background-color: #252525;
-  }
+            .event-date-month {
+                @apply(--paper-font-subhead);
+                line-height: 12px;
+            }
 
-  .news-date {
-    @apply(--paper-font-subhead);
-    font-weight: normal;
-  }
+            .event-title {
+                padding: 16px;
+                @apply(--paper-font-display2);
+                color: #FFFFFF;
+            }
 
-  .news-time {
-    @apply(--paper-font-title);
+            .pad {
+              @apply(--layout-flex);
+              @apply(--layout-vertical);
+                padding: 0 16px;
+                margin-top: auto;
+                margin-bottom: auto;
+            }
 
-  }
+            .artists-pad {
+              @apply(--layout-flex);
+              @apply(--layout-vertical);
+            }
 
-  .news-info {
-    @apply(--paper-font-headline);
-  }
+            .artist-label {
+                @apply(--paper-font-subhead);
+                color: #FFFFFF;
+                opacity: 0.7;
+                margin-right: 8px;
+                white-space: nowrap;
+            }
 
-  .news-title {
-    position: absolute;
-    bottom: 0;
-    margin-bottom: 24px;
-  }
+            .artist-name {
+                @apply(--paper-font-subhead);
+                color: #FFFFFF;
+                opacity: 0.7;
+                margin-right: 8px;
+                display: inline-block;
+            }
 
-  .special-event {
-    color: var(--app-primary-color);
-  }
+            .artist-style {
+                @apply(--paper-font-body1);
+                color: #FFFFFF;
+                opacity: 0.7;
+            }
 
-  #ripple {
-    position: fixed;
-        top: 0;
-        left: 0;
-        height: 100vh;
-        width: 100vw;
-        background-color: var(--app-lower-layer-color);
-        z-index: -5;
-  }
+            .artist-name:not(:last-of-type):after {
+              content: ",";
+              margin-left: -3px;
+            }
+            .artist-name:nth-last-of-type(2):before {
+              content: none;
+            }
 
-  .item-badge {
-    width: 100px;
-  }
+            .primary {
+                @apply(--paper-font-headline);
+                color: #FFFFFF;
+                font-size: 26px;
+            }
 
-  </style>
-  <app-header id="header" condenses reveals  effects="waterfall resize-title blend-background parallax-background">
-    <app-toolbar class="small">
-      <content select="[drawer-toggle]"></content>
-      <h3 condensed-title>Афиша</h3>
-    </app-toolbar>
-    <app-toolbar class="tall">
-      <h1 main-title>Афиша</h1>
-    </app-toolbar>
-  </app-header>
+            .event:hover .primary {
+                text-decoration: underline;
+            }
 
-  <iron-ajax id="ajax"
-             url="http://146.185.165.166:80/api/v1/events/"
-             handle-as="json"
-             on-response="handleResponse"></iron-ajax>
+            .secondary {
+                @apply(--paper-font-subhead);
+                color: #FFFFFF;
+                opacity: 0.7;
+                display: block;
+                /* Fallback for non-webkit */
+                display: -webkit-box;
+                -webkit-line-clamp: 2;
+                -webkit-box-orient: vertical;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
 
-  <app-localstorage-document key="events" data={{events}}></app-localstorage-document>
+            a {
+                text-decoration: none;
+            }
 
-  <div id="ripple"></div>
-  <div id="content" class="content">
-    <div class="events-list">
-    <paper-material class="events-material">
-      <template is="dom-repeat" items="[[events]]">
-          <a href="#/event/[[item.pk]]">
-            <div class="event" on-tap="_heroAnimationHandler">
-              <div class="event-date">
-                <template is="dom-if" if="[[_shouldRenderDate(item.date)]]">
-                    <div class="event-date-soon">[[item.date.soon]]</div>
-                </template>
-                <template is="dom-if" if$="[[!_shouldRenderDate(item.date)]]">
-                  <div class="event-date-weekday">[[item.date.weekday]]</div>
-                  <div class="event-date-day">[[item.date.day]]</div>
-                  <div class="event-date-month">[[item.date.month]]</div>
-                </template>
-              </div>
-              <div class="pad">
-                <div class$="[[_createEventClass(item)]]" class="primary">[[item.name]]</div>
-                <div class="secondary">
-                  <template is="dom-if" if="[[_shouldRenderEnter(item.extra.enter.code)]]">
-                    [[item.extra.enter.value.type]]
-                  </template>
-                </div>
-              </div>
-              <template is="dom-if" if="[[_shouldRenderJazzBadge(item.extra)]]">
-                <div class="badge">
-                  <img class="item-badge" src="http://146.185.165.166/img/static/badges/events-jazz.png" alt="" />
-                </div>
-              </template>
-              <template is="dom-if" if="[[_shouldRenderCastingBadge(item.extra)]]">
-                <div class="badge">
-                  <img class="item-badge" src="http://146.185.165.166/img/static/badges/events-casting5.png" alt="" />
-                </div>
-              </template>
-              <template is="dom-if" if="[[_shouldRenderStandUpBadge(item.extra)]]">
-                <div class="badge">
-                  <img class="item-badge" src="http://146.185.165.166/img/static/badges/events-stand-up.png" alt="" />
-                </div>
-              </template>
+            paper-ripple {
+                color: var(--app-primary-color);
+            }
 
-              <paper-ripple></paper-ripple>
+            .news-image {
+                position: relative;
+                min-height: 170px;
+                height: 100%;
+                width: 100%;
+                max-width: 400px;
+                background-color: #252525;
+            }
+
+            .news-date {
+                @apply(--paper-font-subhead);
+                font-weight: normal;
+            }
+
+            .news-time {
+                @apply(--paper-font-title);
+            }
+
+            .news-info {
+                @apply(--paper-font-headline);
+            }
+
+            .news-title {
+                position: absolute;
+                bottom: 0;
+                margin-bottom: 24px;
+            }
+
+            .special-event {
+                color: var(--app-primary-color);
+            }
+
+            #ripple {
+                position: fixed;
+                top: 0;
+                left: 0;
+                height: 100vh;
+                width: 100vw;
+                background-color: var(--app-lower-layer-color);
+                z-index: -5;
+            }
+
+            .item-badge {
+                width: 90px;
+            }
+
+            @media (max-width: 1400px) {
+              app-toolbar.tall {
+                height: 200px;
+              }
+            }
+
+            @media (max-width: 1000px) {
+
+
+
+                .special-list {
+                    display: none;
+                }
+                .events-list {
+                    width: 100%;
+                }
+                .events-material {
+                    position: relative;
+                    width: 95%;
+                }
+
+
+            }
+
+            @media (max-width: 768px) {
+
+              [main-title] {
+                -webkit-transform-origin: center top !important;
+                transform-origin: center top !important;
+                font-size: 30px;
+
+              }
+              [main-title] .title-label {
+                font-size: 30px;
+                margin-left: 16px;
+                margin-right: 16px;
+              }
+              [condensed-title] {
+                margin-left: -36px;
+                font-size: 20px;
+              }
+              [condensed-title] .title-label {
+                font-size: 20px;
+                margin-left: 16px;
+                margin-right: 16px;
+              }
+
+
+                .item-badge {
+                  width: 75px;
+                }
+
+
+            }
+
+            @media (max-width: 540px) {
+
+              .item-badge {
+                display: none;
+              }
+
+                .pad {
+                  padding-right: 0;
+                }
+
+                .event-date-day {
+                    font-size: 34px;
+                }
+
+                .primary {
+                  font-size: 20px;
+                }
+
+                .event {
+                  padding: 8px 4px 8px 8px;
+                }
+
+                .event-date-day {
+                  width: 40px;
+                }
+
+                .event-date {
+                  width: 88px;
+                  min-width: 88px;
+                }
+
+                .event-date-soon {
+                  font-size: 22px;
+                }
+
+                .artist-label, .artist-name{
+                  font-size: 14px;
+                }
+
+                .artist-name:not(:last-of-type):after {
+                  margin-left: -2px;
+                }
+            }
+        </style>
+        <app-header id="header"  condenses reveals  effects="waterfall resize-title blend-background parallax-background" >
+          <app-toolbar>
+            <slot select="[drawer-toggle]"></slot>
+            <div condensed-title><iron-icon icon="foot-left"></iron-icon><div class="title-label">АФИША</div><iron-icon icon="foot-right"></iron-icon></div>
+          </app-toolbar>
+          <app-toolbar class="tall">
+            <div main-title><iron-icon icon="foot-left"></iron-icon><div class="title-label">АФИША</div><iron-icon icon="foot-right"></iron-icon></div>
+          </app-toolbar>
+        </app-header>
+
+        <iron-ajax id="ajax" url="https://maddogclub.com/api/v1/events/" handle-as="json" on-response="handleResponse"></iron-ajax>
+
+        <app-localstorage-document key="events" data={{events}}></app-localstorage-document>
+
+        <iron-media-query query="max-width: 540px" query-matches="{{smallScreen}}"></iron-media-query>
+
+        <div id="ripple"></div>
+        <div id="content" class="content">
+            <div id="events" class="events-list">
+                <paper-material class="events-material">
+                    <template is="dom-repeat" items="[[events]]">
+                        <a href="#/event/[[item.pk]]">
+                            <div class="event" on-tap="_heroAnimationHandler">
+                                <div class="event-date">
+                                    <div class="event-date-soon" hidden$="[[!_shouldRenderDate(item.date)]]">[[item.date.soon]]</div>
+                                    <template is="dom-if" if$="[[!_shouldRenderDate(item.date)]]">
+
+                                        <div class="event-date-day">[[item.date.day]]</div>
+                                        <div class="event-date-vertical">
+                                            <div class="event-date-month">[[item.date.month]]</div>
+                                            <div class="event-date-weekday">[[item.date.weekday]]</div>
+                                        </div>
+
+
+
+                                    </template>
+                                </div>
+                                <div class="pad">
+                                    <div class$="[[_createEventClass(item)]]" class="primary">[[item.name]]</div>
+                                    <div class="artist-container">
+                                      <div class="artist-label">В программе:</div>
+                                      <div class="">
+                                        <template is="dom-repeat" items="{{item.artists}}" as="artist">
+                                            <div class="artist-name">
+                                              [[artist.name]]
+                                            </div>
+                                        </template>
+                                      </div>
+                                    </div>
+                                </div>
+                                    <div class="badge" hidden$="[[!_shouldRenderJazzBadge(item.extra)]]">
+                                        <img class="item-badge" src="https://maddogclub.com/img/static/badges/events-jazz.png" alt="" />
+                                    </div>
+                                    <div class="badge" hidden$="[[!_shouldRenderStandUpBadge(item.extra)]]">
+                                        <img class="item-badge" src="https://maddogclub.com/img/static/badges/events-stand-up.png" alt="" />
+                                    </div>
+                                <paper-ripple></paper-ripple>
+                            </div>
+                        </a>
+
+                    </template>
+                </paper-material>
             </div>
-          </a>
-
-      </template>
-      </paper-material>
-    </div>
-    <div class="special-list">
-        <paper-material class="material-news">
-          <iron-image class="news-image" sizing="cover" preload fade src="http://146.185.165.166/img/static/events/casting.jpg"></iron-image>
-          <div class="news-title-casting">
-            <div class="news-title">
-              <div class="news-info">
-                Кастинг молодых исполнителей
-              </div>
-              <div class="news-date">
-                Каждую среду в 18:00
-              </div>
+            <div id="news" class="special-list">
+                <paper-material class="material-news">
+                    <iron-image class="news-image" sizing="cover" preload fade src="https://maddogclub.com/img/static/events/casting.jpg"></iron-image>
+                    <div class="news-title-casting">
+                        <div class="news-title">
+                            <div class="news-info">
+                                Кастинг молодых исполнителей
+                            </div>
+                            <div class="news-date">
+                                Каждую среду в 18:00
+                            </div>
+                        </div>
+                    </div>
+                </paper-material>
+                <paper-material class="material-news">
+                    <iron-image class="news-image" sizing="cover" preload fade src="https://maddogclub.com/img/static/events/jazz.jpg"></iron-image>
+                    <div class="news-title-jazz">
+                        <div class="news-title">
+                            <div class="news-info">
+                                Джазовый вечер
+                            </div>
+                            <div class="news-date">
+                                Каждый четверг в 21:00
+                            </div>
+                        </div>
+                    </div>
+                </paper-material>
+                <paper-material class="material-news">
+                    <iron-image class="news-image" sizing="cover" preload fade src="https://maddogclub.com/img/static/events/stand_up.jpg"></iron-image>
+                    <div class="news-title-stand-up">
+                        <div class="news-title">
+                            <div class="news-info">
+                                Stand Up вечер
+                            </div>
+                            <div class="news-date">
+                                Каждое воскресенье в 21:00
+                            </div>
+                        </div>
+                    </div>
+                </paper-material>
             </div>
-          </div>
-        </paper-material>
-        <paper-material class="material-news">
-          <iron-image class="news-image" sizing="cover" preload fade src="http://146.185.165.166/img/static/events/jazz.jpg"></iron-image>
-          <div class="news-title-jazz">
-            <div class="news-title">
-              <div class="news-info">
-                Джазовый вечер
-              </div>
-              <div class="news-date">
-                Каждый четверг в 21:00
-              </div>
-            </div>
-          </div>
-        </paper-material>
-        <paper-material class="material-news">
-          <iron-image class="news-image" sizing="cover" preload fade src="http://146.185.165.166/img/static/events/stand_up.jpg"></iron-image>
-          <div class="news-title-stand-up">
-            <div class="news-title">
-              <div class="news-info">
-                Stand Up выступление
-              </div>
-              <div class="news-date">
-                Каждое воскресенье в 21:00
-              </div>
-            </div>
-          </div>
-        </paper-material>
-    </div>
-  </div>
+        </div>
 
-</template>
+    </template>
 
-<script>
+    <script>
+        Polymer({
 
-Polymer({
+            is: 'md-events',
 
-  is: 'md-events',
+            properties: {
 
-  properties: {
+                events: {
+                    type: Array
+                },
 
-    events: {
-      type: Array
-    },
+                animationConfig: {
+                    value: function() {
+                        return {
+                            'entry': [{
+                                name: 'ripple-animation',
+                                id: 'events-ripple',
+                                toPage: this,
+                            }, {
+                                name: 'hero-animation',
+                                id: 'events-hero',
+                                toPage: this,
+                            }, {
+                                name: 'fade-in-animation',
+                                node: this.$.events,
+                                timing: {delay: 250},
+                            }, {
+                                name: 'slide-from-bottom-animation',
+                                node: this.$.events,
+                            }, {
+                                name: 'fade-in-animation',
+                                node: this.$.news,
+                                timing: {delay: 300},
+                            }, {
+                                name: 'slide-from-bottom-animation',
+                                node: this.$.news,
+                                timing: {delay: 100},
+                            }],
+                            'exit': [{
+                                name: 'fade-out-animation',
+                                node: this,
+                            }, {
+                                name: 'ripple-animation',
+                                id: 'event-ripple',
+                                fromPage: this,
+                            }]
+                        }
+                    }
+                },
 
-    animationConfig: {
-      value: function() {
-        return {
-          'entry': [
-            {
-              name: 'ripple-animation',
-              id: 'events-ripple',
-              toPage: this,
-            }, {
-              name: 'hero-animation',
-              id: 'events-hero',
-              toPage: this,
-            }, {
-              name: 'fade-in-animation',
-              node: this.$.content,
-              timing: {delay: 150},
-            }],
-          'exit': [
-            {
-              name: 'fade-out-animation',
-              node: this,
-            }, {
-              name: 'ripple-animation',
-              id: 'event-ripple',
-              fromPage: this,
-            }]
-        }
-      }
-    },
+                sharedElements: {
+                    value: function() {
+                        return {
+                            'events-hero': this.$.header,
+                            'events-ripple': this.$.ripple,
+                        }
+                    }
+                },
+            },
 
-    sharedElements: {
-      value: function() {
-        return {
-          'events-hero': this.$.header,
-          'events-ripple': this.$.ripple,
-        }
-      }
-    },
-  },
+            listeners: {
+                'md-render-neon-page': '_renderNeonPage',
+            },
 
-  listeners: {
-    'md-render-neon-page': '_renderNeonPage',
-  },
+            _heroAnimationHandler: function(e) {
+                this.sharedElements['event-ripple'] = e.currentTarget;
+            },
 
-  _heroAnimationHandler: function(e) {
-    this.sharedElements['event-ripple'] = e.currentTarget;
-  },
+            _renderNeonPage: function(e) {
+                this.$.ajax.generateRequest();
+                layout = document.createElement('app-header-layout');
+                layout.id = "layout";
+                childNodes = Polymer.dom(this.root).childNodes;
+                for (var i = 0; i < childNodes.length; i++) {
+                    Polymer.dom(layout).appendChild(childNodes[i]);
+                }
+                Polymer.dom(this.root).appendChild(layout);
+                this.unlisten(this, 'md-render-neon-page', '_renderNeonPage');
+            },
 
-  _renderNeonPage: function(e) {
-      this.$.ajax.generateRequest();
-      layout = document.createElement('app-header-layout');
-      layout.id = "layout";
-      childNodes = Polymer.dom(this.root).childNodes;
-      for (var i = 0; i < childNodes.length; i++) {
-        Polymer.dom(layout).appendChild(childNodes[i]);
-      }
-      Polymer.dom(this.root).appendChild(layout);
-      this.unlisten(this, 'md-render-neon-page', '_renderNeonPage');
-  },
+            _shouldRenderDate: function(date) {
+                return !!date.soon;
+            },
 
-  _shouldRenderDate: function(date) {
-    return !!date.soon;
-  },
+            _shouldRenderJazzBadge: function(extra) {
+                return extra.type.code === 'jazz';
+            },
 
-  _shouldRenderEnter: function(enter) {
-    return enter !== 'paid';
-  },
+            _shouldRenderStandUpBadge: function(extra) {
+                return extra.type.code === 'stand-up';
+            },
 
-  _shouldRenderJazzBadge: function(extra) {
-    return extra.type.code === 'jazz';
-  },
+            _createEventClass: function(event) {
+                var is_special = event.is_special ? ' special-event' : '';
+                return 'primary' + is_special;
+            },
 
-  _shouldRenderCastingBadge: function(extra) {
-    return extra.type.code === 'casting';
-  },
+            behaviors: [
+                Polymer.NeonSharedElementAnimatableBehavior,
+                Polymer.IronResizableBehavior
+            ],
 
-  _shouldRenderStandUpBadge: function(extra) {
-    return extra.type.code === 'stand-up';
-  },
+            handleResponse: function(request) {
+                var response = request.detail.response;
+                var index, len, date, today, options;
+                if(this.smallScreen) {
+                  options = {
+                      year: 'numeric',
+                      month: 'short',
+                      day: 'numeric',
+                      weekday: 'short',
+                  };
+                } else {
+                  options = {
+                      year: 'numeric',
+                      month: 'long',
+                      day: 'numeric',
+                      weekday: 'long',
+                  };
+                }
+                for (index = 0, len = response.length; index < len; ++index) {
+                    date = new Date(response[index].date);
+                    today = new Date();
+                    today = today.toLocaleString("ru", options).split(' ');
+                    date = date.toLocaleString("ru", options).split(' ');
+                    response[index].date = {
+                        'weekday': date[0].slice(0, -1),
+                        'day': date[1],
+                        'month': date[2],
+                        'year': date[3],
+                        'original': response[index].date,
+                    };
 
-  _createEventClass: function(event) {
-      var is_special = event.is_special ? ' special-event' : '';
-      return 'primary' + is_special;
-  },
+                    response[index].start = response[index].start.slice(0, -3);
 
-  behaviors: [
-    Polymer.NeonSharedElementAnimatableBehavior,
-    Polymer.IronResizableBehavior],
+                    if (date[1] === today[1] && date[2] === today[2]) {
+                        response[index].date['soon'] = 'Сегодня';
+                    } else if (date[1] == (parseInt(today[1]) + 1) && date[2] === today[2]) {
+                        response[index].date['soon'] = 'Завтра';
+                    }
+                };
+                this.events = response;
+            },
 
-  handleResponse: function(request) {
-    var response = request.detail.response;
-    var index, len, date, today;
-    var options = {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-      weekday: 'long',
-    };
-    for (index = 0, len = response.length; index < len; ++index) {
-      response[index].start = response[index].start.slice(0, -3);
-      if(response[index].price == 0) {
-        response[index].price = 'Свободный';
-      }
-      date = new Date(response[index].date);
-      today = new Date();
-      today = today.toLocaleString("ru", options).split(' ');
-      date = date.toLocaleString("ru", options).split(' ');
-      response[index].date = {
-        'weekday': date[0].slice(0, -1),
-        'day': date[1],
-        'month': date[2],
-        'year': date[3],
-        'original': response[index].date,
-      };
-
-      if(date[1] === today[1] && date[2] === today[2]) {
-        response[index].date['soon'] = 'Сегодня';
-      } else if(date[1] == (parseInt(today[1]) + 1) && date[2] === today[2]) {
-        response[index].date['soon'] = 'Завтра';
-      }
-    };
-    this.events = response;
-  },
-
-});
-
-</script>
+        });
+    </script>
 
 </dom-module>

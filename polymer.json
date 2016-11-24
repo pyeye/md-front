@@ -1,6 +1,12 @@
 {
   "entrypoint": "index.html",
   "shell": "src/md-app.html",
+  "fragments": [
+    "src/md-reservation.html",
+    "src/md-menu-main.html",
+    "src/md-menu-bar.html",
+    "src/md-menu-other.html"
+  ],
   "sourceGlobs": [
     "src/**/*",
     "images/**/*",

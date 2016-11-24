@@ -9,11 +9,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 -->
 
 <link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
-<link rel="import" href="../bower_components/paper-card/paper-card.html">
-<link rel="import" href="../bower_components/paper-tabs/paper-tabs.html">
-<link rel="import" href="../bower_components/iron-pages/iron-pages.html">
-<link rel="import" href="../bower_components/paper-button/paper-button.html">
-<link rel="import" href="../bower_components/paper-badge/paper-badge.html">
+<link rel="import" href="../bower_components/iron-image/iron-image.html">
 <link rel="import" href="../bower_components/paper-ripple/paper-ripple.html">
 <link rel="import" href="../bower_components/paper-styles/typography.html">
 <link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout.html">
@@ -26,13 +22,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <template>
 
     <style>
-      :host {
-        display: block;
 
-      }
+
 
       .menu-category {
-        padding-top: 24px;
+        padding-top: 16px;
         @apply(--paper-font-headline);
         font-size: 26px;
         color: var(--app-primary-color);
@@ -52,35 +46,90 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     .content {
       display: block;
+      width: 90%;
       position: relative;
-      max-width: 1000px;
-      margin: 5px auto;
-      padding-left: 16px;
+      margin: 16px auto;
     }
 
-    paper-card {
+
+    .card-flex {
+      @apply(--layout-horizontal);
+      @apply(--layout-wrap);
+
+    }
+
+
+    .card {
       position: relative;
       display: inline-block;
-      width: 31%;
-      margin-right: 14px;
-      margin-top: 18px;
-      --paper-card-background-color: #272727;
-      --paper-card-actions : {
-        border-top: 1px solid #191919;
-      }
-      --paper-card-header-image: {
-        height: 250px;
+      -webkit-flex: 1 1;
+      flex: 1 1;
+      -webkit-flex-basis: 23%;
+      flex-basis: 23%;
+      max-width: 23%;
+      margin-top: 16px;
+      margin-right: 16px;
+      box-sizing: border-box;
+      border-radius: 2px;
+      box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14),
+                  0 1px 5px 0 rgba(0, 0, 0, 0.12),
+                  0 3px 1px -2px rgba(0, 0, 0, 0.2);
+      background-color: var(--app-upper-layer-color);
+    }
+
+    .card-content {
+      padding: 16px;
+    }
+
+    .card iron-image {
+      position: relative;
+      width: 100%;
+      height: 250px;
+    }
+
+
+    @media (max-width: 1400px) {
+      .card {
+        -webkit-flex-basis: 31%;
+        flex-basis: 31%;
+        max-width: 31%;
       }
     }
+
+    @media (max-width: 1038px) {
+      .card {
+        -webkit-flex-basis: 46%;
+          flex-basis: 46%;
+          max-width: 46%;
+      }
+    }
+
+    @media (max-width: 500px) {
+      .card {
+        -webkit-flex-basis: 100%;
+          flex-basis: 100%;
+          max-width: 100%;
+        margin-right: 0;
+      }
+    }
+
     .item-header {
       height: 45px;
 
     }
     .item-name {
-      max-width: 65%;
+      max-width: 70%;
       display: inline-block;
       @apply(--paper-font-title);
       color: #FFFFFF;
+    }
+
+    .card:hover {
+     cursor: pointer;
+    }
+
+    .card:hover .item-name {
+     text-decoration: underline;
     }
 
     .item-price {
@@ -124,7 +173,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       -webkit-transform: rotate(-45deg);
       width: 100px;
       display: block;
-
       background-color: var(--app-primary-color) ;
       box-shadow: 0 3px 10px -5px rgba(0, 0, 0, 1);
       position: absolute;
@@ -151,52 +199,31 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 
   }
-
-
-
-    @media (max-width: 960px) {
-     .content {
-       max-width: 800px;
-     }
-     paper-card {
-       width: 46%;
-     }
-   }
-   @media (max-width: 719px) {
-     .content {
-       max-width: 400px;
-     }
-     paper-card {
-       width: 96%;
-     }
-   }
-
     </style>
 
-    <iron-ajax id="ajax"
-               url="http://146.185.165.166:80/api/v1/menu/?group=other&format=md_menu"
+    <iron-ajax auto
+               url="https://maddogclub.com/api/v1/menu/?group=other&format=md_menu"
                handle-as="json"
                last-response="{{menuOther}}"></iron-ajax>
 
-
     <div class="content">
-      <template is="dom-repeat" items="{{menuOther}}" as="main">
+      <template is="dom-repeat" items="{{menuOther}}" as="other">
         <div class="menu-category">
-          {{main.category}}
+          {{other.category}}
         </div>
-        <template is="dom-repeat" items="{{main.items}}">
-            <paper-card image="{{item.photo.thumbnail}}" preload-image fade-image on-tap="handleTap">
-              <template is="dom-if" if="[[item.detail.sale]]">
-                <div class="sale-badge">
-                  <span>Акция!</span>
-                </div>
-              </template>
+        <div class="card-flex">
+          <template is="dom-repeat" items="{{other.items}}" initial-count="4">
+            <div class="card" on-tap="handleTap">
+              <iron-image sizing="cover" preload fade src="{{item.photo.thumbnail}}"></iron-image>
+              <div class="sale-badge" hidden$="[[!item.detail.sale]]">
+                <span>Акция!</span>
+              </div>
               <div class="card-content">
                 <div class="item-header">
                   <div class="item-name">{{item.name}}</div>
                   <div class="item-price">
                     <template is="dom-repeat" items="{{_getPrices(item.prices)}}" as="price">
-                       {{price.value}} &#x20bd;
+                      {{price.value}} &#x20bd;
                         <div class="item-weight">
                           за {{price.count}} {{price.measure}}
                         </div>
@@ -205,8 +232,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 </div>
               </div>
               <paper-ripple></paper-ripple>
-            </paper-card>
-        </template>
+            </div>
+          </template>
+        </div>
+
       </template>
     </div>
 </template>
@@ -220,7 +249,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         menuOther: {
           type: Array
         },
-
       },
 
       listeners: {
@@ -237,7 +265,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       },
 
       handleTap: function(e) {
-        this.fire('open-menu-modal', e.model.item);
+        this.fire('open-menu-modal', {
+          'value': e.model.item,
+          'group': 'other',
+        });
       },
 
       behaviors: [

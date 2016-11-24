@@ -23,8 +23,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/paper-input/paper-textarea.html">
 <link rel="import" href="../bower_components/google-map/google-map.html">
 <link rel="import" href="../bower_components/google-map/google-map-marker.html">
-<link rel="import" href="../bower_components/gold-email-input/gold-email-input.html">
 <link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
 
 <link rel="import" href="md-icons.html">
 
@@ -35,7 +35,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <style>
       :host {
         display: block;
-        min-width: 870px;
+        --paper-input-container-color: #fff;
+        --paper-input-container-focus-color: var(--app-primary-color);
+        --paper-input-container-input-color: #fff;
       }
 
 
@@ -48,6 +50,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       .about-row {
         @apply(--layout-horizontal);
+        @apply(--layout-wrap);
         justify-content: space-between;
       }
 
@@ -105,10 +108,36 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         height: 400px;
       }
 
+      paper-button {
+        margin-top: 16px;
+        background: var(--app-primary-color);
+        color: #fff;
+      }
+
+      @media (max-width: 500px) {
+        .common {
+          -webkit-flex-basis: 100%;
+            flex-basis: 100%;
+            max-width: 100%;
+            margin-left: 0;
+        }
+
+        .pad {
+          -webkit-flex-basis: 100%;
+            flex-basis: 100%;
+            max-width: 100%;
+        }
+      }
+
 
 
     </style>
-
+    <iron-ajax id="ajax"
+               url="https://maddogclub.com/api/v1/feedback/"
+               method="POST"
+               content-type="application/json"
+               handle-as="json"
+               on-response="handleResponse"></iron-ajax>
 
 
     <div class="main-content">
@@ -118,13 +147,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             <p class="common-primary">Адрес:</p>
             <p class="common-secondary">г. Челябинск ул. Кирова, 7а</p>
             <p class="common-primary">Время работы:</p>
-            <p class="common-secondary">16:00 - 02:00</p>
-            <p class="common-secondary">12:00 - 14:00 - Бизнес ланч</p>
+            <p class="common-secondary">12:00 - 02:00</p>
+            <p class="common-secondary">12:00 - 16:00 - Бизнес ланч</p>
             <p class="common-primary">Телефон:</p>
-            <p class="common-secondary"> 8 (351) 240 - 20 - 00 - для справок</p>
-            <p class="common-secondary"> 8 (919) 349 - 29 - 33 - для сотрудничества</p>
+            <p class="common-secondary"> 8 (351) 240 - 20 - 00 - по вопросам</p>
+            <p class="common-secondary"> 8 (919) 349 - 29 - 33 - по сотрудничеству</p>
             <p class="common-primary">Электронная почта:</p>
-            <p class="common-secondary">admin@email.com</p>
+            <p class="common-secondary">team@maddogclub.com</p>
         </div>
         <div class="pad">
           <div class="social">
@@ -142,30 +171,31 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           <div class="message">
             <p class="title">Обратная связь</p>
             <paper-input auto-validate
-                         maxlength="20"
+                         maxlength="30"
                          char-counter
                          error-message="Это обязательное поле!"
+                         value="{{form.name}}"
                          label="Имя"
                          required></paper-input>
 
             <paper-input auto-validate
-                         maxlength="20"
+                         maxlength="30"
                          char-counter
-                         error-message="Это обязательное поле!"
-                         label="Эл. почта"
-                         required></paper-input>
+                         label="Контакт для обратной связи"
+                         value="{{form.contact}}"></paper-input>
 
             <paper-textarea auto-validate
+                            value="{{form.message}}"
                             label="Комментарий"
-                            maxlength="100"
-                            char-counter
+                            maxlength="250"
                             error-message="Это обязательное поле!"
+                            char-counter
                             required></paper-textarea>
-                            <br>
-                            <paper-button raised on-tap="submitForm">
-                              <iron-icon class="reservation-icons" icon="near-me"></iron-icon>
-                              Отправить
-                            </paper-button>
+            <br>
+            <paper-button raised on-tap="submitForm" disabled$="[[!validators.summary]]">
+              <iron-icon class="reservation-icons" icon="near-me"></iron-icon>
+              Отправить
+            </paper-button>
           </div>
         </div>
       </div>
@@ -191,6 +221,56 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     Polymer({
 
       is: 'md-about-contacts',
+
+      properties: {
+        form: {
+          type: Object,
+          value: function() {
+            return {
+                name: '',
+                contact: '',
+                message: '',
+            }
+          },
+        },
+        validators: {
+          type: Object,
+          value: function() {
+            return {
+              name: false,
+              message: false,
+              summary: false,
+            }
+          }
+        },
+      },
+
+      observers: [
+        '_formNameChanged(form.name)',
+        '_formMessageChanged(form.message)',
+        '_formValid(validators.name, validators.message)',
+      ],
+
+      _formNameChanged: function(newValue, oldValue) {
+        this.set('validators.name', newValue.length !== 0);
+      },
+
+      _formMessageChanged: function(newValue, oldValue) {
+        this.set('validators.message', newValue.length !== 0);
+      },
+
+      _formValid: function(name, message) {
+        this.set('validators.summary', (name && message));
+      },
+
+      submitForm: function() {
+        this.$.ajax.body = JSON.stringify(this.form);
+        this.$.ajax.generateRequest();
+      },
+
+      handleResponse: function(request) {
+        console.log(request.detail.responce);
+      },
 
     });
 

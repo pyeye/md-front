@@ -12,6 +12,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/app-route/app-location.html">
 <link rel="import" href="../bower_components/app-route/app-route.html">
 
+<link rel="import" href="../bower_components/iron-media-query/iron-media-query.html">
+
 <link rel="import" href="../bower_components/app-layout/app-drawer-layout/app-drawer-layout.html">
 <link rel="import" href="../bower_components/app-layout/app-drawer/app-drawer.html">
 <link rel="import" href="../bower_components/app-layout/app-header/app-header.html">
@@ -21,16 +23,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/paper-styles/typography.html">
 <link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout.html">
 <link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
-<link rel="import" href="../bower_components/iron-image/iron-image.html">
-<link rel="import" href="../bower_components/iron-pages/iron-pages.html">
+<link rel="import" href="../bower_components/paper-ripple/paper-ripple.html">
 <link rel="import" href="../bower_components/iron-selector/iron-selector.html">
-
-<link rel="import" href="md-icons.html">
-<link rel="import" href="../bower_components/paper-dialog/paper-dialog.html">
-<link rel="import" href="../bower_components/iron-overlay-behavior/iron-overlay-behavior.html">
-<link rel="import" href="../bower_components/neon-animation/neon-animated-pages.html">
-<link rel="import" href="../bower_components/neon-animation/animations/scale-up-animation.html">
+<link rel="import" href="../bower_components/neon-animation/animations/fade-in-animation.html">
 <link rel="import" href="../bower_components/neon-animation/animations/fade-out-animation.html">
+
+<link rel="import" href="../bower_components/neon-animation/neon-animated-pages.html">
 
 <link rel="import" href="md-home.html">
 <link rel="import" href="md-events.html">
@@ -39,7 +37,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="md-gallery.html">
 <link rel="import" href="md-album.html">
 <link rel="import" href="md-about.html">
-<link rel="import" href="md-reservation.html">
+<link rel="import" href="md-icons.html">
+<link rel="import" href="md-analytics.html">
+<link rel="import" href="md-menu-modal.html">
 
 <dom-module id="md-app">
 
@@ -47,249 +47,177 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
   <style>
 
-    :host {
-      overflow: hidden;
-      @apply(--layout-fullbleed);
-      --app-primary-color: #F44336;
-      --app-secondary-color: #212121;
-      --app-lower-layer-color: #202020;
-      --app-upper-layer-color: #252525;
-      --app-accent-color: #172C50;
-      --paper-button-ink-color: var(--app-accent-color);
-      --paper-icon-button-ink-color: var(--app-accent-color);
-      --paper-spinner-color: var(--app-accent-color);
+  :host {
+    overflow: hidden;
+    @apply(--layout-fullbleed);
+    --app-primary-color: #F44336;
+    --app-secondary-color: #212121;
+    --app-lower-layer-color: #202020;
+    --app-upper-layer-color: #252525;
+    --app-accent-color: #172C50;
+    --paper-button-ink-color: var(--app-accent-color);
+    --paper-icon-button-ink-color: var(--app-accent-color);
+    --paper-spinner-color: var(--app-accent-color);
+  }
+
+  [hidden] {
+    display: none;
+  }
+
+  app-drawer {
+    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
+    --app-drawer-width: 260px;
+    --app-drawer-content-container: {
+      background-color: var(--app-upper-layer-color);
     }
+  }
 
-    [hidden] {
-      display: none;
-    }
+  app-drawer a {
+    text-decoration: none;
+  }
 
-    app-drawer {
-      box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
-      --app-drawer-width: 260px;
-      --app-drawer-content-container: {
-        background-color: var(--app-upper-layer-color);
-      }
-    }
+  .flex-drawer {
+    @apply(--layout-vertical);
+    height: 100%;
+  }
 
-    app-drawer a {
-      text-decoration: none;
-    }
+  .flex-nav {
+    @apply(--layout-flex);
+  }
 
-    .flex-drawer {
-      @apply(--layout-vertical);
-      height: 100%;
-    }
+  .social {
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 24px;
+  }
 
-    .flex-nav {
-      @apply(--layout-flex);
-    }
+  .social-icon {
+    --iron-icon-height: 26px;
+    --iron-icon-width: 26px;
+    margin-left: 18px;
+    margin-right: 18px;
+  }
 
-    .social {
-      display: -ms-flexbox;
-      display: -webkit-flex;
-      display: flex;
-      justify-content: center;
-      margin-bottom: 12px;
-    }
+  #fb-icon {
+    --iron-icon-height: 23px;
+    --iron-icon-width: 23px;
+  }
 
-    .social-icon {
-      --iron-icon-height: 29px;
-      --iron-icon-width: 29px;
-      margin-left: 18px;
-      margin-right: 18px;
-    }
+  .social-icon-container {
+    display: inline-block;
+    transition: color 0.5s;
+    color: #FFFFFF;
+  }
 
-    #fb-icon {
-      --iron-icon-height: 25px;
-      --iron-icon-width: 25px;
-    }
+  .social-icon-container a {
+    transition: color 0.5s;
+    color: #FFFFFF;
+  }
 
-    .social-icon-container {
-      display: inline-block;
-      transition: color 0.5s;
-      color: #FFFFFF;
-    }
-
-    .social-icon-container a {
-      transition: color 0.5s;
-      color: #FFFFFF;
-    }
-
-    .social-icon-container:hover a {
-      color: var(--app-primary-color);
-    }
+  .social-icon-container:hover a {
+    color: var(--app-primary-color);
+  }
 
 
-    app-header paper-icon-button {
-      --paper-icon-button-ink-color: #fff;
-    }
+  app-header paper-icon-button {
+    --paper-icon-button-ink-color: #fff;
+  }
 
-    .drawer-list {
-      margin: 0 20px;
-    }
+  .drawer-list {
+    margin: 0 8px;
+  }
+
+  .drawer-container {
+    height: 100%;
+    overflow: auto;
+  }
+
+  .drawer-list a {
+    display: block;
+    padding: 0 10px;
+    margin-left: 4px;
+    line-height: 36px;
+    text-decoration: none;
+    color: #fff;
+    @apply(--paper-font-subhead);
+    line-height: 36px;
+  }
+
+  .drawer-list a.iron-selected {
+    margin-left: 0px;
+    border-left: 4px solid var(--app-primary-color);
+    color: var(--app-primary-color);
+    --iron-icon-fill-color: #FFFFFF;
+  }
+
+  .drawer-list a:hover {
+    color: var(--app-primary-color);
+  }
+
+  .drawer-list a.subroute {
+    padding-left: 32px;
+  }
+
+  .contacts {
+    color: #fff;
+    margin-left: 6px;
+    font-size: 14px;
+  }
+
+  .contact-logo {
+    font-size: 18px;
+  }
+
+  .contact-info {
+    margin: 0 16px;
+    padding: 8px 0;
+    border-top: 1px solid rgba(255,255,255, 0.5);
+    letter-spacing: 1.5px;
+  }
+
+  .contacts iron-icon {
+    --iron-icon-fill-color: #FFFFFF;
+    --iron-icon-height: 21px;
+    --iron-icon-width: 21px;
+  }
+
+  .logo {
+    padding-top: 8px;
+    padding-bottom: 8px;
+    text-align: center;
+    border-bottom: 1px solid rgba(255,255,255, 0.5);
+    margin-left: 20px;
+    margin-right: 20px;
+    color: var(--app-primary-color);
+  }
+
+  .nav-icons {
+    margin: 0 8px;
+  }
+
+  .logo img {
+    width: 110px;
+  }
+
+  .nav-links {
+    position: relative;
+  }
+
+  paper-ripple {
+    color: var(--app-primary-color);
+  }
 
 
-    .drawer-list a {
-        display: block;
-        padding: 0 16px;
-        margin-left: 6px;
-        line-height: 40px;
-        text-decoration: none;
-        color: #fff;
-      }
 
-    .drawer-list a.iron-selected {
-        margin-left: 0px;
-        border-left: 6px solid var(--app-primary-color);
-        color: var(--app-primary-color);
-        --iron-icon-fill-color: #FFFFFF;
-      }
-
-    .drawer-list a.subroute {
-      padding-left: 32px;
-    }
-
-    .contacts {
-      color: #fff;
-      margin-left: 16px;
-    }
-
-    .contact-info {
-      margin-bottom: 24px;
-      margin-left: 16px;
-    }
-
-    .contacts iron-icon {
-      --iron-icon-fill-color: #FFFFFF;
-      --iron-icon-height: 21px;
-      --iron-icon-width: 21px;
-    }
-
-    .logo {
-      padding-top: 5px;
-      padding-bottom: 5px;
-      text-align: center;
-      border-bottom: 1px solid #fff;
-      margin-left: 20px;
-      margin-right: 20px;
-      color: var(--app-primary-color);
-    }
-
-    .nav-icons {
-      margin-left: 10px;
-      margin-right: 10px;
-    }
-
+  @media (max-height: 698px) {
     .logo img {
-      width: 100px;
+      width: 85px;
     }
 
-    .logo .logo-text {
-      width: 210px;
-    }
+  }
 
-    paper-dialog.menu-modal {
-      width: 40%;
-      background-color: #212121;
-      color: var(--app-primary-color);
-      @apply(--layout-flex);
-      flex-direction: column;
-      flex-wrap: wrap;
-    }
-
-    paper-dialog iron-image {
-      width: 100%;
-      height: 300px;
-    }
-
-    paper-dialog .modal-item-name-container {
-      position: relative;
-      margin-top: -5px;
-      background-color: var(--app-primary-color);
-      padding-left: 16px;
-      min-height: 70px;
-    }
-    paper-dialog .modal-item-name-box {
-      @apply(--paper-font-headline);
-      position: absolute;
-      color: #FFFFFF;
-      font-size: 26px;
-      top: 50%;
-      transform: translateY(-50%);
-    }
-
-    paper-dialog .modal-item-description {
-      @apply(--paper-font-body1);
-      color: #FFFFFF;
-      padding-left: 16px;
-      padding-right: 16px;
-      padding-top: 16px;
-      margin-bottom: 16px;
-
-    }
-    paper-dialog .modal-item-bottom {
-      @apply(--paper-font-headline);
-      font-size: 28px;
-      color: var(--app-primary-color);
-      margin-left: 16px;
-    }
-
-    paper-dialog .modal-item-bottom-container {
-      padding-top: 32px;
-      @apply(--layout-horizontal);
-      @apply(--layout-end-justified);
-      margin-right: 16px;
-    }
-
-    paper-dialog .modal-item-weight {
-      margin-bottom: 16px;
-      @apply(--paper-font-subhead);
-      color: var(--app-primary-color);
-    }
-
-    paper-dialog .modal-item-detail {
-      @apply(--paper-font-subhead);
-      color: var(--app-primary-color);
-      margin: 16px 0;
-      @apply(--layout-horizontal);
-    }
-
-    .modal-item-detail-sale-description {
-      font-weight: bold;
-      width: 50px;
-      padding-right: 20px;
-      color: var(--app-primary-color);
-      text-align: right;
-    }
-
-    .modal-item-detail-sale-value {
-      @apply(--layout-flex);
-      color: #FFFFFF;
-      float: left
-    }
-
-    @media (max-width: 960px) {
-      paper-dialog.menu-modal {
-        width: 50%;
-      }
-
-      paper-dialog iron-image {
-        height: 250px;
-      }
-    }
-
-    @media (max-width: 768px) {
-      paper-dialog.menu-modal {
-        width: 75%;
-      }
-
-    }
-    @media (max-width: 450px) {
-      paper-dialog.menu-modal {
-        width: 99%;
-      }
-    }
 
   </style>
 
@@ -300,60 +228,63 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         data="{{routeData}}"
         tail="{{subroute}}"></app-route>
 
+    <md-analytics></md-analytics>
 
+    <iron-media-query query="max-width: 480px" query-matches="{{smallScreen}}"></iron-media-query>
 
     <app-drawer-layout responsive-width="768px">
 
       <!-- Drawer content -->
-      <app-drawer id="drawer">
-        <div class="flex-drawer">
-          <div class="flex-logo">
+      <app-drawer id="drawer" no-focus-trap>
+        <div class="drawer-container">
+          <div class="flex-drawer">
+            <div class="flex-logo">
+              <a href="#/home">
+                <div class="logo">
+                  <img src="https://maddogclub.com/img/static/logo.jpg" alt="" />
+                </div>
+              </a>
+            </div>
+            <div class="flex-nav">
+              <iron-selector selected="[[pageSection]]"
+                             attr-for-selected="name"
+                             class="drawer-list"
+                             role="navigation"
+                             on-iron-activate="_drawerSelected">
 
-              <div class="logo">
-                <a href="#/home">
-                <img src="http://146.185.165.166/img/static/new_logo_3.jpeg" alt="" />
-                <img class="logo-text" src="http://146.185.165.166/img/static/logo-text.png" alt="" />
-                  </a>
+                <a class="nav-links" name="home" href="#/home"><iron-icon class="nav-icons" icon="home"></iron-icon>Главная<paper-ripple></paper-ripple></a>
+                <a class="nav-links" name="menu" href="#/menu"><iron-icon class="nav-icons" icon="restaurant-menu"></iron-icon>Меню<paper-ripple></paper-ripple></a>
+                <a class="nav-links" name="events" href="#/events"><iron-icon class="nav-icons" icon="event"></iron-icon>Афиша<paper-ripple></paper-ripple></a>
+                <a class="nav-links" name="gallery" href="#/gallery"><iron-icon class="nav-icons" icon="perm-media"></iron-icon>Галерея<paper-ripple></paper-ripple></a>
+                <a class="nav-links" name="reservation" href="#/reservation"><iron-icon class="nav-icons" icon="event-available"></iron-icon>Бронирование<paper-ripple></paper-ripple></a>
+                <a class="nav-links" name="about" href="#/about"><iron-icon class="nav-icons" icon="feedback"></iron-icon>О нас<paper-ripple></paper-ripple></a>
+              </iron-selector>
+            </div>
+
+            <div class="flex-contact">
+
+              <div class="contact-info">
+                <span class="contacts contact-logo"> MAD DOG</span><br>
+                <span class="contacts"> Клуб живой музыки</span><br>
+                <span class="contacts">  <iron-icon icon="location-on"></iron-icon>&nbsp Челябинск, Кирова, 7а</span><br>
+                <span class="contacts">  <iron-icon icon="access-time"></iron-icon>&nbsp 12:00 - 02:00</span><br>
+                <span class="contacts">  <iron-icon icon="phone"></iron-icon>&nbsp 8 (351) 240 - 20 - 00</span>
               </div>
-
-
-
-          </div>
-          <div class="flex-nav">
-            <iron-selector selected="[[pageSection]]"
-                           attr-for-selected="name"
-                           class="drawer-list"
-                           role="navigation"
-                           on-iron-activate="_drawerSelected">
-
-              <a name="home" href="#/home"><iron-icon class="nav-icons" icon="home"></iron-icon>Главная</a>
-              <a name="menu" href="#/menu"><iron-icon class="nav-icons" icon="restaurant-menu"></iron-icon> Меню</a>
-              <a name="events" href="#/events"><iron-icon class="nav-icons" icon="event"></iron-icon> Афиша </paper-item></a>
-              <a name="gallery" href="#/gallery"><iron-icon class="nav-icons" icon="perm-media"></iron-icon> Галерея</a>
-              <a name="reservation" href="#/reservation"><iron-icon class="nav-icons" icon="event-available"></iron-icon> Бронирование</a>
-              <a name="about" href="#/about"><iron-icon class="nav-icons" icon="feedback"></iron-icon> О нас</a>
-            </iron-selector>
-          </div>
-          <div class="social">
-            <div class="social-icon-container">
-              <a target="_blank" href="https://vk.com/club_maddog"><iron-icon class="social-icon" icon="vk"></iron-icon></a>
             </div>
-            <div class="social-icon-container">
-              <a target="_blank" href="https://www.facebook.com/clubmaddog/"><iron-icon id="fb-icon" class="social-icon" icon="facebook"></iron-icon></a>
-            </div>
-            <div class="social-icon-container">
-              <a target="_blank" href="https://www.instagram.com/mad_dog_club/"><iron-icon class="social-icon" icon="instagram"></iron-icon></a>
+            <div class="social">
+              <div class="social-icon-container">
+                <a target="_blank" href="https://vk.com/club_maddog"><iron-icon class="social-icon" icon="vk"></iron-icon></a>
+              </div>
+              <div class="social-icon-container">
+                <a target="_blank" href="https://www.facebook.com/clubmaddog/"><iron-icon id="fb-icon" class="social-icon" icon="facebook"></iron-icon></a>
+              </div>
+              <div class="social-icon-container">
+                <a target="_blank" href="https://www.instagram.com/mad_dog_club/"><iron-icon class="social-icon" icon="instagram"></iron-icon></a>
+              </div>
             </div>
           </div>
-          <div class="flex-contact">
-            <div class="contact-info">
-              <span class="contacts">  <iron-icon icon="location-on"></iron-icon>&nbsp&nbsp ул. Кирова, 7а</span><br>
-              <span class="contacts">  <iron-icon icon="access-time"></iron-icon>&nbsp&nbsp 16:00 - 02:00</span><br>
-              <span class="contacts">  <iron-icon icon="phone"></iron-icon>&nbsp&nbsp 8 (351) 240 - 20 - 00</span>
-            </div>
-          </div>
-
         </div>
+
       </app-drawer>
 
       <!-- Main content -->
@@ -383,52 +314,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     </app-drawer-layout>
 
-    <paper-dialog id="modal" class="menu-modal" entry-animation="scale-up-animation" exit-animation="fade-out-animation" with-backdrop>
 
-          <iron-image src="{{modalItem.photo.original}}" sizing="cover" preload fade></iron-image>
-
-        <div class="modal-item-name-container">
-          <div class="modal-item-name-box">
-            {{modalItem.name}}
-          </div>
-        </div>
-        <div class="modal-item-description">
-          [[modalItem.description]]
-          <template is="dom-if" if=[[modalItem.detail.sale]]>
-            <div class="modal-item-detail">
-              <div class="modal-item-detail-sale-description">[[modalItem.detail.sale.description]]:</div>
-              <div class="modal-item-detail-sale-value">[[modalItem.detail.sale.value]]</div>
-            </div>
-          </template>
-
-          <div class="modal-item-bottom-container">
-            <template is="dom-repeat" items="{{modalItem.prices}}" as="price">
-              <div class="modal-item-bottom">
-                  {{price.value}} &#x20bd;
-                  <div class="modal-item-weight">
-                    за {{price.count}} {{price.measure}}
-                  </div>
-              </div>
-
-            </template>
-            <!--
-            <div class="modal-item-bottom">
-                <iron-icon icon="alarm"></iron-icon>
-                <div class="modal-item-weight">
-                  25 мин.
-                </div>
-            </div>
-            <div class="modal-item-bottom">
-                <iron-icon icon="favorite"></iron-icon>
-                <div class="modal-item-weight">
-                  47k
-                </div>
-            </div>
-
-          -->
-          </div>
-        </div>
-    </paper-dialog>
+    <md-menu-modal id="modal" with-backdrop="{{!smallScreen}}" entry-animation="fade-in-animation" exit-aanimation="fade-out-animation"></md-menu-modal>
 
   </template>
 
@@ -443,10 +330,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           type: String,
           reflectToAttribute: true,
           observer: '_pageChanged'
-        },
-
-        modalItem: {
-          type: Object,
         },
 
       },
@@ -472,23 +355,33 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       },
 
       _openMenuModal: function(e) {
-        this.modalItem = e.detail;
+        this.$.modal.setMenuItem(e.detail);
         this.$.modal.open();
       },
 
       _routePageChanged: function(page) {
         this.page = page || 'home';
+        this.async(this._scroll, 200);
+      },
+
+      _scroll: function() {
+        scroll(0,0);
       },
 
       _pageChanged: function(page) {
-          this._changeCategory(page);
+        if (page === 'reservation') {
+          this.importHref(
+              this.resolveUrl('md-reservation.html'),
+              null, null, true);
+        }
+          this._changeSection(page);
       },
 
       _drawerSelected: function() {
         if (!this.$.drawer.persistent) this.$.drawer.close();
       },
 
-      _changeCategory: function(category) {
+      _changeSection: function(category) {
         category = category === 'album' ? 'gallery' : category;
         category = category === 'event' ? 'events' : category;
         this.pageSection = category;

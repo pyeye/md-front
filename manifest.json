@@ -2,7 +2,7 @@
   "name": "Mad Dog",
   "short_name": "Mad Dog",
     "icons": [{
-      "src": "images/app-icon-32.png",
+      "src": "images/logo_32.png",
       "type": "image/png",
       "sizes": "32x32"
     }, {
@@ -24,6 +24,6 @@
     }],
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#3f51b5",
-  "theme_color": "#3f51b5"
+  "background_color": "#212121",
+  "theme_color": "#F44336"
 }

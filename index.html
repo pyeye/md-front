@@ -1,4 +1,4 @@
-<!--
+ <!--
 @license
 Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
 This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
@@ -13,224 +13,187 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+  <meta name="google-site-verification" content="TxKD9Hv6qsTHkXa77-s58D8kAMed5sy4rXLYvZ7qo90" />
+  <meta name="yandex-verification" content="aa9d1325f4e27eb9" />
 
-  <title>Mad Dog</title>
+  <title>Mad Dog - Клуб живой музыки</title>
 
   <link rel="shortcut icon" sizes="32x32" href="/images/logo_32.png">
   <link type="text/css" rel="stylesheet" href="bower_components/lightgallery.js/dist/css/lightgallery.min.css" async>
   <link rel="manifest" href="/manifest.json">
 
   <script>
-    // Note: this version requires Promises, which are in all the
-    // latest browsers except IE 11. Edge will ship them.
-    // Note: native Promise.defer() is deprecated. Have to create our own.
-    function deferred() {
-      var result = {};
-      result.promise = new Promise(function(resolve, reject) {
-        result.resolve = resolve;
-        result.reject = reject;
-      });
-      return result;
-    };
-    // (Optional) Use native Shadow DOM if availabe in the browser.
-    window.Polymer = window.Polymer || {lazyRegister: true, dom: 'shadow'};
-    // 1. Create deferred Promise to capture async import's load.
-    var importsLoadedDeferred = deferred();
-    function onImportsLoaded(e) {
-      // 3. Resolve the Promise when the async import has loaded.
-      importsLoadedDeferred.resolve(e.target);
-    }
+  // Note: this version requires Promises, which are in all the
+  // latest browsers except IE 11. Edge will ship them.
+  // Note: native Promise.defer() is deprecated. Have to create our own.
+  function deferred() {
+    var result = {};
+    result.promise = new Promise(function(resolve, reject) {
+      result.resolve = resolve;
+      result.reject = reject;
+    });
+    return result;
+  };
+  // (Optional) Use native Shadow DOM if availabe in the browser.
+  window.Polymer = window.Polymer || {lazyRegister: true, dom: 'shadow'};
+  // 1. Create deferred Promise to capture async import's load.
+  var importsLoadedDeferred = deferred();
+  function onImportsLoaded(e) {
+    // 3. Resolve the Promise when the async import has loaded.
+    importsLoadedDeferred.resolve(e.target);
+  }
   </script>
 
   <link rel="import" href="/src/md-app.html" onload="onImportsLoaded(event)" async>
 
   <style>
 
-    body.loading #splash {
-      opacity: 1;
+  body.loading #splash {
+    opacity: 1;
+  }
+
+  #splash {
+    width: 100%;
+    height: 100%;
+    transition: opacity 300ms cubic-bezier(0,0,0.2,1);
+    opacity: 0;
+    will-change: opacity;
+    z-index: -111;
+    background-color: #252525;
+  }
+
+  #splash-logo {
+    width: 100%;
+    height: 100%;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    z-index: 2;
+  }
+
+  #splash-logo img {
+    width: 180px;
+  }
+
+  #splash-logo svg {
+    margin-left: 1.25px;
+    margin-top: -68.65px;
+    width: 41px;
+    height: 41px;
+
+  }
+
+  .spinner {
+    -webkit-animation: rotator 1.4s linear infinite;
+    animation: rotator 1.4s linear infinite;
+  }
+
+  @-webkit-keyframes rotator {
+    0% {
+      -webkit-transform: rotate(0deg);
+      transform: rotate(0deg);
     }
-
-    #splash {
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      transition: opacity 300ms cubic-bezier(0,0,0.2,1);
-      opacity: 0;
-      will-change: opacity;
-      z-index: -111;
-      background-color: #252525;
+    100% {
+      -webkit-transform: rotate(270deg);
+      transform: rotate(270deg);
     }
+  }
 
-    #splash-logo {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      z-index: 2;
+  @keyframes rotator {
+    0% {
+      -webkit-transform: rotate(0deg);
+      transform: rotate(0deg);
     }
-
-    #splash-logo img {
-      width: 180px;
+    100% {
+      -webkit-transform: rotate(270deg);
+      transform: rotate(270deg);
     }
+  }
+  .path {
+    stroke-dasharray: 187;
+    stroke-dashoffset: 0;
+    -webkit-transform-origin: center;
+    transform-origin: center;
+    -webkit-animation: dash 1.4s ease-in-out infinite, colors 5.6s ease-in-out infinite;
+    animation: dash 1.4s ease-in-out infinite, colors 5.6s ease-in-out infinite;
+  }
 
-    #splash-logo svg {
-      position: relative;
-      left: -113.7px;
-      top: -27.8px;
-      width: 41px;
-      height: 41px;
+  @-webkit-keyframes colors {
+    0% {
+      stroke: #F44336;
     }
-
-
-
-    @media (max-width: 480px) {
-      #splash-logo img {
-        width: 150px;
-      }
-
-      #splash-logo {
-        transform: translate(-40%, -50%);
-      }
-
-      #splash-logo svg {
-        left: -95.5px;
-        top: -22.6px;
-        width: 35px;
-        height: 35px;
-      }
+    25% {
+      stroke: #F44336;
     }
-
-    @media (max-width: 380px) {
-      #splash-logo img {
-        width: 125px;
-      }
-
-      #splash-logo {
-        transform: translate(-40%, -50%);
-      }
-
-      #splash-logo svg {
-        left: -80.2px;
-        top: -19.1px;
-        width: 28px;
-        height: 28px;
-      }
+    50% {
+      stroke: #F44336;
     }
-
-
-
-
-
-    .spinner {
-      -webkit-animation: rotator 1.4s linear infinite;
-      animation: rotator 1.4s linear infinite;
+    75% {
+      stroke: #F44336;
     }
+    100% {
+      stroke: #F44336;
+    }
+  }
 
-    @-webkit-keyframes rotator {
-      0% {
-        -webkit-transform: rotate(0deg);
-        transform: rotate(0deg);
-      }
-      100% {
-        -webkit-transform: rotate(270deg);
-        transform: rotate(270deg);
-      }
+  @keyframes colors {
+    0% {
+      stroke: #F44336;
     }
+    25% {
+      stroke: #F44336;
+    }
+    50% {
+      stroke: #F44336;
+    }
+    75% {
+      stroke: #F44336;
+    }
+    100% {
+      stroke: #F44336;
+    }
+  }
+  @-webkit-keyframes dash {
+    0% {
+      stroke-dashoffset: 187;
+    }
+    50% {
+      stroke-dashoffset: 46.75;
+      -webkit-transform: rotate(135deg);
+      transform: rotate(135deg);
+    }
+    100% {
+      stroke-dashoffset: 187;
+      -webkit-transform: rotate(450deg);
+      transform: rotate(450deg);
+    }
+  }
+  @keyframes dash {
+    0% {
+      stroke-dashoffset: 187;
+    }
+    50% {
+      stroke-dashoffset: 46.75;
+      -webkit-transform: rotate(135deg);
+      transform: rotate(135deg);
+    }
+    100% {
+      stroke-dashoffset: 187;
+      -webkit-transform: rotate(450deg);
+      transform: rotate(450deg);
+    }
+  }
 
-    @keyframes rotator {
-      0% {
-        -webkit-transform: rotate(0deg);
-        transform: rotate(0deg);
-      }
-      100% {
-        -webkit-transform: rotate(270deg);
-        transform: rotate(270deg);
-      }
-    }
-    .path {
-      stroke-dasharray: 187;
-      stroke-dashoffset: 0;
-      -webkit-transform-origin: center;
-      transform-origin: center;
-      -webkit-animation: dash 1.4s ease-in-out infinite, colors 5.6s ease-in-out infinite;
-      animation: dash 1.4s ease-in-out infinite, colors 5.6s ease-in-out infinite;
-    }
-
-    @-webkit-keyframes colors {
-      0% {
-        stroke: #F44336;
-      }
-      25% {
-        stroke: #F44336;
-      }
-      50% {
-        stroke: #F44336;
-      }
-      75% {
-        stroke: #F44336;
-      }
-      100% {
-        stroke: #F44336;
-      }
-    }
-
-    @keyframes colors {
-      0% {
-        stroke: #F44336;
-      }
-      25% {
-        stroke: #F44336;
-      }
-      50% {
-        stroke: #F44336;
-      }
-      75% {
-        stroke: #F44336;
-      }
-      100% {
-        stroke: #F44336;
-      }
-    }
-    @-webkit-keyframes dash {
-      0% {
-        stroke-dashoffset: 187;
-      }
-      50% {
-        stroke-dashoffset: 46.75;
-        -webkit-transform: rotate(135deg);
-        transform: rotate(135deg);
-      }
-      100% {
-        stroke-dashoffset: 187;
-        -webkit-transform: rotate(450deg);
-        transform: rotate(450deg);
-      }
-    }
-    @keyframes dash {
-      0% {
-        stroke-dashoffset: 187;
-      }
-      50% {
-        stroke-dashoffset: 46.75;
-        -webkit-transform: rotate(135deg);
-        transform: rotate(135deg);
-      }
-      100% {
-        stroke-dashoffset: 187;
-        -webkit-transform: rotate(450deg);
-        transform: rotate(450deg);
-      }
-    }
-
-    body {
-      margin: 0;
-      font-family: 'Roboto', 'Noto', sans-serif;
-      line-height: 1.5;
-      height: 100vh;
-      background-color: #202020;
-    }
+  body {
+    margin: 0;
+    font-family: 'Roboto', 'Noto', sans-serif;
+    line-height: 1.5;
+    height: 100vh;
+    background-color: #202020;
+  }
 
   </style>
 
@@ -238,19 +201,18 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <body class="loading">
   <div id="splash">
     <div id="splash-logo">
-      <img src="http://146.185.165.166/img/static/new_logo_3_ripple.jpeg" alt="" />
+      <img src="https://maddogclub.com/img/static/logo_ripple.jpg" alt="" />
       <svg class="spinner" width="65px" height="65px" viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg">
         <circle class="path" fill="none" stroke-width="6" stroke-linecap="round" cx="33" cy="33" r="30"></circle>
       </svg>
     </div>
   </div>
 
-  <script src="bower_components/lightgallery.js/dist/js/lightgallery.min.js" async></script>
-  <script src="bower_components/lg-thumbnail.js/dist/lg-thumbnail.min.js" async></script>
+  <script src="bower_components/lightgallery.js/dist/js/lightgallery.min.js"></script>
+  <script src="bower_components/lg-thumbnail.js/dist/lg-thumbnail.min.js"></script>
 
   <md-app></md-app>
   <script src="app.js" async></script>
-
 
 </body>
 </html>
