@@ -174,6 +174,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             .events-list {
                 width: 70%;
                 margin: 16px auto;
+                transition: opacity 0.3s;
+                opacity: 0;
+            }
+
+            .events-list[has-content] {
+              opacity: 1;
             }
 
             .events-material {
@@ -509,7 +515,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         <div id="ripple"></div>
         <div id="content" class="content">
-            <div id="events" class="events-list">
+            <div id="events" class="events-list" has-content$="[[_isDefined(events)]]">
                 <paper-material class="events-material">
                     <template is="dom-repeat" items="[[events]]">
                         <a href="/event/[[item.pk]]">
@@ -700,6 +706,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
             _makeBadgeSrc: function(type) {
               return "https://maddogclub.com/img/static/badges/events/" + type + ".png";
+            },
+
+            _isDefined: function(events) {
+              return events != null;
             },
 
             behaviors: [

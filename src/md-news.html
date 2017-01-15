@@ -127,6 +127,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         @apply(--layout-wrap);
         margin: 16px;
         padding: 0;
+        transition: opacity 0.3s;
+        opacity: 0;
+      }
+
+      .grid[has-content] {
+        opacity: 1;
       }
 
       .item {
@@ -306,7 +312,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       </app-toolbar>
     </app-header>
     <div id="ripple"></div>
-    <div class="grid" id="content">
+    <div class="grid" id="content" has-content$="[[_isDefined(news)]]">
       <template is="dom-repeat" items="[[news]]" initial-count="4">
         <div class="item" on-tap="_heroAnimationHandler">
           <a href="/article/[[item.pk]]">
@@ -413,6 +419,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           }
           Polymer.dom(this.root).appendChild(layout);
           this.unlisten(this, 'md-render-neon-page', '_renderNeonPage');
+      },
+
+      _isDefined: function(news) {
+        return news != null;
       },
 
       handleResponse: function(request) {

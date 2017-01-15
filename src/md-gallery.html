@@ -165,6 +165,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         --app-grid-item-height: 20vw;
     }
 
+    .content {
+      transition: opacity 0.3s;
+      opacity: 0;
+    }
+
+    .content[has-content]{
+      opacity: 1;
+    }
+
     .item-title {
       position: absolute;
         bottom: 0;
@@ -269,7 +278,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
              on-response="handleResponse"></iron-ajax>
 
   <div id="ripple"></div>
-  <div id="content">
+  <div id="content" class="content" has-content$="[[_isDefined(gallery)]]">
     <ul class="app-grid">
        <template items="[[gallery]]" is="dom-repeat" on-dom-change="_doAnimation">
            <li class="item" style="background-image: url([[item.main_image.thumbnail_big]]);" on-tap="_itemTapHandler">
@@ -390,6 +399,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         items = Polymer.dom(this.root).querySelectorAll('.item');
         itemsArray = Array.prototype.slice.call(items);
         this.animationConfig.entry[2].nodes = itemsArray;
+      },
+
+      _isDefined: function(gallery) {
+        return gallery != null;
       },
 
       handleResponse: function(request) {

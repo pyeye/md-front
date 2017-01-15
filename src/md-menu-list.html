@@ -32,7 +32,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       margin: 16px auto;
     }
 
+    .content {
+      transition: opacity 0.3s;
+      opacity: 0;
+    }
 
+    .content[has-content]{
+      opacity: 1;
+    }
 
       .menu-category {
         padding-top: 16px;
@@ -198,36 +205,37 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                handle-as="json"
                last-response="{{items}}"></iron-ajax>
 
-      <template is="dom-repeat" items="[[items]]" as="menu">
-        <div class="menu-category">
-          [[menu.category]]
-        </div>
-        <div class="card-flex">
-          <template is="dom-repeat" items="[[menu.items]]" initial-count="4">
-            <div class="card" on-tap="handleTap">
-              <iron-image sizing="cover" preload fade src="[[item.photo.thumbnail]]"></iron-image>
-              <div class="sale-badge" hidden$="[[!item.detail.sale]]">
-                <span>Акция!</span>
-              </div>
-              <div class="card-content">
-                <div class="item-header">
-                  <div class="item-name">[[item.name]]</div>
-                  <div class="item-price">
-                    <template is="dom-repeat" items="{{_getPrices(item.prices)}}" as="price">
-                      [[price.value]] &#x20bd;
-                        <div class="item-weight">
-                          за [[price.count]] [[price.measure]]
-                        </div>
-                    </template>
-                  </div>
-                </div>
-              </div>
-              <paper-ripple></paper-ripple>
-            </div>
-          </template>
-        </div>
-
-      </template>
+   <div class="content" has-content$="[[_isDefined(items)]]">
+     <template is="dom-repeat" items="[[items]]" as="menu">
+       <div class="menu-category">
+         [[menu.category]]
+       </div>
+       <div class="card-flex">
+         <template is="dom-repeat" items="[[menu.items]]" initial-count="4">
+           <div class="card" on-tap="handleTap">
+             <iron-image sizing="cover" preload fade src="[[item.photo.thumbnail]]"></iron-image>
+             <div class="sale-badge" hidden$="[[!item.detail.sale]]">
+               <span>Акция!</span>
+             </div>
+             <div class="card-content">
+               <div class="item-header">
+                 <div class="item-name">[[item.name]]</div>
+                 <div class="item-price">
+                   <template is="dom-repeat" items="{{_getPrices(item.prices)}}" as="price">
+                     [[price.value]] &#x20bd;
+                       <div class="item-weight">
+                         за [[price.count]] [[price.measure]]
+                       </div>
+                   </template>
+                 </div>
+               </div>
+             </div>
+             <paper-ripple></paper-ripple>
+           </div>
+         </template>
+       </div>
+     </template>
+   </div>
 </template>
 
   <script>
@@ -274,6 +282,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       _generateRequest: function(group) {
         this.$.ajax.url = 'https://maddogclub.com/api/v1/menu/?format=md_menu&group=' + group;
         this.$.ajax.generateRequest();
+      },
+
+      _isDefined: function(menu) {
+        return menu != null;
       },
 
       handleTap: function(e) {
