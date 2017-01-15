@@ -218,7 +218,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
   @media (max-height: 650px) {
     .logo img {
-      width: 67px;
+      width: 220px;
     }
   }
 
@@ -235,6 +235,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <md-analytics></md-analytics>
 
     <iron-media-query query="max-width: 550px" query-matches="{{smallScreen}}"></iron-media-query>
+    <iron-media-query query="max-height: 650px" query-matches="{{smallHeight}}"></iron-media-query>
 
     <app-drawer-layout responsive-width="1050px">
 
@@ -245,7 +246,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             <div class="flex-logo">
               <a href="/home">
                 <div class="logo">
-                  <img src="https://maddogclub.com/img/static/logo.jpg" alt="" />
+                  <img src$="[[_getLogo(smallHeight)]]" alt="" />
                   <paper-ripple></paper-ripple>
                 </div>
               </a>
@@ -380,6 +381,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       _scroll: function() {
         scroll(0,0);
+      },
+
+      _getLogo: function(smallHeight) {
+        var logo = smallHeight ? 'logo_s.jpg' : 'logo.jpg';
+        return 'http://localhost/img/static/' + logo;
       },
 
       _pageChanged: function(page) {
