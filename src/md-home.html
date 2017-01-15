@@ -13,6 +13,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout.html">
 <link rel="import" href="../bower_components/iron-media-query/iron-media-query.html">
 <link rel="import" href="../bower_components/paper-styles/typography.html">
+<link rel="import" href="../bower_components/paper-ripple/paper-ripple.html">
 
 
 
@@ -31,6 +32,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
   <style>
   :host {
+    height: 100vh;
+    margin 0;
   }
 
   [hidden] {
@@ -38,6 +41,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   }
 
   [main-title] {
+    margin-left: -40px;
     font-weight: normal;
     display: -ms-flexbox;
     display: -webkit-flex;
@@ -50,7 +54,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     font-size: 24px;
     margin-left: 16px;
     margin-right: 16px;
-    letter-spacing: 1.5px;
+    letter-spacing: 4px;
+    font-family: 'Raleway', sans-serif;
+    font-weight: 500;
   }
 
   [main-title] iron-icon {
@@ -60,41 +66,35 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   }
 
   .container {
-    @apply(--layout-fullbleed);
-    width: 100%;
+
+    position: absolute;
+    top: 64px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+
   }
 
-  .menu {
+  .item {
     position: relative;
-    display: inline-block;
-    float: left;
-    vertical-align: top;
-    width: 35%;
-    height: 100%;
-    @apply(--paper-font-title);
-    @apply(--layout-vertical);
-    @apply(--layout-center-center);
-  }
-
-  .events {
-    position: relative;
-    display: inline-block;
-    float: left;
-    vertical-align: top;
-    width: 65%;
-    height: calc(100% / 3);
-    @apply(--paper-font-title);
-    @apply(--layout-vertical);
-    @apply(--layout-center-center);
+    -webkit-transition: all 0.6s ease 0.15s;
+    transition: all 0.6s ease 0.15s;
+    -webkit-transform: scale3d(1, 1, 1);
+    transform: scale3d(1, 1, 1);
+    width: 80%;
+    height: 23.3%;
+    min-height: 1px;
+    margin: 8px auto;
+    box-shadow: 0 8px 10px 1px rgba(0, 0, 0, 0.14),
+              0 3px 14px 2px rgba(0, 0, 0, 0.12),
+              0 5px 5px -3px rgba(0, 0, 0, 0.4);
   }
 
   .image {
+    position: relative;
+    min-height: 1px;
     height: 100%;
     width: 100%;
-    -webkit-transition: all 0.3s ease;
-    transition: all 0.3s ease;
-    -webkit-transform: scale3d(1, 1, 1);
-    transform: scale3d(1, 1, 1);
   }
 
   .item-title {
@@ -103,18 +103,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     left: 50%;
     -webkit-transform: translate(-50%, -50%);
     transform: translate(-50%, -50%);
-    color: var(--app-primary-color);
-    padding: 20px;
+    color: #fff;
     @apply(--paper-font-display1);
-    transition: color 0.3s;
-    z-index: 1;
-  }
-
-  .item-badge {
-    width: 200px;
-    transition: opacity 0.3s ease;
-    transition: all 0.3s ease;
-    z-index: 1;
+    z-index: 2;
+    letter-spacing: 4px;
+    font-family: 'Raleway', 'Roboto', sans-serif;
   }
 
   .item-cover {
@@ -123,9 +116,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     left: 0;
     right: 0;
     top: 0;
-    background: #252525;
-    transition: opacity 0.3s ease;
-    opacity: 0.4;
+    background: var(--app-accent-color);
+    opacity: 0.5;
+    -webkit-transition: opacity 0.6s ease 0.15s;
+    transition: opacity 0.6s ease 0.15s;
   }
 
   app-header {
@@ -133,67 +127,72 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     color: #FFFFFF;
   }
 
-  .accordion {
-    width: 100%;
+  app-header-layout {
     height: 100vh;
-    overflow: hidden;
   }
 
-  .accordion-item {
-    vertical-align: bottom;
-    position: relative;
-    width: 100%;
-    height: 25%;
-    background-repeat: no-repeat;
-    background-position: center center;
-    transition: all 300ms ease;
+  paper-ripple {
+    color: var(--app-primary-color);
   }
 
-  .accordion-badge  {
-    z-index: 1;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    -webkit-transform: translate(-50%, -50%);
-    transform: translate(-50%, -50%);
+  @media (min-width: 1450px) {
+    [main-title] {
+      margin-left: 0px;
+    }
+
   }
 
-  .accordion:hover .accordion-item {
-    height: 22%;
+  @media (min-width: 1050px) {
+    .container {
+      top: 0;
+    }
+
+    .item:hover {
+      -webkit-transition: all 0.6s ease 0.15s;
+      transition: all 0.6s ease 0.15s;
+      -webkit-transform: scale3d(1.1, 1.1, 1);
+      transform: scale3d(1.1, 1.1, 1) ;
+      z-index: 1;
+    }
+
+    .item:hover .item-cover {
+      -webkit-transition: opacity 0.6s ease 0.15s;
+      transition: opacity 0.6s ease 0.15s;
+      opacity: 0.1;
+    }
+
+    .item:last-of-type:hover {
+      -webkit-transition: all 0.6s ease 0.15s;
+      transition: all 0.6s ease 0.15s;
+      -webkit-transform: scale3d(1.1, 1.1, 1) translate3d(0px, -10px, 0px);
+      transform: scale3d(1.1, 1.1, 1) translate3d(0px, -10px, 0px);
+      z-index: 1;
+    }
+
+    #events:hover {
+      -webkit-transition: all 0.6s ease 0.15s;
+      transition: all 0.6s ease 0.15s;
+      -webkit-transform: scale3d(1.1, 1.1, 1) translate3d(0px, 10px, 0px);
+      transform: scale3d(1.1, 1.1, 1) translate3d(0px, 10px, 0px);
+      z-index: 1;
+    }
+
   }
 
-  .accordion:hover .item-badge {
-    opacity: 1;
-    -webkit-transform: scale3d(0.7, 0.7, 1);
-    transform: scale3d(0.7, 0.7, 1);
-  }
-
-  .accordion:hover .accordion-item:hover .item-cover {
-    opacity: 0;
-  }
-
-  .accordion:hover .accordion-item:hover .item-badge {
-    opacity: 1;
-    -webkit-transform: scale3d(1.4, 1.4, 1);
-    transform: scale3d(1.4, 1.4, 1);
-  }
-
-  .accordion:hover .accordion-item:hover {
-    height: 34%;
-  }
-
-  @media (max-width: 768px) {
-    .item-badge {
-      width: 160px;
+  @media (max-width: 550px) {
+    .item {
+      width: 100%;
+      margin: 0;
+      height: 24.9%;
     }
 
   }
 
     </style>
 
-    <iron-media-query query="max-width: 768px" query-matches="{{smallScreen}}"></iron-media-query>
+    <iron-media-query query="max-width: 1050px" query-matches="{{smallScreen}}"></iron-media-query>
 
-    <app-header-layout>
+
         <app-header id="header" effects="waterfall fade-background" reveals hidden$="[[!smallScreen]]">
           <app-toolbar>
             <slot select="[drawer-toggle]"></slot>
@@ -201,40 +200,45 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           </app-toolbar>
         </app-header>
 
-        <div class="accordion">
-          <div class="accordion-item">
-            <a href="#/menu">
-              <iron-image id="menu" class="image" sizing="cover" preload fade placeholder="[[base64img.menu]]" src="https://maddogclub.com/img/static/homepage/menu.jpg"></iron-image>
-              <div class="accordion-badge">
-                <img class="item-badge" src="https://maddogclub.com/img/static/badges/menu.png" alt="" />
-              </div>
-              <div class="item-cover"></div>
-            </a>
-          </div>
-          <div class="accordion-item"> <a href="#/events">
-            <iron-image id="events" class="image" sizing="cover" preload fade placeholder="[[base64img.events]]" src="https://maddogclub.com/img/static/homepage/events.jpg"></iron-image>
-            <div class="item-cover"></div>
-            <div class="accordion-badge">
-              <img class="item-badge" src="https://maddogclub.com/img/static/badges/events.png" alt="" />
-            </div>
+        <div class="container">
 
-          </a> </div>
-          <div class="accordion-item"> <a href="#/gallery">
-            <iron-image id="gallery" class="image" sizing="cover" preload fade placeholder="[[base64img.gallery]]" src="https://maddogclub.com/img/static/homepage/gallery.jpg"></iron-image>
-            <div class="accordion-badge">
-              <img class="item-badge" src="https://maddogclub.com/img/static/badges/gallery.png" alt="" />
-            </div>
-            <div class="item-cover"></div>
-          </a> </div>
-          <div class="accordion-item"> <a href="#/about">
-            <iron-image id="about" class="image" sizing="cover" preload fade placeholder="[[base64img.about]]" src="https://maddogclub.com/img/static/homepage/about.jpg"></iron-image>
-            <div class="accordion-badge">
-              <img class="item-badge" src="https://maddogclub.com/img/static/badges/about.png" alt="" />
-            </div>
-            <div class="item-cover"></div>
-          </a> </div>
+
+          <div class="item" id="events">
+            <a href="/events">
+              <iron-image  class="image" sizing="cover" preload fade placeholder="[[base64img.events]]" src="https://maddogclub.com/img/static/homepage/events.jpg"></iron-image>
+              <div class="item-cover"></div>
+              <div class="item-title">АФИША</div>
+            </a>
+            <paper-ripple hidden$="[[!smallScreen]]" ></paper-ripple>
+          </div>
+
+          <div class="item">
+            <a href="/sales">
+              <iron-image id="sales" class="image" sizing="cover" preload fade placeholder="[[base64img.sales]]" src="https://maddogclub.com/img/static/homepage/news.jpg"></iron-image>
+              <div class="item-cover"></div>
+              <div class="item-title">АКЦИИ</div>
+            </a>
+            <paper-ripple hidden$="[[!smallScreen]]"></paper-ripple>
+          </div>
+
+          <div class="item">
+            <a href="/menu">
+              <iron-image id="menu" class="image" sizing="cover" preload fade placeholder="[[base64img.menu]]" src="https://maddogclub.com/img/static/homepage/menu.jpg"></iron-image>
+              <div class="item-cover"></div>
+              <div class="item-title">МЕНЮ</div>
+            </a>
+            <paper-ripple hidden$="[[!smallScreen]]"></paper-ripple>
+          </div>
+
+          <div class="item">
+            <a href="/gallery">
+              <iron-image id="gallery" class="image" sizing="cover" preload fade placeholder="[[base64img.gallery]]" src="https://maddogclub.com/img/static/homepage/gallery.jpg"></iron-image>
+              <div class="item-cover"></div>
+              <div class="item-title">ГАЛЕРЕЯ</div>
+            </a>
+            <paper-ripple hidden$="[[!smallScreen]]"></paper-ripple>
+          </div>
         </div>
-    </app-header-layout>
 
 
   </template>
@@ -254,7 +258,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           type: Object,
           value: function () {
             return {
-              'about': 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEASABIAAD/2wBDAAMCAgMCAgMDAwMEAwMEBQgFBQQEBQoHBwYIDAoMDAsKCwsNDhIQDQ4RDgsLEBYQERMUFRUVDA8XGBYUGBIUFRT/2wBDAQMEBAUEBQkFBQkUDQsNFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBT/wgARCAAJAA0DAREAAhEBAxEB/8QAFgABAQEAAAAAAAAAAAAAAAAABQME/8QAGAEAAgMAAAAAAAAAAAAAAAAAAQQFBgf/2gAMAwEAAhADEAAAASs7t6YGmHemyt//xAAbEAACAQUAAAAAAAAAAAAAAAACBAMBBQYxM//aAAgBAQABBQLFlZres5QymU213//EABwRAAICAgMAAAAAAAAAAAAAAAACAQMEMRFBQv/aAAgBAwEBPwHGpauqVfsZOJ2eRtn/xAAdEQABBAIDAAAAAAAAAAAAAAAAAQIDBAUxETJB/9oACAECAQE/AcjbjntNfF4Nn5TQvcTR/8QAHhAAAgEDBQAAAAAAAAAAAAAAAQIAAxESITFBUnH/2gAIAQEABj8CK1LB2fIc20hzqbdREj+z/8QAHhAAAgIABwAAAAAAAAAAAAAAAAERMSFBYZGxwfD/2gAIAQEAAT8hfperILHYgdlop7OIeDRH/9oADAMBAAIAAwAAABB9n//EABsRAAIBBQAAAAAAAAAAAAAAAAABEBEhMUGh/9oACAEDAQE/EMhjV4JsDaD/xAAaEQEBAAIDAAAAAAAAAAAAAAABEQAQITGR/9oACAECAQE/EKqIY0livHuDbW6s/8QAHRABAQACAQUAAAAAAAAAAAAAAREAIaExQYGRwf/aAAgBAQABPxBdaxFvBGruoPkwnuouXpVr9ds53xnP4f/Z',
+              'sales': 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEASABIAAD/2wBDAAMCAgMCAgMDAwMEAwMEBQgFBQQEBQoHBwYIDAoMDAsKCwsNDhIQDQ4RDgsLEBYQERMUFRUVDA8XGBYUGBIUFRT/2wBDAQMEBAUEBQkFBQkUDQsNFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBT/wgARCAAFAA0DAREAAhEBAxEB/8QAFAABAAAAAAAAAAAAAAAAAAAABv/EABYBAQEBAAAAAAAAAAAAAAAAAAUBA//aAAwDAQACEAMQAAABBkKMcr//xAAXEAADAQAAAAAAAAAAAAAAAAADBAUC/9oACAEBAAEFAoc/LKklMJAf/8QAGREBAAMBAQAAAAAAAAAAAAAAAQACEgMi/9oACAEDAQE/Aa2TlkiY8k//xAAaEQACAgMAAAAAAAAAAAAAAAABAgADESJB/9oACAECAQE/AbG3OYWY9n//xAAfEAABAwMFAAAAAAAAAAAAAAABAAIRAxIxBBMhIkH/2gAIAQEABj8CkO2xp2XGMv7RlEmm26efF//EABgQAQEBAQEAAAAAAAAAAAAAAAERADFR/9oACAEBAAE/IbGgEegjhNfeUwhfYQN//9oADAMBAAIAAwAAABB//8QAGhEAAgMBAQAAAAAAAAAAAAAAAREAIVExYf/aAAgBAwEBPxBu0D3ShuRgqQ8DtG6uf//EABgRAAMBAQAAAAAAAAAAAAAAAAABESHw/9oACAECAQE/EJSXkMMH/8QAFxABAQEBAAAAAAAAAAAAAAAAAREhAP/aAAgBAQABPxBEbwoCTEMVpWzYTns17c0RuIWFXVe//9k=',
               'events': 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEASABIAAD/2wBDAAMCAgMCAgMDAwMEAwMEBQgFBQQEBQoHBwYIDAoMDAsKCwsNDhIQDQ4RDgsLEBYQERMUFRUVDA8XGBYUGBIUFRT/2wBDAQMEBAUEBQkFBQkUDQsNFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBT/wgARCAAHABMDAREAAhEBAxEB/8QAFgAAAwAAAAAAAAAAAAAAAAAAAQUG/8QAFwEBAAMAAAAAAAAAAAAAAAAABQIDBP/aAAwDAQACEAMQAAABNkUmk+qLW//EABkQAAIDAQAAAAAAAAAAAAAAAAMFAQIEBv/aAAgBAQABBQJuxnIjVN9TU1uUNJP/xAAcEQACAgIDAAAAAAAAAAAAAAABAgADEmETIeH/2gAIAQMBAT8BNOaNoeSoOG7M4tz/xAAbEQABBAMAAAAAAAAAAAAAAAAAAQIDERMxUf/aAAgBAgEBPwGN1PJKrRm6h//EACAQAAIBBAEFAAAAAAAAAAAAAAIDAQAEERIhE1FhgdH/2gAIAQEABj8CVo4o4EZ1ksiXPyn3AXRmK1QtgkU5x3j3TencsENyxG/mv//EABoQAQACAwEAAAAAAAAAAAAAAAEAESExYcH/2gAIAQEAAT8hcCRbiHWvEGmuHgo6IuMTPXsX5P/aAAwDAQACAAMAAAAQt/8A/8QAGhEBAAIDAQAAAAAAAAAAAAAAARExAEFRIf/aAAgBAwEBPxB0KRsW3SOLPPN1jlkIC2eYBp5//8QAHBEBAAICAwEAAAAAAAAAAAAAAQAxEUEhUXGB/9oACAECAQE/EBLjbor73UbwAW1Ejgc+T//EABoQAQEBAAMBAAAAAAAAAAAAAAERIQAxQWH/2gAIAQEAAT8QkrUoMZpSfuohZEsihM7lJVdbsXVWrdaR6Qivb9ef/9k=',
               'gallery': 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEASABIAAD/2wBDAAMCAgMCAgMDAwMEAwMEBQgFBQQEBQoHBwYIDAoMDAsKCwsNDhIQDQ4RDgsLEBYQERMUFRUVDA8XGBYUGBIUFRT/2wBDAQMEBAUEBQkFBQkUDQsNFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBT/wgARCAAGABEDAREAAhEBAxEB/8QAFgAAAwAAAAAAAAAAAAAAAAAABAYH/8QAGAEAAgMAAAAAAAAAAAAAAAAAAgQDBQf/2gAMAwEAAhADEAAAAZVRaY4rASrD/8QAGhAAAgIDAAAAAAAAAAAAAAAABAUAAwECFv/aAAgBAQABBQJUqp3w1pHWn9ILP//EAB0RAAEEAwEBAAAAAAAAAAAAAAEAAgMEEyIxEWH/2gAIAQMBAT8BqR04WFzI/Xbd+JguWiDk1J4VhkX/xAAfEQACAQIHAAAAAAAAAAAAAAACAwABEQQSFCExUfD/2gAIAQIBAT8BxD2Xy39zFtFi6hUd5pT7n//EAB8QAAIBAwUBAAAAAAAAAAAAAAECEgADESEyUZHR8P/aAAgBAQAGPwJbzLK2BM84nGkdZqpAaIA0+xWy70Pa/8QAHBABAAIBBQAAAAAAAAAAAAAAAREhMQAQQVGh/9oACAEBAAE/IQBiCtsU4mfNQuh1yqVJ3LOw3//aAAwDAQACAAMAAAAQZ3//xAAcEQEBAAICAwAAAAAAAAAAAAABEQAhMfBBYYH/2gAIAQMBAT8QhXIGWJ5nG+zNscDTxFCaBGcOew78z//EAB8RAAEDAwUAAAAAAAAAAAAAAAEAETEhQZFRYXGB0f/aAAgBAgEBPxAIhYYpx2hXmUO5Gk5W0yfF/8QAGRABAQADAQAAAAAAAAAAAAAAAREAIYEx/9oACAEBAAE/EFFTvd4CQivDbrAfCQY6IVWi+njkz//Z',
               'menu': 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEASABIAAD/2wBDABALDA4MChAODQ4SERATGCgaGBYWGDEjJR0oOjM9PDkzODdASFxOQERXRTc4UG1RV19iZ2hnPk1xeXBkeFxlZ2P/2wBDARESEhgVGC8aGi9jQjhCY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2P/wgARCAAIABMDAREAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAABAX/xAAXAQADAQAAAAAAAAAAAAAAAAAAAgME/9oADAMBAAIQAxAAAAGWDLZSpX//xAAaEAACAgMAAAAAAAAAAAAAAAABAgADBBIj/9oACAEBAAEFAk5mvJ1j2At//8QAGxEAAgEFAAAAAAAAAAAAAAAAAAIRARIxQVH/2gAIAQMBAT8BjZD0wWt0/8QAFxEAAwEAAAAAAAAAAAAAAAAAAAECEf/aAAgBAgEBPwFM2TZP/8QAHBAAAgEFAQAAAAAAAAAAAAAAAAERAjFBYXGR/9oACAEBAAY/AlXjRdTwbjxn/8QAGRABAQEAAwAAAAAAAAAAAAAAEQEAMUGR/9oACAEBAAE/IUoVwnAJCvWpSG3sN//aAAwDAQACAAMAAAAQB3//xAAaEQEAAQUAAAAAAAAAAAAAAAABABEhQWGB/9oACAEDAQE/EKyyLzGGtwn/xAAYEQADAQEAAAAAAAAAAAAAAAAAARExUf/aAAgBAgEBPxBLcK6Pkf/EABoQAQEAAwEBAAAAAAAAAAAAAAERADFBUfD/2gAIAQEAAT8QTZVWSOx82bwk+CC5XyCx12Gf/9k=',
@@ -263,7 +267,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         },
         animationConfig: {
           value: function() {
-            var items = Polymer.dom(this.root).querySelectorAll('.accordion-item');
+            var items = Polymer.dom(this.root).querySelectorAll('.item');
             var itemsArray = Array.prototype.slice.call(items);
             return {
               'entry': [
@@ -274,7 +278,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                   name: 'cascaded-animation',
                   animation: 'fade-in-animation',
                   nodes: itemsArray,
-                  timing: {delay: 50}
                 }],
               'exit': [
                 {
@@ -291,7 +294,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                   fromPage: this,
                 },{
                   name: 'hero-animation',
-                  id: 'about-hero',
+                  id: 'sales-hero',
                   fromPage: this,
                 },{
                   name: 'ripple-animation',
@@ -307,7 +310,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                   fromPage: this,
                 },{
                   name: 'ripple-animation',
-                  id: 'about-ripple',
+                  id: 'sales-ripple',
                   fromPage: this,
                 },{
                   name: 'fade-out-animation',
@@ -326,14 +329,19 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               'events-ripple': this.$.events,
               'gallery-hero': this.$.gallery,
               'gallery-ripple': this.$.gallery,
-              'about-hero': this.$.about,
-              'about-ripple': this.$.about,
+              'sales-hero': this.$.sales,
+              'sales-ripple': this.$.sales,
             }
           }
-        }
+        },
+
       },
+
     });
 
+  </script>
+
+  <script>
   </script>
 
 </dom-module>

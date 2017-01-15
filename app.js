@@ -20,17 +20,33 @@ if ('serviceWorker' in navigator) {
 }
 
 function finishLazyLoading() {
-  // 5. Wait on importsLoadedDeferred to resolve. When it does,
-  // the import has loaded.
-  importsLoadedDeferred.promise.then(function(htmlImport) {
 
-    // 6. Fade splash screen, then remove.
-    var loadEl = document.getElementById('splash');
-    //loadEl.addEventListener('transitionend', loadEl.remove);
-    loadEl.remove();
+  Promise.all([ importsLoadedDeferred ])
+    .then(function(imports) {
+        var loadEl = document.getElementById('splash');
+        var htmlEl = document.querySelector('html');
 
-    document.body.classList.remove('loading');
+        // transitionend is not consistant (doesnt always trigger),
+        // you can detect if its supported
+        // https://gist.github.com/O-Zone/7230245
+        // I used a simple setTimeout for now.
 
-    // App is visible and ready to load some data!
-  });
+        window.setTimeout(function() {
+            htmlEl.classList.remove('no-scroll');
+            loadEl.remove();
+        }, 300);
+
+        // loadEl.addEventListener('transitionend', function() {
+        //    htmlEl.classList.remove('no-scroll');
+        //    loadEl.remove();
+        // });
+
+        document.body.classList.remove('loading');
+
+        if (window.innerWidth > 600) {
+          particlesJS.load('particles', 'assets/particles.json');
+        }
+
+        // App is visible and ready to load some data!
+    });
 }

@@ -36,10 +36,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="md-menu.html">
 <link rel="import" href="md-gallery.html">
 <link rel="import" href="md-album.html">
-<link rel="import" href="md-about.html">
 <link rel="import" href="md-icons.html">
 <link rel="import" href="md-analytics.html">
 <link rel="import" href="md-menu-modal.html">
+<link rel="import" href="md-news.html">
+<link rel="import" href="md-article.html">
 
 <dom-module id="md-app">
 
@@ -54,7 +55,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     --app-secondary-color: #212121;
     --app-lower-layer-color: #202020;
     --app-upper-layer-color: #252525;
-    --app-accent-color: #172C50;
+    --app-accent-color: #37474F;
     --paper-button-ink-color: var(--app-accent-color);
     --paper-icon-button-ink-color: var(--app-accent-color);
     --paper-spinner-color: var(--app-accent-color);
@@ -65,7 +66,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   }
 
   app-drawer {
-    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
+
+    box-shadow: 0 16px 24px 2px rgba(0, 0, 0, 0.14),
+                  0  6px 30px 5px rgba(0, 0, 0, 0.12),
+                  0  8px 10px -5px rgba(0, 0, 0, 0.4);
     --app-drawer-width: 260px;
     --app-drawer-content-container: {
       background-color: var(--app-upper-layer-color);
@@ -184,6 +188,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   }
 
   .logo {
+    position: relative;
     padding-top: 8px;
     padding-bottom: 8px;
     text-align: center;
@@ -211,17 +216,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 
 
-  @media (max-height: 698px) {
+  @media (max-height: 650px) {
     .logo img {
-      width: 85px;
+      width: 67px;
     }
-
   }
 
 
   </style>
 
-    <app-location route="{{route}}" use-hash-as-path></app-location>
+    <app-location route="{{route}}"></app-location>
     <app-route
         route="{{route}}"
         pattern="/:page"
@@ -230,18 +234,19 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     <md-analytics></md-analytics>
 
-    <iron-media-query query="max-width: 480px" query-matches="{{smallScreen}}"></iron-media-query>
+    <iron-media-query query="max-width: 550px" query-matches="{{smallScreen}}"></iron-media-query>
 
-    <app-drawer-layout responsive-width="768px">
+    <app-drawer-layout responsive-width="1050px">
 
       <!-- Drawer content -->
       <app-drawer id="drawer" no-focus-trap>
         <div class="drawer-container">
           <div class="flex-drawer">
             <div class="flex-logo">
-              <a href="#/home">
+              <a href="/home">
                 <div class="logo">
                   <img src="https://maddogclub.com/img/static/logo.jpg" alt="" />
+                  <paper-ripple></paper-ripple>
                 </div>
               </a>
             </div>
@@ -252,12 +257,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                              role="navigation"
                              on-iron-activate="_drawerSelected">
 
-                <a class="nav-links" name="home" href="#/home"><iron-icon class="nav-icons" icon="home"></iron-icon>Главная<paper-ripple></paper-ripple></a>
-                <a class="nav-links" name="menu" href="#/menu"><iron-icon class="nav-icons" icon="restaurant-menu"></iron-icon>Меню<paper-ripple></paper-ripple></a>
-                <a class="nav-links" name="events" href="#/events"><iron-icon class="nav-icons" icon="event"></iron-icon>Афиша<paper-ripple></paper-ripple></a>
-                <a class="nav-links" name="gallery" href="#/gallery"><iron-icon class="nav-icons" icon="perm-media"></iron-icon>Галерея<paper-ripple></paper-ripple></a>
-                <a class="nav-links" name="reservation" href="#/reservation"><iron-icon class="nav-icons" icon="event-available"></iron-icon>Бронирование<paper-ripple></paper-ripple></a>
-                <a class="nav-links" name="about" href="#/about"><iron-icon class="nav-icons" icon="feedback"></iron-icon>О нас<paper-ripple></paper-ripple></a>
+                <a class="nav-links" name="home" href="/home"><iron-icon class="nav-icons" icon="home"></iron-icon>Главная<paper-ripple></paper-ripple></a>
+                <a class="nav-links" name="events" href="/events"><iron-icon class="nav-icons" icon="event"></iron-icon>Афиша<paper-ripple></paper-ripple></a>
+                <a class="nav-links" name="sales" href="/sales"><iron-icon class="nav-icons" icon="loyalty"></iron-icon>Акции<paper-ripple></paper-ripple></a>
+                <a class="nav-links" name="menu" href="/menu"><iron-icon class="nav-icons" icon="restaurant-menu"></iron-icon>Меню<paper-ripple></paper-ripple></a>
+                <a class="nav-links" name="gallery" href="/gallery"><iron-icon class="nav-icons" icon="camera"></iron-icon>Галерея<paper-ripple></paper-ripple></a>
+                <a class="nav-links" name="reservation" href="/reservation"><iron-icon class="nav-icons" icon="event-available"></iron-icon>Банкеты<paper-ripple></paper-ripple></a>
+                <a class="nav-links" name="about" href="/about"><iron-icon class="nav-icons" icon="message"></iron-icon>О нас<paper-ripple></paper-ripple></a>
               </iron-selector>
             </div>
 
@@ -296,14 +302,18 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           <md-menu name="menu">
             <paper-icon-button icon="menu" drawer-toggle></paper-icon-button>
           </md-menu>
-          <md-events name="events">
+          <md-events name="events" page=[[page]]>
             <paper-icon-button icon="menu" drawer-toggle></paper-icon-button>
           </md-events>
-          <md-event route={{subroute}} name="event"></md-event>
-          <md-gallery name="gallery">
+          <md-event route={{subroute}} page=[[page]] name="event"></md-event>
+          <md-news name="sales" page=[[page]]>
+            <paper-icon-button icon="menu" drawer-toggle></paper-icon-button>
+          </md-news>
+          <md-article route={{subroute}} name="article" page=[[page]]></md-article>
+          <md-gallery name="gallery" page=[[page]]>
             <paper-icon-button icon="menu" drawer-toggle></paper-icon-button>
           </md-gallery>
-          <md-album route={{subroute}} name="album"></md-album>
+          <md-album route={{subroute}} name="album" page=[[page]]></md-album>
           <md-reservation name="reservation">
             <paper-icon-button icon="menu" drawer-toggle></paper-icon-button>
           </md-reservation>
@@ -330,6 +340,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           type: String,
           reflectToAttribute: true,
           observer: '_pageChanged'
+        },
+
+        animatedPage: {
+          type: String,
         },
 
       },
@@ -374,6 +388,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               this.resolveUrl('md-reservation.html'),
               null, null, true);
         }
+        if (page === 'about') {
+          this.importHref(
+              this.resolveUrl('md-about.html'),
+              null, null, true);
+        }
           this._changeSection(page);
       },
 
@@ -384,6 +403,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       _changeSection: function(category) {
         category = category === 'album' ? 'gallery' : category;
         category = category === 'event' ? 'events' : category;
+        category = category === 'article' ? 'sales' : category;
         this.pageSection = category;
       },
 

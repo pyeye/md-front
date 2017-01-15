@@ -75,7 +75,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     margin-right: 40px;
     font-size: 38px;
     white-space: pre-line;
-
+    letter-spacing: 2px;
+    font-family: 'Raleway', sans-serif;
   }
 
 
@@ -94,10 +95,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
   [condensed-title] .title-label {
     @apply(--paper-font-title);
+    font-size: 22px;
     margin-left: 24px;
     margin-right: 24px;
     white-space: pre-line;
     text-align: center;
+    letter-spacing: 2px;
+    font-family: 'Raleway', sans-serif;
   }
 
   [condensed-title] iron-icon {
@@ -111,13 +115,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     font-style: normal;
   }
 
-  @media (max-width: 1400px) {
+  @media (max-width: 1450px) {
     app-toolbar.tall {
       height: 200px;
     }
+
+    [condensed-title] {
+      margin-left: -40px;
+    }
   }
 
-  @media (max-width: 768px) {
+  @media (max-width: 1050px) {
     [main-title] {
       -webkit-transform-origin: center top !important;
       transform-origin: center top !important;
@@ -181,21 +189,21 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     background-position: center center;
   }
 
-  @media (max-width: 1400px) {
+  @media (max-width: 1450px) {
     .card-container {
 
       width: 31%;
     }
   }
 
-  @media (max-width: 799px) {
+  @media (max-width: 1050px) {
     .card-container {
       width: 47%;
 
     }
   }
 
-  @media (max-width: 599px) {
+  @media (max-width: 550px) {
     .card-container {
 
       width: 95%;
@@ -244,7 +252,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
   <app-header id="header"  condenses reveals  effects="waterfall resize-title blend-background parallax-background" >
     <app-toolbar>
-      <a href="#/gallery" tabindex="-1">
+      <a href="/gallery" tabindex="-1">
         <paper-icon-button icon="arrow-back"></paper-icon-button>
       </a>
       <div condensed-title><iron-icon icon="foot-left"></iron-icon><div class="title-label">[[headerTitle]]</div><iron-icon icon="foot-right"></iron-icon></div>

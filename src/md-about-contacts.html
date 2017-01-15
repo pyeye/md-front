@@ -25,6 +25,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/google-map/google-map-marker.html">
 <link rel="import" href="../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../bower_components/paper-spinner/paper-spinner-lite.html">
+<link rel="import" href="../bower_components/paper-toast/paper-toast.html">
+
 
 <link rel="import" href="md-icons.html">
 
@@ -35,6 +38,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <style>
       :host {
         display: block;
+        --paper-spinner-color: #fff;
         --paper-input-container-color: #fff;
         --paper-input-container-focus-color: var(--app-primary-color);
         --paper-input-container-input-color: #fff;
@@ -46,6 +50,21 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         margin: 24px;
         background-color: #252525;
         color: #FFFFFF;
+      }
+
+      paper-spinner-lite {
+        width: 24px;
+        height: 24px;
+      }
+
+      [hidden] {
+        display: none;
+      }
+
+      .loading-box {
+        width: 28px;
+        height: 24px;
+        text-align: left;
       }
 
       .about-row {
@@ -104,7 +123,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
 
       google-map {
-        width: 100%;
+
         height: 400px;
       }
 
@@ -137,6 +156,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                method="POST"
                content-type="application/json"
                handle-as="json"
+               loading="{{loading}}"
                on-response="handleResponse"></iron-ajax>
 
 
@@ -193,7 +213,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                             required></paper-textarea>
             <br>
             <paper-button raised on-tap="submitForm" disabled$="[[!validators.summary]]">
-              <iron-icon class="reservation-icons" icon="near-me"></iron-icon>
+              <div class="loading-box">
+                <paper-spinner-lite hidden$="[[!loading]]" active$="[[loading]]"></paper-spinner-lite>
+                <iron-icon class="reservation-icons" icon="near-me" hidden$="[[loading]]"></iron-icon>
+              </div>
               Отправить
             </paper-button>
           </div>
@@ -204,16 +227,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <p class="title">
           Мы на карте:
         </p>
-        <google-map fit-to-markers zoom="16" api-key="AIzaSyBpkU5yuBZCCd_djT8mhfl5s0yHqIPCVWU">
-          <google-map-marker api-key="AIzaSyBpkU5yuBZCCd_djT8mhfl5s0yHqIPCVWU" latitude="55.180348" longitude="61.400013" title="Go Giants!"></google-map-marker>
-        <google-map>
+        <google-map zoom="17" api-key="AIzaSyBrF28rC3erMqrLvtQBRl_Ez1umxUwxA-U" latitude="55.180368" longitude="61.400164">
+          <google-map-marker api-key="AIzaSyBrF28rC3erMqrLvtQBRl_Ez1umxUwxA-U"  latitude="55.180368" longitude="61.400164"></google-map-marker>
+        </google-map>
       </div>
     </div>
 
-
-
-
-
+    <paper-toast id="toast" horizontal-align="right" always-on-top text="Сообщение отправлено."></paper-toast>
   </template>
 
   <script>
@@ -243,6 +263,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             }
           }
         },
+
+        loading: {
+          type: Boolean,
+          value: false,
+        },
+
+        apiKey: {
+          type: String,
+          value: "AIzaSyBrF28rC3erMqrLvtQBRl_Ez1umxUwxA-U",
+        },
       },
 
       observers: [
@@ -269,7 +299,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       },
 
       handleResponse: function(request) {
-        console.log(request.detail.responce);
+        this.form = {
+            name: '',
+            contact: '',
+            message: '',
+        };
+        this.$.toast.open();
       },
 
     });

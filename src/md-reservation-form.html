@@ -13,19 +13,18 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/paper-input/paper-textarea.html">
 <link rel="import" href="../bower_components/paper-input/paper-input-container.html">
 <link rel="import" href="../bower_components/paper-input/paper-input-error.html">
+<link rel="import" href="../bower_components/paper-spinner/paper-spinner-lite.html">
 <link rel="import" href="../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../bower_components/gold-phone-input/gold-phone-input.html">
 <link rel="import" href="../bower_components/paper-checkbox/paper-checkbox.html">
 <link rel="import" href="../bower_components/paper-item/paper-item.html">
 <link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
 <link rel="import" href="../bower_components/paper-styles/typography.html">
+<link rel="import" href="../bower_components/paper-toast/paper-toast.html">
 <link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout.html">
 <link rel="import" href="../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
-<link rel="import" href="../bower_components/vaadin-date-picker/vaadin-date-picker.html">
 <link rel="import" href="../bower_components/iron-media-query/iron-media-query.html">
 
-
-<link rel="import" href="md-timepicker.html">
 <link rel="import" href="md-icons.html">
 
 
@@ -36,7 +35,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <style>
       :host {
         display: block;
+        --paper-spinner-color: #fff;
         --iron-icon-fill-color: #FFFFFF;
+        --paper-toast-background-color: var(--app-accent-color);
         --paper-input-container-color: #fff;
         --paper-input-container-focus-color: var(--app-primary-color);
         --paper-input-container-input-color: #fff;
@@ -60,26 +61,57 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         --iron-icon-fill-color: #FFFFFF;
       }
 
+      paper-spinner-lite {
+        width: 24px;
+        height: 24px;
+      }
+
+      .loading-box {
+        width: 28px;
+        height: 24px;
+        text-align: left;
+      }
+
     paper-button {
-      margin-top: 16px;
-      background: var(--app-primary-color);
+      background: var(--app-accent-color);
       color: #fff;
     }
 
     .form-container {
-      width: 95%;
+      width: 100;
+      margin: 16px;
+    }
+
+    .action-bar {
+      @apply(--layout-horizontal);
     }
 
     .form-title {
       @apply(--paper-font-title);
       color: var(--app-primary-color);
+      margin-top: 8px;
+    }
+
+    .form-event-title {
+      @apply(--paper-font-headline);
+      color: #fff;
       margin-top: 16px;
+      margin-bottom: 16px;
     }
 
     .form-item {
-      margin-top: 16px;
+      margin-top: 8px;
       margin-right: 24px;
       min-width: 120px;
+      width: 95.5%;
+    }
+
+    .form-item-half {
+      width: 50%;
+    }
+
+    paper-dropdown-menu {
+      width: 100%;
     }
 
     .form-item span {
@@ -101,51 +133,50 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                method="POST"
                content-type="application/json"
                handle-as="json"
+               loading={{loading}}
                on-response="handleResponse"></iron-ajax>
 
-    <iron-media-query query="max-width: 540px" query-matches="{{smallScreen}}"></iron-media-query>
+    <iron-media-query query="max-width: 550px" query-matches="{{smallScreen}}"></iron-media-query>
 
     <div class="form-container">
+      <div class="form-block">
+        <div class="form-event-title">
+          Бронирование столика на [[event.date.day]] [[event.date.month]], [[event.name]]
+        </div>
+      </div>
       <div class="form-block">
         <div class="form-title">
           Контактные данные
         </div>
-        <div class="form-item">
-          <paper-input auto-validate
-                       maxlength="20"
-                       char-counter
-                       error-message="Это обязательное поле!"
-                       value="{{form.name}}"
-                       label="Имя*"
-                       required></paper-input>
+        <div class="form-row">
+          <div class="form-item form-item-half">
+            <paper-input maxlength="20"
+                         char-counter
+                         error-message="Это обязательное поле!"
+                         value="{{form.name}}"
+                         label="Имя"
+                         required></paper-input>
+          </div>
+          <div class="form-item form-item-half">
+            <paper-input maxlength="17"
+                         char-counter
+                         error-message="Это обязательное поле!"
+                         value="{{form.phone_number}}"
+                         label="Номер телефона"
+                         required></paper-input>
+          </div>
         </div>
-        <div class="form-item">
-          <gold-phone-input required
-                            auto-validate
-                            country-code="7"
-                            maxlength="12"
-                            always-float-label
-                            error-message="Это обязательное поле!"
-                            label="Номер телефона*"
-                            value="{{form.phone_number}}"></gold-phone-input>
-        </div>
+
       </div>
 
       <div class="form-block">
         <div class="form-title">
-          Дата посещения
+          Дополнительно
         </div>
         <div class="form-row">
-          <div class="form-item">
-            <vaadin-date-picker required
-                                auto-validate
-                                label="Дата*"
-                                value="{{form.date}}"
-                                i18n="[[i18n]]"></vaadin-date-picker>
-          </div>
-          <div class="form-item">
-            <paper-dropdown-menu id="time" label="Время*" value="{{form.time}}">
-              <paper-listbox class="dropdown-content">
+          <div class="form-item form-item-half">
+            <paper-dropdown-menu  label="Время" value="{{form.time}}">
+              <paper-listbox id="time" class="dropdown-content">
                 <paper-item>&nbsp&nbsp&nbsp 16:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
                 <paper-item>&nbsp&nbsp&nbsp 16:30 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
                 <paper-item>&nbsp&nbsp&nbsp 17:00 &nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
@@ -172,17 +203,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               </paper-listbox>
             </paper-dropdown-menu>
           </div>
-        </div>
-      </div>
-
-      <div class="form-block">
-        <div class="form-title">
-          Дополнительно
-        </div>
-        <div class="form-row">
-          <div class="form-item">
-            <paper-dropdown-menu label="Количество человек*" value="{{form.count_people}}">
-              <paper-listbox class="dropdown-content">
+          <div class="form-item form-item-half">
+            <paper-dropdown-menu label="Количество человек" value="{{form.count_people}}">
+              <paper-listbox id="peoples" class="dropdown-content">
                 <paper-item>&nbsp&nbsp&nbsp&nbsp&nbsp 1 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
                 <paper-item>&nbsp&nbsp&nbsp&nbsp&nbsp 2 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
                 <paper-item>&nbsp&nbsp&nbsp&nbsp&nbsp 3 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</paper-item>
@@ -205,7 +228,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <template is="dom-if" if="[[form.is_vip]]">
           <div class="form-row">
             <div class="form-item">
-              <span>Внимание! Для бронирования вип столика требуется вложение депозита. Подробности вы сможете узнать у администратора клуба по телефону 8 (351) 240 - 20 - 00</span>
+              <span>Внимание! Для бронирования вип столика требуется вложение депозита. Подробности Вы сможете узнать у администратора клуба по телефону 8 (351) 240 - 20 - 00</span>
             </div>
           </div>
         </template>
@@ -217,11 +240,18 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         </div>
       </div>
 
-    <paper-button raised on-tap="submitForm" disabled$="[[!validators.summary]]">
-      <iron-icon class="reservation-icons" icon="near-me"></iron-icon>
-      Отправить
-    </paper-button>
+      <div class="action-bar">
+        <paper-button raised on-tap="submitForm" disabled$="[[!validators.summary]]">
+          <div class="loading-box">
+            <paper-spinner-lite hidden$="[[!loading]]" active$="[[loading]]"></paper-spinner-lite>
+            <iron-icon class="reservation-icons" icon="near-me" hidden$="[[loading]]"></iron-icon>
+          </div>
+          Отправить
+        </paper-button>
+        <slot select="[form-toggle]"></slot>
+      </div>
 
+    <paper-toast id="toast" horizontal-align="right" always-on-top text="Заявка отправлена. В ближайшее время с Вами свяжутся для подтверждения брони." duration="5000"></paper-toast>
   </div>
   </template>
 
@@ -240,6 +270,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 date: '',
                 time: '',
                 is_vip: false,
+                count_people: '',
             }
           },
         },
@@ -250,12 +281,29 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             return {
               name: false,
               phone_number: false,
+              time: false,
+              count_people: false,
+              summary: false,
             }
           }
         },
 
         errors: {
           type: Object,
+        },
+
+        event: {
+          type: Object,
+        },
+
+        active: {
+          type: Boolean,
+          observer: '_activeChanged',
+        },
+
+        loading: {
+          type: Boolean,
+          value: false,
         },
 
         i18n: {
@@ -282,7 +330,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 var local = d.toLocaleString("ru", options).split(' ');
                 var date = d.getDate();
                 var year = this.smallScreen ? d.getFullYear() : '';
-                console.log(year);
                 if(date < 10) {
                   date = '0' + date;
                 }
@@ -299,10 +346,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       observers: [
         '_formNameChanged(form.name)',
         '_formPhoneChanged(form.phone_number)',
-        '_formDateChanged(form.date)',
         '_formTimeChanged(form.time)',
         '_formPeopleChanged(form.count_people)',
-        '_formValid(validators.name, validators.phone_number, validators.count_peeople, validators.date, validators.time)',
+        '_formValid(validators.name, validators.phone_number, validators.count_people, validators.time)',
       ],
 
       _formTimeInitial: function(newValue, oldValue) {
@@ -314,11 +360,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       },
 
       _formPhoneChanged: function(newValue, oldValue) {
-        this.set('validators.phone_number', (newValue.length !== 0 && newValue.length === 12));
-      },
-
-      _formDateChanged: function(newValue, oldValue) {
-        this.set('validators.date', newValue.length !== 0);
+        this.set('validators.phone_number', (newValue.length !== 0));
       },
 
       _formTimeChanged: function(newValue, oldValue) {
@@ -326,11 +368,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       },
 
       _formPeopleChanged: function(newValue, oldValue) {
-        this.set('validators.count_peeople', newValue !== 0);
+        this.set('validators.count_people', newValue.length !== 0);
       },
 
-      _formValid: function(name, phone_number) {
-        this.set('validators.summary', (name && phone_number));
+      _formValid: function(name, phone_number, count_people, time) {
+        this.set('validators.summary', (name && phone_number && count_people && time));
       },
 
       _initialDate: function() {
@@ -346,14 +388,36 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         return [d.getFullYear(),  month, date].join('-') + 'г.';
       },
 
+      _activeChanged: function(active) {
+        if (!active) {
+          this._resetForm();
+        }
+      },
+
       submitForm: function() {
-        this.form.phone_number = '+7' + this.form.phone_number.replace(/-/g, '');
+        this.form.date = event.date.original;
         this.$.ajax.body = JSON.stringify(this.form);
         this.$.ajax.generateRequest();
       },
 
       handleResponse: function(request) {
-        console.log(request.detail.responce);
+        this.fire('reservation-form-send');
+        this.$.toast.open();
+      },
+
+      _resetForm: function() {
+
+        this.form = {
+            name: '',
+            phone_number: '',
+            date: '',
+            time: '',
+            is_vip: false,
+            count_people: '',
+        };
+        this.$.peoples.selected = null;
+        this.$.time.selected = null;
+
       },
 
       _handleCheckbox: function() {

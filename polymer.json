@@ -3,13 +3,13 @@
   "shell": "src/md-app.html",
   "fragments": [
     "src/md-reservation.html",
-    "src/md-menu-main.html",
-    "src/md-menu-bar.html",
-    "src/md-menu-other.html"
+    "src/md-about.html"
   ],
   "sourceGlobs": [
     "src/**/*",
     "images/**/*",
+    "assets/**/*",
+    "fonts/**/*",
     "bower.json"
   ],
   "includeDependencies": [
@@ -18,11 +18,7 @@
     "bower_components/lightgallery.js/dist/**/*",
     "bower_components/lg-thumbnail.js/dist/lg-thumbnail.min.js",
     "bower_components/lightgallery.js/dist/css/lightgallery.min.css",
-    "bower_components/vaadin-date-picker/vaadin-date-picker.html",
-    "bower_components/vaadin-date-picker/vaadin-date-picker-overlay.html",
-    "bower_components/vaadin-date-picker/vaadin-date-picker-behavior.html",
-    "bower_components/vaadin-date-picker/vaadin-infinite-scroller.html",
-    "bower_components/vaadin-date-picker/vaadin-month-calendar.html",
+    "bower_components/particles.js/particles.min.js",
     "bower_components/webcomponentsjs/webcomponents-lite.min.js"
   ]
 }

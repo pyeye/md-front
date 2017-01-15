@@ -8,12 +8,15 @@ Code distributed by Google as part of the polymer project is also
 subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
 -->
 
-<link rel="import" href="../bower_components/paper-tabs/paper-tabs.html">
 <link rel="import" href="../bower_components/app-layout/app-header/app-header.html">
 <link rel="import" href="../bower_components/app-layout/app-toolbar/app-toolbar.html">
 <link rel="import" href="../bower_components/app-layout/app-header-layout/app-header-layout.html">
+
+<link rel="import" href="../bower_components/paper-styles/typography.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tabs.html">
 <link rel="import" href="../bower_components/paper-styles/typography.html">
 
+<link rel="import" href="../bower_components/neon-animation/neon-animated-pages.html">
 <link rel="import" href="../bower_components/neon-animation/neon-shared-element-animatable-behavior.html">
 <link rel="import" href="../bower_components/neon-animation/animations/hero-animation.html">
 <link rel="import" href="../bower_components/neon-animation/animations/ripple-animation.html">
@@ -24,9 +27,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/neon-animation/animations/slide-from-left-animation.html">
 <link rel="import" href="../bower_components/neon-animation/animations/slide-from-right-animation.html">
 <link rel="import" href="../bower_components/neon-animation/animations/slide-from-bottom-animation.html">
-<link rel="import" href="../bower_components/neon-animation/neon-animated-pages.html">
 
 <link rel="import" href="md-icons.html">
+<link rel="import" href="md-menu-list.html">
 
 <dom-module id="md-menu">
 
@@ -69,32 +72,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         display: -webkit-flex;
         display: flex;
         justify-content: center;
-        -ms-flex-direction: column;
-        -webkit-flex-direction: column;
-        flex-direction: column;
         font-size: 38px;
       }
-
-      [main-title] .header-label {
-        justify-content: center;
-        display: -ms-flexbox;
-        display: -webkit-flex;
-        display: flex;
-        -ms-flex-direction: row;
-        -webkit-flex-direction: row;
-        flex-direction: row;
-      }
-
-      [main-title] .header-sale {
-        justify-content: center;
-        display: -ms-flexbox;
-        display: -webkit-flex;
-        display: flex;
-        -ms-flex-direction: row;
-        -webkit-flex-direction: row;
-        flex-direction: row;
-      }
-
 
       [main-title] iron-icon {
         --iron-icon-fill-color: #FFFFFF;
@@ -107,13 +86,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         margin-left: 40px;
         margin-right: 40px;
         font-size: 38px;
-        letter-spacing: 1.5px;
-      }
-
-      [main-title] .title-sale {
-        @apply(--paper-font-display1);
-        font-size: 24px;
-        display: block;
+        letter-spacing: 4px;
+        font-family: 'Raleway', sans-serif;
       }
 
 
@@ -126,46 +100,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         display: -webkit-flex;
         display: flex;
         justify-content: center;
-        -ms-flex-direction: column;
-        -webkit-flex-direction: column;
-        flex-direction: column;
-        justify-content: center;
         font-size: 20px;
-        margin-top: 6px;
-      }
-
-      [condensed-title] .header-label {
-        justify-content: center;
-        display: -ms-flexbox;
-        display: -webkit-flex;
-        display: flex;
-        -ms-flex-direction: row;
-        -webkit-flex-direction: row;
-        flex-direction: row;
-      }
-
-      [condensed-title] .header-sale {
-
-        justify-content: center;
-        display: -ms-flexbox;
-        display: -webkit-flex;
-        display: flex;
-        -ms-flex-direction: row;
-        -webkit-flex-direction: row;
-        flex-direction: row;
-      }
-
-      [condensed-title] .title-sale {
-        @apply(--paper-font-display1);
-        font-size: 16px;
-        display: block;
       }
 
       [condensed-title] .title-label {
         @apply(--paper-font-title);
+        font-size: 22px;
         margin-left: 24px;
         margin-right: 24px;
-        letter-spacing: 1.5px;
+        letter-spacing: 4px;
+        font-family: 'Raleway', sans-serif;
+        line-height: 34px;
       }
 
       [condensed-title] iron-icon {
@@ -175,18 +120,28 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
 
       [condensed-title] i {
-        font-weight: 100;
-        font-style: normal;
+          font-weight: 100;
+          font-style: normal;
       }
 
-      @media (max-width: 1400px) {
+
+
+      app-toolbar {
+          color: white;
+      }
+
+      @media (max-width: 1450px) {
         app-toolbar.tall {
           height: 200px;
+        }
+
+        [condensed-title] {
+          margin-left: -40px;
         }
       }
 
 
-      @media (max-width: 768px) {
+      @media (max-width: 1050px) {
         [main-title] {
           -webkit-transform-origin: center top !important;
           transform-origin: center top !important;
@@ -197,6 +152,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           font-size: 30px;
           margin-left: 16px;
           margin-right: 16px;
+          letter-spacing: 2px;
         }
         [condensed-title] {
           margin-left: -36px;
@@ -206,25 +162,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           font-size: 20px;
           margin-left: 16px;
           margin-right: 16px;
-        }
-        [main-title] .title-sale {
-          @apply(--paper-font-display1);
-          font-size: 14px;
-          display: block;
-        }
-
-        [condensed-title] .title-sale {
-          @apply(--paper-font-display1);
-          font-size: 12px;
-          display: block;
-        }
-      }
-
-      paper-tabs {
-        --paper-tabs-selection-bar-color: #fff;
-        --paper-tabs: {
-          color: #fff;
-          background-color: var(--app-primary-color);
+          letter-spacing: 2px;
         }
       }
 
@@ -238,52 +176,49 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             z-index: -5;
       }
 
+      paper-tabs {
+        --paper-tabs-selection-bar-color: #fff;
+        --paper-tabs: {
+          color: rgba(255,255,255, 0.9);
+          background-color: var(--app-primary-color);
+        }
+      }
+
+      paper-tab {
+        font-family: 'Raleway', sans-serif;
+        text-transform: uppercase;
+        font-weight: 600;
+      }
+
+      paper-tab.iron-selected {
+        color: rgba(255,255,255, 1);
+      }
+
     </style>
 
-        <app-header id="header"  condenses reveals  effects="waterfall resize-title blend-background parallax-background" >
-          <app-toolbar>
-            <slot select="[drawer-toggle]"></slot>
-            <div condensed-title>
-              <div class="header-label">
-                <iron-icon icon="foot-left"></iron-icon>
-                <div class="title-label">МЕНЮ</div>
-                <iron-icon icon="foot-right"></iron-icon>
-              </div>
-              <div class="header-sale">
-                <div class="title-sale">
-                 С 12:00 ДО 16:00 СКИДКА 50% НА КУХНЮ
-                </div>
-              </div>
-            </div>
-          </app-toolbar>
-          <app-toolbar class="tall">
-            <div main-title>
-              <div class="header-label">
-                <iron-icon icon="foot-left"></iron-icon>
-                <div class="title-label">МЕНЮ</div>
-                <iron-icon icon="foot-right"></iron-icon>
-              </div>
-              <div class="header-sale">
-                <div class="title-sale">
-                 С 12:00 ДО 16:00 СКИДКА 50% НА КУХНЮ
-                </div>
-              </div>
-            </div>
-          </app-toolbar>
-        </app-header>
+    <app-header id="header"  condenses reveals  effects="waterfall resize-title blend-background parallax-background" >
+      <app-toolbar>
+        <slot select="[drawer-toggle]"></slot>
+        <div condensed-title><iron-icon icon="foot-left"></iron-icon><div class="title-label">МЕНЮ</div><iron-icon icon="foot-right"></iron-icon></div>
+      </app-toolbar>
+      <app-toolbar class="tall">
+        <div main-title><iron-icon icon="foot-left" id="fleft"></iron-icon><div class="title-label">МЕНЮ</div><iron-icon icon="foot-right" id="fright"></iron-icon></div>
+      </app-toolbar>
+    </app-header>
 
-      <div id="ripple"></div>
-        <paper-tabs id="tab" selected="{{tab}}" attr-for-selected="group" >
-            <paper-tab group="main" on-tap="_mainTapped">Основное</paper-tab>
-            <paper-tab group="bar">Карта бара</paper-tab>
-            <paper-tab group="other" on-tap="_otherTapped">Фруктовый пар</paper-tab>
-        </paper-tabs>
+    <div id="ripple"></div>
 
-        <neon-animated-pages id="content" selected="{{tab}}" attr-for-selected="group" on-iron-select="_menuTabChanged">
-            <md-menu-main group="main" entry-animation="slide-from-left-animation" exit-animation="slide-left-animation"></md-menu-main>
-            <md-menu-bar group="bar" entry-animation="[[middleEntryAnimation]]" exit-animation="[[middleExitAnimation]]"></md-menu-bar>
-            <md-menu-other group="other" entry-animation="slide-from-right-animation" exit-animation="slide-right-animation"></md-menu-other>
-        </neon-animated-pages>
+    <paper-tabs id="tab" selected="{{tab}}" attr-for-selected="group" >
+        <paper-tab group="main" on-tap="_mainTapped">Основное</paper-tab>
+        <paper-tab group="bar">Карта бара</paper-tab>
+        <paper-tab group="other" on-tap="_otherTapped">Фруктовый пар</paper-tab>
+    </paper-tabs>
+
+    <neon-animated-pages id="content" selected="[[tab]]" attr-for-selected="group">
+        <md-menu-list group="main" tab=[[tab]] entry-animation="slide-from-left-animation" exit-animation="slide-left-animation"></md-menu-list>
+        <md-menu-list group="bar" tab=[[tab]] entry-animation="[[middleEntryAnimation]]" exit-animation="[[middleExitAnimation]]"></md-menu-list>
+        <md-menu-list group="other" tab=[[tab]] entry-animation="slide-from-right-animation" exit-animation="slide-right-animation"></md-menu-list>
+    </neon-animated-pages>
 
   </template>
 
@@ -296,7 +231,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       properties: {
         tab: {
           type: String,
-          observer: '_menuTabChanged',
         },
 
         middleEntryAnimation: {
@@ -332,6 +266,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                   name: 'fade-in-animation',
                   node: this.$.tab,
                   timing: {delay: 250},
+                },{
+                    name: 'fade-in-animation',
+                    node: this.$.fleft,
+                    timing: {delay: 400},
+                },{
+                    name: 'fade-in-animation',
+                    node: this.$.fright,
+                    timing: {delay: 450},
                 }],
               'exit': {
                   name: 'fade-out-animation',
@@ -355,6 +297,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         'md-render-neon-page': '_renderNeonPage',
       },
 
+      behaviors: [
+        Polymer.NeonSharedElementAnimatableBehavior,
+        Polymer.IronResizableBehavior
+      ],
+
       _renderNeonPage: function(e) {
           layout = document.createElement('app-header-layout');
           childNodes = Polymer.dom(this.root).childNodes;
@@ -362,31 +309,19 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             Polymer.dom(layout).appendChild(childNodes[i]);
           }
           Polymer.dom(this.root).appendChild(layout);
+          this.tab = 'main';
           this.unlisten(this, 'md-render-neon-page', '_renderNeonPage');
-          this.tab = "main";
       },
 
-      behaviors: [
-        Polymer.NeonSharedElementAnimatableBehavior,
-        Polymer.IronResizableBehavior],
+        _mainTapped: function(e) {
+          this.middleEntryAnimation = 'slide-from-right-animation';
+          this.middleExitAnimation = 'slide-right-animation';
+        },
 
-      _menuTabChanged: function(tab) {
-        this.importHref(
-          this.resolveUrl('md-menu-' + tab + '.html'),
-          null, null, true);
-
-      },
-
-      _mainTapped: function(e) {
-        this.middleEntryAnimation = 'slide-from-right-animation';
-        this.middleExitAnimation = 'slide-right-animation';
-      },
-
-      _otherTapped: function(e) {
-        this.middleEntryAnimation = 'slide-from-left-animation';
-        this.middleExitAnimation = 'slide-left-animation';
-      },
-
+        _otherTapped: function(e) {
+          this.middleEntryAnimation = 'slide-from-left-animation';
+          this.middleExitAnimation = 'slide-left-animation';
+        },
     });
 
   </script>

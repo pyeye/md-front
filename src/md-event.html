@@ -10,16 +10,15 @@
      Code distributed by Google as part of the polymer project is also
      subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
      -->
-
+     <link rel="import" href="../bower_components/polymer/polymer.html">
      <link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
 
      <link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout.html">
 
      <link rel="import" href="../bower_components/paper-card/paper-card.html">
-     <link rel="import" href="../bower_components/paper-fab/paper-fab.html">
      <link rel="import" href="../bower_components/paper-button/paper-button.html">
-
      <link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
+     <link rel="import" href="../bower_components/paper-fab/paper-fab.html">
 
      <link rel="import" href="../bower_components/app-layout/app-header-layout/app-header-layout.html">
      <link rel="import" href="../bower_components/app-layout/app-header/app-header.html">
@@ -37,9 +36,10 @@
 
      <link rel="import" href="../bower_components/app-storage/app-localstorage/app-localstorage-document.html">
      <link rel="import" href="../bower_components/iron-media-query/iron-media-query.html">
-
+     <link rel="import" href="../bower_components/marked-element/marked-element.html">
 
      <link rel="import" href="md-icons.html">
+     <link rel="import" href="md-reservation-form.html">
 
      <dom-module id="md-event">
 
@@ -51,6 +51,7 @@
        :host {
          display: block;
          margin: 0;
+         color: #fff;
          --iron-icon-fill-color: #FFFFFF;
        }
 
@@ -85,103 +86,88 @@
        }
 
        paper-card {
-         padding: 16px 0 16px 100px;
+         padding: 16px;
          margin-bottom: 30px;
          width: 100%;
          sizing: border-box;
-         --paper-card-background-color: #272727;
-         --paper-card-content: {
-           color: var(--app-primary-color);
-         }
-         --paper-card-header-text: {
-           color: var(--app-primary-color);
+         --paper-card-background-color: #252525;
          }
 
+         paper-button {
+           background: var(--app-accent-color);
+           color: #fff;
          }
-         paper-card p {
-           @apply(--paper-font-body1);
-           margin: 16px 0;
-           color: #FFFFFF;
-         }
-         paper-fab {
-           position: absolute;
-           top: -42px;
-           right: 48px;
-           box-shadow: 0 4px 10px 0 rgba(0, 0, 0, 0.3);
-           --paper-fab-background: var(--app-primary-color);
-           --paper-fab-keyboard-focus-background: var(--app-primary-color);
-           --paper-fab-iron-icon: {
-             height: 32px;
-             width: 32px;
-             color: #FFFFFF;
-           }
-         }
-
-         paper-fab:hover {
-           box-shadow: 0 4px 10px 0 rgba(0, 0, 0, 0.3);
-         }
-
-         h4 {
-           color: var(--app-primary-color);
-           margin: 40px 0 12px;
-         }
-
-
 
          paper-icon-button {
-         color: white;
-         --paper-icon-button-ink-color: white;
-       }
+           color: white;
+           --paper-icon-button-ink-color: white;
+         }
 
-       .ingredient-item {
-           margin: 20px 0;
+         paper-fab {
+           position: absolute;
+           top: -28px;
+           right: 40px;
+           --paper-fab-background: #EF5458;
+           --paper-fab-keyboard-focus-background: #DF4448;
+        }
+
+        .close-icon {
+          margin-right: 4px;
+        }
+
+
+         .card-form {
+           width: 75%;
+           margin: 0 auto;
+         }
+
+         .event-flex {
+           @apply(--layout-vertical);
+         }
+
+         .event-row {
            @apply(--layout-horizontal);
+           align-items: flex-start;
+           margin: 8px;
          }
-         .ingredient-amount {
-           @apply(--paper-font-subhead);
-           margin-left: -95px;
+
+         .event-label {
            width: 80px;
-           padding-right: 16px;
-           color: var(--app-primary-color);
+           padding-right: 8px;
            text-align: right;
+           color: var(--app-primary-color);
          }
-         .ingredient-name {
+
+         .event-content {
            @apply(--layout-flex);
+         }
+
+         p {
            @apply(--paper-font-subhead);
-           color: #FFFFFF;
-           float: left;
-           position: relative;
+           line-height: 22px;
          }
 
-         .event-header {
-             @apply(--layout-horizontal);
-             margin-bottom: 16px;
-          }
-
-         .event-name-box {
-           @apply(--layout-flex);
-           color: #fff;
-           float: left;
-           position: relative;
+         .card-event {
+           padding-bottom: 8px;
          }
 
-         .event-name {
-             @apply(--paper-font-display2);
-             position: absolute;
-             top: 50%;
-             transform: translateY(-50%);
+         .event-artists {
+           @apply(--layout-horizontal);
          }
 
          .event-date {
-           text-align: center;
            @apply(--layout-vertical);
-           @apply(--paper-font-title);
-           margin-left: -95px;
-           width: 80px;
-           padding-right: 16px;
+           text-align: center;
            color: var(--app-primary-color);
+         }
 
+         .event-date-day {
+           @apply(--paper-font-display3);
+         }
 
+         .event-date-month {
+           @apply(--paper-font-subhead);
+           line-height: 12px;
          }
 
          .event-date-weekday {
@@ -191,54 +177,42 @@
            text-overflow: ellipsis;
          }
 
-         .event-date-day {
-           @apply(--paper-font-display3);
-
+         .event-name {
+           @apply(--paper-font-display2);
+           align-self: center;
 
          }
 
-         .event-date-month {
-           @apply(--paper-font-subhead);
-           line-height: 12px;
-         }
-
-         .pad {
-           @apply(--layout-flex);
+         .event-content-column {
            @apply(--layout-vertical);
-           color: #FFFFFF;
-           float: left;
-           position: relative;
-           margin-right: 16px;
+           padding-right: 32px;
          }
-         .primary {
-           @apply(--paper-font-subhead);
 
+         .event-content-primary {
+           @apply(--paper-font-subhead);
          }
-         .secondary {
+
+         .event-content-secondary {
            @apply(--paper-font-body1);
            opacity: 0.7;
          }
-         paper-button {
-           display: inline-block;
-           background: var(--app-primary-color);
-           color: #fff;
-         }
 
-         .reservation-form {
-           width: 70%;
-           margin-left: -25px;
-           margin-right: auto;
-         }
 
-         @media (max-width: 938px) {
+
+
+         @media (max-width: 1050px) {
 
            .content {
              margin: 350px auto 5px;
              width: 100%;
            }
+
+           .card-form {
+             width: 100%;
+           }
          }
 
-         @media (max-width: 720px) {
+         @media (max-width: 550px) {
 
            .content {
              width: 100%;
@@ -248,9 +222,6 @@
            paper-card {
              margin-bottom: 0px;
            }
-         }
-
-         @media (max-width: 540px) {
 
            .event-date-day {
              font-size: 48px;
@@ -260,11 +231,11 @@
            .event-name {
              font-size: 32px;
            }
+
+           p {
+             font-size: 14px;
+           }
          }
-
-
-
-
 
          #ripple {
            position: fixed;
@@ -275,8 +246,6 @@
                background-color: #191919;
                z-index: -5;
          }
-
-
 
        </style>
 
@@ -290,11 +259,11 @@
 
       <app-localstorage-document id="storage" key="events" data={{events}}></app-localstorage-document>
 
-      <iron-media-query query="max-width: 540px" query-matches="{{smallScreen}}"></iron-media-query>
+      <iron-media-query query="max-width: 550px" query-matches="{{smallScreen}}"></iron-media-query>
 
        <app-header id="header" effects="fade-background" reveals>
          <app-toolbar>
-           <a href="#/events" tabindex="-1">
+           <a href="/events" tabindex="-1">
              <paper-icon-button icon="arrow-back"></paper-icon-button>
            </a>
          </app-toolbar>
@@ -308,71 +277,76 @@
 
        <div class="content" id="content">
          <paper-card id="card">
-           <div class="card-content" hidden$="[[active]]">
-             <div class="event-header">
-               <div class="event-date">
-                 <div class="event-date-day">[[event.date.day]]</div>
-                 <div class="event-date-month">[[event.date.month]]</div>
-                 <div class="event-date-weekday">[[event.date.weekday]]</div>
+
+           <div class="card-form" hidden$="[[!showReserved]]">
+             <md-reservation-form event="[[event]]" active="[[showReserved]]">
+               <paper-button raised on-tap="_toggleForm" form-toggle>
+                 <iron-icon class="close-icon" icon="close"  ></iron-icon>
+                 Закрыть
+               </paper-button>
+             </md-reservation-form>
+           </div>
+
+           <div class="card-event" hidden$="[[showReserved]]">
+             <div class="event-flex">
+
+               <div class="event-row">
+                 <div class="event-label event-date">
+                     <div class="event-date-day">[[event.date.day]]</div>
+                     <div class="event-date-month">[[event.date.month]]</div>
+                     <div class="event-date-weekday">[[event.date.weekday]]</div>
+                 </div>
+                 <div class="event-content event-name">[[event.name]]</div>
                </div>
-               <div class="event-name-box" >
-                 <div class="event-name">{{event.name}}</div>
+
+               <div class="event-row">
+                 <div class="event-label"></div>
+                 <div class="event-content">
+                   <marked-element markdown="[[event.info]]">
+                     <div class="markdown-html custom"></div>
+                   </marked-element>
+                 </div>
+               </div>
+               <div class="event-row">
+                 <div class="event-label">Артисты:</div>
+                 <div class="event-content event-artists">
+                   <template is="dom-repeat" items="[[event.artists]]" as="artist">
+                     <div class="event-content-column">
+                       <div class="event-content-primary">
+                         [[artist.name]]
+                       </div>
+                       <div class="event-content-secondary">
+                         [[artist.style]]
+                       </div>
+                     </div>
+                   </template>
+                 </div>
+               </div>
+               <div class="event-row">
+                 <div class="event-label">Начало:</div>
+                 <div class="event-content">[[event.start]]</div>
+               </div>
+               <div class="event-row">
+                 <div class="event-label">Вход:</div>
+                 <div class="event-content">
+                   <div class="event-content-column">
+                     <div class="event-content-primary">
+                       [[event.price]] <span hidden$="[[_hideRubles(event.price)]]">&#x20bd;</span>
+                     </div>
+                     <div class="event-content-secondary" hidden$="[[_hidePriceExtra(event.extra)]]">
+                       [[event.extra.price_description]]
+                     </div>
+                   </div>
+                 </div>
                </div>
              </div>
-             <p>
-               {{event.info}}
-             </p>
-             <div class="ingredient-item">
-               <div class="ingredient-amount">Артисты:</div>
-               <template is="dom-repeat" items="{{event.artists}}" as="artist">
-                 <div class="pad">
-                   <div class="primary">
-                     [[artist.name]]
-                   </div>
-                   <div class="secondary">
-                     [[artist.style]]
-                   </div>
-                 </div>
-               </template>
-             </div>
-
-             <div class="ingredient-item">
-               <div class="ingredient-amount">Начало:</div>
-               <div class="ingredient-name">{{event.start}}</div>
-             </div>
-
-             <div class="ingredient-item">
-               <div class="ingredient-amount">Вход:</div>
-               <template is="dom-if" if="[[_isFreeEnter(event.extra.enter)]]">
-                 <div class="ingredient-name">Свободный</div>
-               </template>
-               <template is="dom-if" if="[[_isTicketsEnter(event.extra.enter)]]">
-                 <div class="pad">
-                   <div class="primary">
-                     По билетам
-                   </div>
-                   <div class="secondary">
-                     Стоимость билета [[event.extra.enter.value.price]] &#x20bd;
-                   </div>
-                 </div>
-               </template>
-               <template is="dom-if" if="[[_isPaidEnter(event.extra.enter)]]">
-                 <div class="pad">
-                   <div class="primary">
-                     [[event.extra.enter.value.price]] &#x20bd;
-                   </div>
-                   <div class="secondary">
-                     Девушкам до 21:00 вход свободный
-                   </div>
-                 </div>
-               </template>
-             </div>
-             <!--
-             <paper-fab icon="event-available" active on-tap="_toggleForm" raised></paper-fab>
-              -->
-
            </div>
          </paper-card>
+         <div hidden$="[[showReserved]]">
+           <paper-fab icon="event-available" on-tap="_toggleForm"></paper-fab>
+         </div>
+
+         </div>
      </template>
 
      <script>
@@ -382,18 +356,29 @@
        is: 'md-event',
 
        properties: {
-         day: {
-           type: String,
-           computed: 'computeDate(item.date)',
-         },
          event: {
            type: Object,
            notify: true,
            observer: '_eventChanged'
          },
-         active: {
+         showReserved: {
            type: Boolean,
            value: false,
+         },
+         page: {
+           type: String,
+           observer: '_pageChanged'
+         },
+         pageInit: {
+           type: Boolean,
+           value: false,
+         },
+         name: {
+           type: String,
+         },
+         freeEnter: {
+           type: String,
+           value: 'Свободный',
          },
          animationConfig: {
            value: function() {
@@ -434,11 +419,11 @@
        },
 
        observers: [
-         '_eventPageChanged(eventData.event)'
+         '_eventPageChanged(eventData.event)',
        ],
 
        listeners: {
-         'md-render-neon-page': '_renderNeonPage',
+         'reservation-form-send': '_toggleForm',
        },
 
        behaviors: [
@@ -446,10 +431,10 @@
          Polymer.IronResizableBehavior],
 
        _toggleForm: function(e) {
-         this.active = !this.active;
+         this.showReserved = !this.showReserved;
        },
 
-       _renderNeonPage: function(e) {
+       _renderNeonPage: function() {
          layout = document.createElement('app-header-layout');
          layout.id = "layout";
          childNodes = Polymer.dom(this.root).childNodes;
@@ -457,7 +442,6 @@
            Polymer.dom(layout).appendChild(childNodes[i]);
          }
          Polymer.dom(this.root).appendChild(layout);
-         this.unlisten(this, 'md-render-neon-page', '_renderNeonPage');
        },
 
        _eventPageChanged: function(event) {
@@ -501,6 +485,26 @@
          return null;
        },
 
+       _pageChanged: function(page) {
+         if (page === this.name) {
+           if (this.showReserved) {
+             this.showReserved = false;
+           }
+           if (!this.pageInit) {
+             this._renderNeonPage()
+             this.pageInit = true;
+           }
+         }
+       },
+
+       _hideRubles: function(price) {
+         return price === this.freeEnter;
+       },
+
+       _hidePriceExtra: function(extra) {
+         return !extra.hasOwnProperty('price_description');
+       },
+
        handleResponse: function(request) {
          var index, len, date;
          var response = request.detail.response;
@@ -510,10 +514,9 @@
            day: 'numeric',
            weekday: 'long',
          };
-         this.active = false;
          response.start = response.start.slice(0, -3);
          if(response.price == 0) {
-           response.price = 'Свободный';
+           response.price = this.freeEnter;
          }
          date = new Date(response.date);
          date = date.toLocaleString("ru", options).split(' ');
@@ -555,21 +558,6 @@
          return rand;
        },
 
-       _isFreeEnter: function(enter) {
-          return enter.code === 'free';
-       },
-
-       _isTicketsEnter: function(enter) {
-          return enter.code === 'tickets';
-       },
-
-       _isPaidEnter: function(enter) {
-          return enter.code === 'paid';
-       },
-
-       computeDate: function(date) {
-         return date.split('-')[0];
-       },
   });
 
      </script>

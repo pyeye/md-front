@@ -62,17 +62,19 @@
        @apply(--paper-font-headline);
        font-size: 31px;
        margin-left: 16px;
+       line-height: 25px;
      }
 
      .modal-item-bottom-sales {
        @apply(--paper-font-headline);
        font-size: 31px;
        margin-left: 16px;
+       line-height: 25px;
      }
 
      .modal-item-bottom-container {
        color: #FFFFFF;
-       padding-bottom: 65px;
+       padding-bottom: 25px;
        @apply(--layout-horizontal);
        @apply(--layout-end-justified);
        margin-right: 16px;
@@ -87,8 +89,8 @@
 
      .sale-badge {
        position: absolute;
-       top: -25px;
-       width: 104px;
+       top: -20px;
+       width: 95px;
      }
 
      .sales-prices {
@@ -148,37 +150,14 @@
        color: #FFFFFF;
      }
 
-     .ribbon {
-  position: absolute;
-  right: -5px; top: -5px;
-  z-index: 1;
-  overflow: hidden;
-  width: 75px; height: 75px;
-  text-align: right;
-}
-.ribbon span {
-  font-size: 10px;
-  color: #FFF;
-  text-align: center;
-  line-height: 13px;
-  transform: rotate(48deg);
-  -webkit-transform: rotate(48deg);
-  width: 100px;
-  display: block;
-  background: #79A70A;
-  background: linear-gradient(#F44336 0%, #F44336 100%);
-  box-shadow: 0 3px 10px -5px rgba(0, 0, 0, 1);
-  position: absolute;
-  top: 19px; right: -21px;
-}
-     @media (max-width: 1400px) {
+     @media (max-width: 1450px) {
 
        iron-image {
          height: 280px;
        }
      }
 
-     @media (max-width: 960px) {
+     @media (max-width: 1050px) {
        :host {
          width: 50%;
        }
@@ -188,11 +167,15 @@
        }
      }
 
-     @media (max-width: 768px) {
+     @media (max-width: 550px) {
        :host {
          width: 100%;
          height: 100%;
          max-height: 100%;
+       }
+
+       .modal-item-bottom-container {
+         padding-bottom: 65px;
        }
 
        iron-image {
@@ -201,24 +184,41 @@
 
      }
 
-     @media (max-width: 400px) {
-       :host {
-         width: 100%;
-         height: 100%;
-       }
-     }
-
-     @media (max-width: 320px) {
+     @media (max-width: 340px) {
        iron-image {
          height: 250px;
        }
 
+       .modal-item-bottom {
+         font-size: 26px;
+         line-height: 20px;
+       }
 
+       .modal-item-bottom-sales {
+         font-size: 26px;
+         line-height: 20px;
+       }
+
+       .sale-badge {
+         width: 85px;
+       }
+
+       .modal-item-weight {
+         font-size: 14px;
+       }
+
+       .modal-item-weight-sales {
+         font-size: 14px;
+       }
+
+       .modal-item-name-box {
+         font-size: 24px;
+       }
      }
 
   </style>
 
-  <iron-media-query query="max-width: 480px" query-matches="{{smallScreen}}"></iron-media-query>
+  <iron-media-query query="max-width: 550px" query-matches="{{smallScreen}}"></iron-media-query>
 
     <iron-image src="{{item.photo.original}}" sizing="cover" preload fade></iron-image>
     <div class="modal-item-name-container">
@@ -248,9 +248,7 @@
         </div>
       </template>
       <div class="sales"  hidden$="[[!isLunch]]">
-        <div class="box">
-          <div class="ribbon"><span>с 12<sup>00</sup> до 16<sup>00</sup></span></div>
-        </div>
+        <img class="sale-badge" src="https://maddogclub.com/img/static/badges/sale.png" alt="sale badge" />
         <div class="sales-prices">
           <template is="dom-repeat" items="{{item.prices}}" as="price">
             <div class="modal-item-bottom-sales">
@@ -272,24 +270,6 @@
       <paper-ripple></paper-ripple>
     </div>
   </div>
-
-      <!--
-      <div class="modal-item-bottom">
-      <iron-icon icon="alarm"></iron-icon>
-      <div class="modal-item-weight">
-      25 мин.
-    </div>
-  </div>
-  <div class="modal-item-bottom">
-  <iron-icon icon="favorite"></iron-icon>
-  <div class="modal-item-weight">
-  47k
-</div>
-</div>
-рекомендации и каллорийность
-
--->
-
 
   </template>
 
@@ -352,7 +332,6 @@
 
       _groupChanged: function(group) {
         this.isLunch = group === 'main';
-        console.log(this.isLunch);
       },
     });
 

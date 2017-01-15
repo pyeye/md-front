@@ -9,45 +9,58 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 -->
 
 <!doctype html>
-<html lang="en">
+<html lang="ru" class="no-scroll">
 <head>
+  <title>Mad Dog - Клуб живой музыки</title>
+  <base href="/">
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
   <meta name="google-site-verification" content="TxKD9Hv6qsTHkXa77-s58D8kAMed5sy4rXLYvZ7qo90" />
   <meta name="yandex-verification" content="aa9d1325f4e27eb9" />
-
-  <title>Mad Dog - Клуб живой музыки</title>
-
-  <link rel="shortcut icon" sizes="32x32" href="/images/logo_32.png">
+  <link rel="shortcut icon" sizes="32x32" href="/images/favicon.png">
   <link type="text/css" rel="stylesheet" href="bower_components/lightgallery.js/dist/css/lightgallery.min.css" async>
   <link rel="manifest" href="/manifest.json">
 
-  <script>
-  // Note: this version requires Promises, which are in all the
-  // latest browsers except IE 11. Edge will ship them.
-  // Note: native Promise.defer() is deprecated. Have to create our own.
-  function deferred() {
-    var result = {};
-    result.promise = new Promise(function(resolve, reject) {
-      result.resolve = resolve;
-      result.reject = reject;
-    });
-    return result;
-  };
-  // (Optional) Use native Shadow DOM if availabe in the browser.
-  window.Polymer = window.Polymer || {lazyRegister: true, dom: 'shadow'};
-  // 1. Create deferred Promise to capture async import's load.
-  var importsLoadedDeferred = deferred();
-  function onImportsLoaded(e) {
-    // 3. Resolve the Promise when the async import has loaded.
-    importsLoadedDeferred.resolve(e.target);
-  }
-  </script>
+  <link rel="import" href="/src/md-app.html" id="htmlImport" async>
 
-  <link rel="import" href="/src/md-app.html" onload="onImportsLoaded(event)" async>
+  <script>
+  var importsLoadedDeferred = new Promise(function(resolve, reject) {
+      var htmlImport = document.querySelector('#htmlImport');
+      htmlImport.addEventListener('load', resolve);
+    });
+    window.Polymer = window.Polymer || {dom: 'shadow'};
+  </script>
 
   <style>
 
+  @font-face {
+    font-family: 'Raleway';
+    src: url('fonts/Raleway-Regular.ttf') format('truetype');
+    font-weight: normal;
+  }
+
+  @font-face {
+    font-family: 'Raleway';
+    src: url('fonts/Raleway-Medium.ttf') format('truetype');
+    font-weight: 500;
+  }
+
+  @font-face {
+    font-family: 'Raleway';
+    src: url('fonts/Raleway-Light.ttf') format('truetype');
+    font-weight: 300;
+  }
+
+  @font-face {
+    font-family: 'Raleway';
+    src: url('fonts/Raleway-SemiBold.ttf') format('truetype');
+    font-weight: bold;
+  }
+
+  .no-scroll,
+  body.loading {
+    overflow: hidden;
+  }
   body.loading #splash {
     opacity: 1;
   }
@@ -78,112 +91,51 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     width: 180px;
   }
 
-  #splash-logo svg {
-    margin-left: 1.25px;
-    margin-top: -68.65px;
-    width: 41px;
-    height: 41px;
-
+  .loader,
+  .loader:after {
+    border-radius: 50%;
+    width: 10em;
+    height: 10em;
   }
 
-  .spinner {
-    -webkit-animation: rotator 1.4s linear infinite;
-    animation: rotator 1.4s linear infinite;
+  .loader {
+    margin-left: 1.5px;
+    margin-top: -71px;
+    width: 38px;
+    height: 38px;
+    font-size: 4px;
+    position: relative;
+    text-indent: -9999em;
+    border-top: 1.1em solid #252525;
+    border-right: 1.1em solid #252525;
+    border-bottom: 1.1em solid #252525;
+    border-left: 1.1em solid #f44336;
+    -webkit-transform: translateZ(0);
+    -ms-transform: translateZ(0);
+    transform: translateZ(0);
+    -webkit-animation: load8 1.1s infinite linear;
+    animation: load8 1.1s infinite linear;
   }
 
-  @-webkit-keyframes rotator {
+  @-webkit-keyframes load8 {
     0% {
       -webkit-transform: rotate(0deg);
       transform: rotate(0deg);
     }
     100% {
-      -webkit-transform: rotate(270deg);
-      transform: rotate(270deg);
+      -webkit-transform: rotate(360deg);
+      transform: rotate(360deg);
     }
   }
 
-  @keyframes rotator {
+  @keyframes load8 {
     0% {
       -webkit-transform: rotate(0deg);
       transform: rotate(0deg);
     }
     100% {
-      -webkit-transform: rotate(270deg);
-      transform: rotate(270deg);
-    }
-  }
-  .path {
-    stroke-dasharray: 187;
-    stroke-dashoffset: 0;
-    -webkit-transform-origin: center;
-    transform-origin: center;
-    -webkit-animation: dash 1.4s ease-in-out infinite, colors 5.6s ease-in-out infinite;
-    animation: dash 1.4s ease-in-out infinite, colors 5.6s ease-in-out infinite;
-  }
-
-  @-webkit-keyframes colors {
-    0% {
-      stroke: #F44336;
-    }
-    25% {
-      stroke: #F44336;
-    }
-    50% {
-      stroke: #F44336;
-    }
-    75% {
-      stroke: #F44336;
-    }
-    100% {
-      stroke: #F44336;
-    }
-  }
-
-  @keyframes colors {
-    0% {
-      stroke: #F44336;
-    }
-    25% {
-      stroke: #F44336;
-    }
-    50% {
-      stroke: #F44336;
-    }
-    75% {
-      stroke: #F44336;
-    }
-    100% {
-      stroke: #F44336;
-    }
-  }
-  @-webkit-keyframes dash {
-    0% {
-      stroke-dashoffset: 187;
-    }
-    50% {
-      stroke-dashoffset: 46.75;
-      -webkit-transform: rotate(135deg);
-      transform: rotate(135deg);
-    }
-    100% {
-      stroke-dashoffset: 187;
-      -webkit-transform: rotate(450deg);
-      transform: rotate(450deg);
-    }
-  }
-  @keyframes dash {
-    0% {
-      stroke-dashoffset: 187;
-    }
-    50% {
-      stroke-dashoffset: 46.75;
-      -webkit-transform: rotate(135deg);
-      transform: rotate(135deg);
-    }
-    100% {
-      stroke-dashoffset: 187;
-      -webkit-transform: rotate(450deg);
-      transform: rotate(450deg);
+      -webkit-transform: rotate(360deg);
+      transform: rotate(360deg);
     }
   }
 
@@ -195,6 +147,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     background-color: #202020;
   }
 
+  #particles {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+  }
+
   </style>
 
 </head>
@@ -202,17 +162,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <div id="splash">
     <div id="splash-logo">
       <img src="https://maddogclub.com/img/static/logo_ripple.jpg" alt="" />
-      <svg class="spinner" width="65px" height="65px" viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg">
-        <circle class="path" fill="none" stroke-width="6" stroke-linecap="round" cx="33" cy="33" r="30"></circle>
-      </svg>
+      <div class="loader"></div>
     </div>
   </div>
 
-  <script src="bower_components/lightgallery.js/dist/js/lightgallery.min.js"></script>
-  <script src="bower_components/lg-thumbnail.js/dist/lg-thumbnail.min.js"></script>
-
+  <script src="bower_components/particles.js/particles.min.js" async></script>
+  <script src="bower_components/lightgallery.js/dist/js/lightgallery.min.js" async></script>
+  <script src="bower_components/lg-thumbnail.js/dist/lg-thumbnail.min.js" async></script>
+  
+  <div id="particles"></div>
   <md-app></md-app>
   <script src="app.js" async></script>
-
 </body>
 </html>

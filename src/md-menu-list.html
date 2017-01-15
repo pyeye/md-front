@@ -10,18 +10,27 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 <link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
 <link rel="import" href="../bower_components/iron-image/iron-image.html">
+<link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
+
 <link rel="import" href="../bower_components/paper-ripple/paper-ripple.html">
 <link rel="import" href="../bower_components/paper-styles/typography.html">
-<link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout.html">
 
 <link rel="import" href="md-icons.html">
 
 
-<dom-module id="md-menu-main">
+<dom-module id="md-menu-list">
 
   <template>
 
     <style>
+
+    :host {
+      display: block;
+      width: 90%;
+      position: relative;
+      margin: 16px auto;
+    }
 
 
 
@@ -32,32 +41,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         color: var(--app-primary-color);
       }
 
-      paper-tabs {
-        --paper-tabs-selection-bar-color: #fff;
-        --paper-tabs: {
-          color: #fff;
-          background-color: var(--app-primary-color);
-        }
-      }
-
       [hidden] {
         display: none;
       }
-
-    .content {
-      display: block;
-      width: 90%;
-      position: relative;
-      margin: 16px auto;
-    }
-
 
     .card-flex {
       @apply(--layout-horizontal);
       @apply(--layout-wrap);
 
     }
-
 
     .card {
       position: relative;
@@ -88,7 +80,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     }
 
 
-    @media (max-width: 1400px) {
+    @media (max-width: 1450px) {
       .card {
         -webkit-flex-basis: 31%;
         flex-basis: 31%;
@@ -96,7 +88,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
     }
 
-    @media (max-width: 1038px) {
+    @media (max-width: 1050px) {
       .card {
         -webkit-flex-basis: 46%;
           flex-basis: 46%;
@@ -104,7 +96,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
     }
 
-    @media (max-width: 500px) {
+    @media (max-width: 550px) {
       .card {
         -webkit-flex-basis: 100%;
           flex-basis: 100%;
@@ -201,31 +193,30 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   }
     </style>
 
-    <iron-ajax auto
+    <iron-ajax id="ajax"
                url="https://maddogclub.com/api/v1/menu/?group=main&format=md_menu"
                handle-as="json"
-               last-response="{{menuMain}}"></iron-ajax>
+               last-response="{{items}}"></iron-ajax>
 
-    <div class="content">
-      <template is="dom-repeat" items="{{menuMain}}" as="main">
+      <template is="dom-repeat" items="[[items]]" as="menu">
         <div class="menu-category">
-          {{main.category}}
+          [[menu.category]]
         </div>
         <div class="card-flex">
-          <template is="dom-repeat" items="{{main.items}}" initial-count="4">
+          <template is="dom-repeat" items="[[menu.items]]" initial-count="4">
             <div class="card" on-tap="handleTap">
-              <iron-image sizing="cover" preload fade src="{{item.photo.thumbnail}}"></iron-image>
+              <iron-image sizing="cover" preload fade src="[[item.photo.thumbnail]]"></iron-image>
               <div class="sale-badge" hidden$="[[!item.detail.sale]]">
                 <span>Акция!</span>
               </div>
               <div class="card-content">
                 <div class="item-header">
-                  <div class="item-name">{{item.name}}</div>
+                  <div class="item-name">[[item.name]]</div>
                   <div class="item-price">
                     <template is="dom-repeat" items="{{_getPrices(item.prices)}}" as="price">
-                      {{price.value}} &#x20bd;
+                      [[price.value]] &#x20bd;
                         <div class="item-weight">
-                          за {{price.count}} {{price.measure}}
+                          за [[price.count]] [[price.measure]]
                         </div>
                     </template>
                   </div>
@@ -237,31 +228,52 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         </div>
 
       </template>
-    </div>
 </template>
 
   <script>
 
     Polymer({
-      is: 'md-menu-main',
+      is: 'md-menu-list',
 
       properties: {
-        menuMain: {
+        items: {
           type: Array
+        },
+
+        group: {
+          type: String,
+        },
+
+        tab: {
+          type: String,
+          observer: '_tabChanged'
+        },
+
+        tabInit: {
+          type: Boolean,
+          value: false,
         },
       },
 
-      listeners: {
-        'md-load-menu': '_loadMenu',
-      },
-
-      _loadMenu: function(e) {
-        this.$.ajax.generateRequest();
-        this.unlisten(this, 'md-load-menu', '_loadMenu');
-      },
+      behaviors: [
+        Polymer.NeonAnimatableBehavior,
+        Polymer.IronResizableBehavior
+      ],
 
       _getPrices: function(prices) {
         return prices.length > 1 ? [prices[0]] : prices;
+      },
+
+      _tabChanged: function(tab) {
+        if(tab === this.group && !this.tabInit) {
+          this._generateRequest(this.group);
+          this.tabInit = true;
+        }
+      },
+
+      _generateRequest: function(group) {
+        this.$.ajax.url = 'https://maddogclub.com/api/v1/menu/?format=md_menu&group=' + group;
+        this.$.ajax.generateRequest();
       },
 
       handleTap: function(e) {
@@ -270,11 +282,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           'group': 'main',
         });
       },
-
-      behaviors: [
-        Polymer.NeonAnimatableBehavior,
-        Polymer.IronResizableBehavior
-      ],
 
     });
 

@@ -21,7 +21,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/paper-styles/typography.html">
 
 <link rel="import" href="md-about-contacts.html">
-<link rel="import" href="md-about-story.html">
 <link rel="import" href="md-icons.html">
 
 <dom-module id="md-about">
@@ -70,7 +69,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         margin-left: 40px;
         margin-right: 40px;
         font-size: 34px;
-        letter-spacing: 1.5px;
+        letter-spacing: 4px;
+        font-family: 'Raleway', sans-serif;
+        font-weight: bold;
       }
 
 
@@ -90,7 +91,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         @apply(--paper-font-title);
         margin-left: 24px;
         margin-right: 24px;
-        letter-spacing: 1.5px;
+        letter-spacing: 4px;
+        font-family: 'Raleway', sans-serif;
+        font-weight: bold;
       }
 
       [condensed-title] iron-icon {
@@ -103,13 +106,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         font-style: normal;
       }
 
-      @media (max-width: 1400px) {
+      @media (max-width: 1450px) {
         app-toolbar.tall {
           height: 200px;
         }
+
+        [condensed-title] {
+          margin-left: -40px;
+        }
       }
 
-      @media (max-width: 768px) {
+      @media (max-width: 1050px) {
         [main-title] {
           -webkit-transform-origin: center top !important;
           transform-origin: center top !important;
@@ -172,41 +179,40 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     </style>
 
 
+    <app-header-layout>
+      <app-header id="header"  condenses reveals  effects="waterfall resize-title blend-background parallax-background" >
+        <app-toolbar>
+          <slot select="[drawer-toggle]"></slot>
+          <div condensed-title><iron-icon icon="foot-left"></iron-icon><div class="title-label">О НАС</div><iron-icon icon="foot-right"></iron-icon></div>
+        </app-toolbar>
+        <app-toolbar class="tall">
+          <div main-title><iron-icon icon="foot-left"></iron-icon><div class="title-label">О НАС</div><iron-icon icon="foot-right"></iron-icon></div>
+        </app-toolbar>
+      </app-header>
 
-    <app-header id="header"  condenses reveals  effects="waterfall resize-title blend-background parallax-background" >
-      <app-toolbar>
-        <slot select="[drawer-toggle]"></slot>
-        <div condensed-title><iron-icon icon="foot-left"></iron-icon><div class="title-label">О НАС</div><iron-icon icon="foot-right"></iron-icon></div>
-      </app-toolbar>
-      <app-toolbar class="tall">
-        <div main-title><iron-icon icon="foot-left"></iron-icon><div class="title-label">О НАС</div><iron-icon icon="foot-right"></iron-icon></div>
-      </app-toolbar>
-    </app-header>
+
+      <div id="ripple"></div>
+      <div class="content-container" id="content">
+        <div class="content">
+              <md-about-contacts name="contacts"></md-about-contacts>
+        </div>
+        <!--
+        <div class="nav">
+          <iron-selector selected="{{aboutSection}}"
+                         attr-for-selected="name"
+                         class="drawer-list"
+                         role="navigation">
+
+            <span name="story">Наша история</span>
+            <span name="contacts">Наши контакты</span>
+          </iron-selector>
+        </div>
+        -->
 
 
-    <div id="ripple"></div>
-    <div class="content-container" id="content">
-      <div class="content">
-          <iron-pages selected="{{aboutSection}}" attr-for-selected="name">
-            <md-about-story name="story"></md-about-story>
-            <md-about-contacts name="contacts"></md-about-contacts>
-          </iron-pages>
       </div>
-      <!--
-      <div class="nav">
-        <iron-selector selected="{{aboutSection}}"
-                       attr-for-selected="name"
-                       class="drawer-list"
-                       role="navigation">
+    </app-header-layout>
 
-          <span name="story">Наша история</span>
-          <span name="contacts">Наши контакты</span>
-        </iron-selector>
-      </div>
-      -->
-
-
-    </div>
 
 
 
@@ -244,41 +250,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             }
           }
         },
-        sharedElements: {
-          value: function() {
-            return {
-              'about-hero': this.$.header,
-              'about-ripple': this.$.ripple,
-            }
-          }
-        },
-      },
-
-      listeners: {
-        'md-render-neon-page': '_renderNeonPage',
-      },
-
-      _renderNeonPage: function(e) {
-          layout = document.createElement('app-header-layout');
-          layout.id = "layout";
-          childNodes = Polymer.dom(this.root).childNodes;
-
-          for (var i = 0; i < childNodes.length; i++) {
-            Polymer.dom(layout).appendChild(childNodes[i]);
-          }
-          Polymer.dom(this.root).appendChild(layout);
-          this.unlisten(this, 'md-render-neon-page', '_renderNeonPage');
-          this.aboutSection = "contacts";
-      },
-
-      ready: function() {
-        this.abboutSection = 'contacts';
       },
 
 
 
-      behaviors: [Polymer.NeonSharedElementAnimatableBehavior,
-      Polymer.IronResizableBehavior],
+      behaviors: [Polymer.IronResizableBehavior],
 
 
     });

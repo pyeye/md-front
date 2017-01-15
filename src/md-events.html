@@ -62,6 +62,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             }
 
             [main-title] {
+
               font-weight: normal;
               -webkit-transform-origin: center top !important;
               transform-origin: center top !important;
@@ -83,7 +84,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               margin-left: 40px;
               margin-right: 40px;
               font-size: 38px;
-              letter-spacing: 1.5px;
+              letter-spacing: 4px;
+              font-family: 'Raleway', sans-serif;
             }
 
 
@@ -101,9 +103,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
             [condensed-title] .title-label {
               @apply(--paper-font-title);
+              font-size: 22px;
               margin-left: 24px;
               margin-right: 24px;
-              letter-spacing: 1.5px;
+              letter-spacing: 4px;
+              font-family: 'Raleway', sans-serif;
+              line-height: 34px;
             }
 
             [condensed-title] iron-icon {
@@ -390,26 +395,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 width: 90px;
             }
 
-            @media (max-width: 1400px) {
+            @media (max-width: 1450px) {
               app-toolbar.tall {
                 height: 200px;
               }
-            }
-
-            @media (max-width: 1000px) {
-
-
-
-                .special-list {
-                    display: none;
-                }
-                .events-list {
-                    width: 100%;
-                }
-                .events-material {
-                    position: relative;
-                    width: 95%;
-                }
 
 
             }
@@ -426,15 +415,28 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 font-size: 30px;
                 margin-left: 16px;
                 margin-right: 16px;
+                letter-spacing: 2px;
               }
               [condensed-title] {
                 margin-left: -36px;
                 font-size: 20px;
+                letter-spacing: 2px;
               }
               [condensed-title] .title-label {
                 font-size: 20px;
                 margin-left: 16px;
                 margin-right: 16px;
+              }
+
+              .special-list {
+                  display: none;
+              }
+              .events-list {
+                  width: 100%;
+              }
+              .events-material {
+                  position: relative;
+                  width: 95%;
               }
 
 
@@ -445,7 +447,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
             }
 
-            @media (max-width: 540px) {
+            @media (max-width: 550px) {
 
               .item-badge {
                 display: none;
@@ -495,7 +497,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             <div condensed-title><iron-icon icon="foot-left"></iron-icon><div class="title-label">АФИША</div><iron-icon icon="foot-right"></iron-icon></div>
           </app-toolbar>
           <app-toolbar class="tall">
-            <div main-title><iron-icon icon="foot-left"></iron-icon><div class="title-label">АФИША</div><iron-icon icon="foot-right"></iron-icon></div>
+            <div main-title><iron-icon icon="foot-left" id="fleft"></iron-icon><div class="title-label">АФИША</div><iron-icon icon="foot-right" id="fright"></iron-icon></div>
           </app-toolbar>
         </app-header>
 
@@ -503,14 +505,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         <app-localstorage-document key="events" data={{events}}></app-localstorage-document>
 
-        <iron-media-query query="max-width: 540px" query-matches="{{smallScreen}}"></iron-media-query>
+        <iron-media-query query="max-width: 550px" query-matches="{{smallScreen}}"></iron-media-query>
 
         <div id="ripple"></div>
         <div id="content" class="content">
             <div id="events" class="events-list">
                 <paper-material class="events-material">
                     <template is="dom-repeat" items="[[events]]">
-                        <a href="#/event/[[item.pk]]">
+                        <a href="/event/[[item.pk]]">
                             <div class="event" on-tap="_heroAnimationHandler">
                                 <div class="event-date">
                                     <div class="event-date-soon" hidden$="[[!_shouldRenderDate(item.date)]]">[[item.date.soon]]</div>
@@ -539,11 +541,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                                       </div>
                                     </div>
                                 </div>
-                                    <div class="badge" hidden$="[[!_shouldRenderJazzBadge(item.extra)]]">
-                                        <img class="item-badge" src="https://maddogclub.com/img/static/badges/events-jazz.png" alt="" />
-                                    </div>
-                                    <div class="badge" hidden$="[[!_shouldRenderStandUpBadge(item.extra)]]">
-                                        <img class="item-badge" src="https://maddogclub.com/img/static/badges/events-stand-up.png" alt="" />
+                                    <div class="badge" hidden$="[[_shouldHideBadge(item.extra)]]">
+                                        <img class="item-badge" src$="[[_makeBadgeSrc(item.extra.type.code)]]" alt="" />
                                     </div>
                                 <paper-ripple></paper-ripple>
                             </div>
@@ -558,7 +557,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     <div class="news-title-casting">
                         <div class="news-title">
                             <div class="news-info">
-                                Кастинг молодых исполнителей
+                                Открытая сцена
                             </div>
                             <div class="news-date">
                                 Каждую среду в 18:00
@@ -579,19 +578,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                         </div>
                     </div>
                 </paper-material>
-                <paper-material class="material-news">
-                    <iron-image class="news-image" sizing="cover" preload fade src="https://maddogclub.com/img/static/events/stand_up.jpg"></iron-image>
-                    <div class="news-title-stand-up">
-                        <div class="news-title">
-                            <div class="news-info">
-                                Stand Up вечер
-                            </div>
-                            <div class="news-date">
-                                Каждое воскресенье в 21:00
-                            </div>
-                        </div>
-                    </div>
-                </paper-material>
             </div>
         </div>
 
@@ -606,6 +592,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
                 events: {
                     type: Array
+                },
+
+                freeEnter: {
+                  type: String,
+                  value: 'Свободный',
                 },
 
                 animationConfig: {
@@ -631,6 +622,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                                 node: this.$.news,
                                 timing: {delay: 300},
                             }, {
+                                name: 'fade-in-animation',
+                                node: this.$.fleft,
+                                timing: {delay: 400},
+                            },{
+                                name: 'fade-in-animation',
+                                node: this.$.fright,
+                                timing: {delay: 450},
+                            },{
                                 name: 'slide-from-bottom-animation',
                                 node: this.$.news,
                                 timing: {delay: 100},
@@ -658,7 +657,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             },
 
             listeners: {
-                'md-render-neon-page': '_renderNeonPage',
+              'md-render-neon-page': '_renderNeonPage',
             },
 
             _heroAnimationHandler: function(e) {
@@ -666,12 +665,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             },
 
             _renderNeonPage: function(e) {
-                this.$.ajax.generateRequest();
+              this.$.ajax.generateRequest();
                 layout = document.createElement('app-header-layout');
-                layout.id = "layout";
                 childNodes = Polymer.dom(this.root).childNodes;
                 for (var i = 0; i < childNodes.length; i++) {
-                    Polymer.dom(layout).appendChild(childNodes[i]);
+                  Polymer.dom(layout).appendChild(childNodes[i]);
                 }
                 Polymer.dom(this.root).appendChild(layout);
                 this.unlisten(this, 'md-render-neon-page', '_renderNeonPage');
@@ -681,17 +679,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 return !!date.soon;
             },
 
-            _shouldRenderJazzBadge: function(extra) {
-                return extra.type.code === 'jazz';
-            },
-
-            _shouldRenderStandUpBadge: function(extra) {
-                return extra.type.code === 'stand-up';
+            _shouldHideBadge: function(extra) {
+                return !extra.hasOwnProperty('type');
             },
 
             _createEventClass: function(event) {
                 var is_special = event.is_special ? ' special-event' : '';
                 return 'primary' + is_special;
+            },
+
+            _makeBadgeSrc: function(type) {
+              return "https://maddogclub.com/img/static/badges/events/" + type + ".png";
             },
 
             behaviors: [
@@ -731,7 +729,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     };
 
                     response[index].start = response[index].start.slice(0, -3);
-
+                    if(response[index].price == 0) {
+                      response[index].price = this.freeEnter;
+                    }
                     if (date[1] === today[1] && date[2] === today[2]) {
                         response[index].date['soon'] = 'Сегодня';
                     } else if (date[1] == (parseInt(today[1]) + 1) && date[2] === today[2]) {

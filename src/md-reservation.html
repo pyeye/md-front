@@ -68,7 +68,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         margin-left: 40px;
         margin-right: 40px;
         font-size: 38px;
-        letter-spacing: 1.5px;
+        letter-spacing: 4px;
+        font-family: 'Raleway', sans-serif;
+        font-weight: bold;
       }
 
 
@@ -88,7 +90,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         @apply(--paper-font-title);
         margin-left: 24px;
         margin-right: 24px;
-        letter-spacing: 1.5px;
+        letter-spacing: 4px;
+        font-family: 'Raleway', sans-serif;
+        font-weight: bold;
       }
 
       [condensed-title] iron-icon {
@@ -161,6 +165,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       app-toolbar.tall {
         height: 200px;
       }
+
+      [condensed-title] {
+        margin-left: -40px;
+      }
     }
 
     @media (max-width: 540px) {
@@ -200,9 +208,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       <div id="ripple"></div>
       <div id="content">
-      <paper-material>
-        <md-reservation-form></md-reservation-form>
-      </paper-material>
       <div>
     </app-header-layout>
 
