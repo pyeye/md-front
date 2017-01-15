@@ -553,7 +553,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             </div>
             <div id="news" class="special-list">
                 <paper-material class="material-news">
-                    <iron-image class="news-image" sizing="cover" preload fade src="https://maddogclub.com/img/static/events/casting.jpg"></iron-image>
+                    <iron-image class="news-image" sizing="cover" preload fade placeholder="[[base64img.casting]]" src="https://maddogclub.com/img/static/events/casting.jpg"></iron-image>
                     <div class="news-title-casting">
                         <div class="news-title">
                             <div class="news-info">
@@ -566,7 +566,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     </div>
                 </paper-material>
                 <paper-material class="material-news">
-                    <iron-image class="news-image" sizing="cover" preload fade src="https://maddogclub.com/img/static/events/jazz.jpg"></iron-image>
+                    <iron-image class="news-image" sizing="cover" preload fade placeholder="[[base64img.jazz]]" src="https://maddogclub.com/img/static/events/jazz.jpg"></iron-image>
                     <div class="news-title-jazz">
                         <div class="news-title">
                             <div class="news-info">
@@ -597,6 +597,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 freeEnter: {
                   type: String,
                   value: 'Свободный',
+                },
+
+                base64img: {
+                  type: Object,
+                  value: function () {
+                    return {
+                      'jazz': 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEASABIAAD/4QCARXhpZgAASUkqAAgAAAAEABoBBQABAAAAPgAAABsBBQABAAAARgAAACgBAwABAAAAAgAAAGmHBAABAAAATgAAAAAAAABIAAAAAQAAAEgAAAABAAAAAwAAkAcABAAAADAyMTAAoAcABAAAADAxMDABoAMAAQAAAP//AAAAAAAA/+EC/2h0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8APD94cGFja2V0IGJlZ2luPSfvu78nIGlkPSdXNU0wTXBDZWhpSHpyZVN6TlRjemtjOWQnPz4KPHg6eG1wbWV0YSB4bWxuczp4PSdhZG9iZTpuczptZXRhLyc+CjxyZGY6UkRGIHhtbG5zOnJkZj0naHR0cDovL3d3dy53My5vcmcvMTk5OS8wMi8yMi1yZGYtc3ludGF4LW5zIyc+CgogPHJkZjpEZXNjcmlwdGlvbiB4bWxuczp4bXBNTT0naHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyc+CiAgPHhtcE1NOkluc3RhbmNlSUQ+eG1wLmlpZDoyOEVDQkZDNERBM0UxMUU2QTRBQ0I0NjI5MEE4Mzk5MDwveG1wTU06SW5zdGFuY2VJRD4KICA8eG1wTU06RG9jdW1lbnRJRCByZGY6cmVzb3VyY2U9J3htcC5kaWQ6MjhFQ0JGQzVEQTNFMTFFNkE0QUNCNDYyOTBBODM5OTAnIC8+CiAgPHhtcE1NOkluc3RhbmNlSUQ+eG1wLmlpZDoyOEVDQkZDNERBM0UxMUU2QTRBQ0I0NjI5MEE4Mzk5MDwveG1wTU06SW5zdGFuY2VJRD4KICA8eG1wTU06RGVyaXZlZEZyb20gcmRmOnBhcnNlVHlwZT0nUmVzb3VyY2UnPgogIDwveG1wTU06RGVyaXZlZEZyb20+CiA8L3JkZjpEZXNjcmlwdGlvbj4KCiA8cmRmOkRlc2NyaXB0aW9uIHhtbG5zOnhtcD0naHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wLyc+CiAgPHhtcDpDcmVhdG9yVG9vbD5EeE8gT3B0aWNzIFBybyA5LjUuMjwveG1wOkNyZWF0b3JUb29sPgogPC9yZGY6RGVzY3JpcHRpb24+Cgo8L3JkZjpSREY+CjwveDp4bXBtZXRhPgo8P3hwYWNrZXQgZW5kPSdyJz8+Cv/bAEMAAwICAwICAwMDAwQDAwQFCAUFBAQFCgcHBggMCgwMCwoLCw0OEhANDhEOCwsQFhARExQVFRUMDxcYFhQYEhQVFP/bAEMBAwQEBQQFCQUFCRQNCw0UFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFP/CABEIAAQABgMBEQACEQEDEQH/xAAUAAEAAAAAAAAAAAAAAAAAAAAH/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAP/2gAMAwEAAhADEAAAAQqr/8QAFxAAAwEAAAAAAAAAAAAAAAAAAAEDBf/aAAgBAQABBQKevVH/xAAYEQACAwAAAAAAAAAAAAAAAAAAAgEDBP/aAAgBAwEBPwHBUsKx/8QAGREAAgMBAAAAAAAAAAAAAAAAAhEAAwRR/9oACAECAQE/AdthMVyf/8QAGhAAAgIDAAAAAAAAAAAAAAAAAQMAEQISIv/aAAgBAQAGPwI7YrbdHsT/xAAXEAEBAQEAAAAAAAAAAAAAAAABIQAR/9oACAEBAAE/IXyaKTxtib//2gAMAwEAAgADAAAAEN//xAAbEQABBAMAAAAAAAAAAAAAAABBAAERIWGB8P/aAAgBAwEBPxAo2cz23X//xAAXEQADAQAAAAAAAAAAAAAAAAAAARFh/9oACAECAQE/EKJpg//EABcQAQEBAQAAAAAAAAAAAAAAAAEhEQD/2gAIAQEAAT8Qy9kFpkKrNNyEO//Z',
+                      'casting': 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEASABIAAD/2wBDAAMCAgMCAgMDAwMEAwMEBQgFBQQEBQoHBwYIDAoMDAsKCwsNDhIQDQ4RDgsLEBYQERMUFRUVDA8XGBYUGBIUFRT/2wBDAQMEBAUEBQkFBQkUDQsNFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBT/wgARCAADAAYDAREAAhEBAxEB/8QAFAABAAAAAAAAAAAAAAAAAAAABP/EABQBAQAAAAAAAAAAAAAAAAAAAAL/2gAMAwEAAhADEAAAASk//8QAFhAAAwAAAAAAAAAAAAAAAAAABAci/9oACAEBAAEFAmBY3//EABgRAAIDAAAAAAAAAAAAAAAAAAACBCEi/9oACAEDAQE/AZ2Xo//EABcRAAMBAAAAAAAAAAAAAAAAAAACIQT/2gAIAQIBAT8Bz1af/8QAHBAAAQMFAAAAAAAAAAAAAAAAAQACAxESISJB/9oACAEBAAY/AoA7YCZ1Ls9K/8QAGRAAAQUAAAAAAAAAAAAAAAAAAAERMUFR/9oACAEBAAE/IVVuKB9T/9oADAMBAAIAAwAAABBf/8QAGBEBAQADAAAAAAAAAAAAAAAAAREAIbH/2gAIAQMBAT8QM3Vhwz//xAAYEQACAwAAAAAAAAAAAAAAAAAAASFRsf/aAAgBAgEBPxCWrPWf/8QAGBABAQEBAQAAAAAAAAAAAAAAAREhAEH/2gAIAQEAAT8QaQfijYhUMAPAhDO//9k=',
+                      }
+                  }
                 },
 
                 animationConfig: {
