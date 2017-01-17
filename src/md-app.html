@@ -296,7 +296,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       <!-- Main content -->
 
-        <neon-animated-pages selected="[[page]]" attr-for-selected="name" on-iron-select="_neonPageChanged">
+        <neon-animated-pages selected="[[page]]" attr-for-selected="name" on-iron-select="_neonPageChanged" fallback-selection="home">
           <md-home name="home">
             <paper-icon-button icon="menu" drawer-toggle></paper-icon-button>
           </md-home>
