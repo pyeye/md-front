@@ -34,7 +34,7 @@ function finishLazyLoading() {
         window.setTimeout(function() {
             htmlEl.classList.remove('no-scroll');
             loadEl.remove();
-        }, 300);
+        }, 200);
 
         // loadEl.addEventListener('transitionend', function() {
         //    htmlEl.classList.remove('no-scroll');
