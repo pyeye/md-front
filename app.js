@@ -43,10 +43,6 @@ function finishLazyLoading() {
 
         document.body.classList.remove('loading');
 
-        if (window.innerWidth > 600) {
-          particlesJS.load('particles', 'assets/particles.json');
-        }
-
         // App is visible and ready to load some data!
     });
 }
