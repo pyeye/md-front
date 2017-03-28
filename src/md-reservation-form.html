@@ -395,7 +395,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       },
 
       submitForm: function() {
-        this.form.date = event.date.original;
+        this.form.date = this.event.date.original;
         this.$.ajax.body = JSON.stringify(this.form);
         this.$.ajax.generateRequest();
       },
